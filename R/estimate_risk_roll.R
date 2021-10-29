@@ -56,13 +56,14 @@ estimate_risk_roll <- function(
   checkmate::assert_character(cond_vars, any.missing = FALSE, max.len = 2,
                               null.ok = TRUE)
   checkmate::assert_subset(cond_vars, all_asset_names)
+  conditional_logical <- ifelse(is.null(cond_vars), FALSE, TRUE)
   # weights argument
   n_all_assets <- length(all_asset_names)
   checkmate::assert_numeric(weights, lower = 0, any.missing = FALSE,
                             len = n_all_assets, names = "unique",
                             null.ok = TRUE)
   checkmate::assert_subset(names(weights), all_asset_names)
-  if (any(weights[cond_vars] != 0 & !is.null(cond_vars))) {
+  if (any(weights[cond_vars] != 0 & conditional_logical)) {
     stop("The weights of the conditioning variables must be 0.")
   }
   # alpha argument
@@ -106,7 +107,7 @@ estimate_risk_roll <- function(
 
   # Preparations for the overall algorithm -------------------------------
 
-  # add id column
+  # add id column and get into long format
   data <- lazy_dt(data) %>%
     mutate(row_num = seq.int(nrow(data))) %>%
     pivot_longer(-row_num, names_to = "asset", values_to = "returns") %>%
@@ -117,12 +118,18 @@ estimate_risk_roll <- function(
     weights <- rep(1, n_all_assets)
     names(weights) <- all_asset_names
     # conditioning variables get weight 0
-    if (!is.null(cond_vars)) {
+    if (conditional_logical) {
       weights[cond_vars] <- 0
     }
   }
-  # prep the marginal_settings
-
+  # prep the marginal specifications for each asset
+  marginal_specs_list <- sapply(all_asset_names, function(asset) {
+    if (asset %in% names(marginal_settings@indicidual_spec)) {
+      marginal_settings@indicidual_spec[[asset]]
+    } else {
+      marginal_settings@default_spec
+    }
+  }, simplify = FALSE, USE.NAMES = TRUE)
   # prep the vine_settings
 
   # Estimate the marginal models in a rolling window fashion -------------
@@ -131,7 +138,7 @@ estimate_risk_roll <- function(
     data,
     n_all_obs, n_marg_train, n_marg_refit,
     all_asset_names,
-    marginal_settings,
+    marginal_specs_list,
     trace
   )
   # get: estimated means, estimated sigma, estimated residuals, estimated u scale, marginal models
