@@ -133,7 +133,7 @@ estimate_risk_roll <- function(
   # prep the vine_settings
 
   # Estimate the marginal models in a rolling window fashion -------------
-  if (trace) cat("Fit marginal models:\n")
+
   marg_mod_result <- estimate_marginal_models(
     data,
     n_all_obs, n_marg_train, n_marg_refit,
