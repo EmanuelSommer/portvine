@@ -1,4 +1,20 @@
-#import dplyr
+#' Title
+#'
+#' @param data
+#' @param n_all_obs
+#' @param n_marg_train
+#' @param n_marg_refit
+#' @param n_vine_train
+#' @param all_asset_names
+#' @param marginal_specs_list
+#' @param trace
+#'
+#' @return
+#' @export
+#'
+#' @import dplyr
+#'
+#' @examples
 estimate_marginal_models <- function(
   data,
   n_all_obs, n_marg_train, n_marg_refit, n_vine_train,
@@ -8,7 +24,8 @@ estimate_marginal_models <- function(
 ) {
   if (trace) cat("Fit marginal models:\n")
   garch_rolls_list <- sapply(all_asset_names, function(asset_name) {
-    if (trace) cat(asset_name," ")
+    if (trace) cat(asset_name, " (", which(asset_name == all_asset_names),
+                   "/", length(all_asset_names), ") ", sep = "")
     # fit the model in a rolling window fashion
     roll <- rugarch::ugarchroll(
       spec = marginal_specs_list[[asset_name]],
@@ -23,15 +40,17 @@ estimate_marginal_models <- function(
       select(Mu, Sigma, Realized, Shape, Skew) %>%
       mutate(row_num = seq(n_marg_train + 1, n_all_obs)) %>%
       data.table::as.data.table()
-    # extract the conditional innovations density
-    roll_density <- roll@model$spec@model$modeldesc$distribution
-    # extract the fitted residuals for each window
-    residuals_per_window <- sapply(
+    # extract the conditional innovations distribution
+    roll_distribution <- roll@model$spec@model$modeldesc$distribution
+    # get the residuals for each window and store all relevant residuals
+    # for the current asset in one data.table whose columns are specified below
+    residuals_dt <- sapply(
       seq.int(roll@model$n.refits),
       function(window) {
+        # first get the fitted residuals
         # extract the coefficients for the window
         coefs <- roll@model$coef[[window]]$coef[, 1]
-        spec <- rugarch::ugarchspec(distribution.model = roll_density,
+        spec <- rugarch::ugarchspec(distribution.model = roll_distribution,
                                     fixed.pars = coefs)
         start_window <- 1 + n_marg_train - n_vine_train +
           (window - 1) * n_marg_refit
@@ -45,34 +64,50 @@ estimate_marginal_models <- function(
         )
         fitted_residuals <- as.numeric(
           rugarch::residuals(filtered_model, standardize = TRUE))
-        fitted_residuals
-      }, simplify = FALSE)
-    list(residuals_per_window, roll_density, roll_density_params, roll)
+        window_residuals_fitted <- data.table::data.table(
+          resid = fitted_residuals,
+          shape = coefs["shape"],
+          skew = coefs["skew"],
+          row_num = seq.int(start_window, start_window + n_vine_train - 1)
+        )
+        # now get the forecasted residuals and append the fitted residuals
+        roll_density_params %>%
+          dtplyr::lazy_dt() %>%
+          filter(row_num <= end_window & row_num >= (start_window + n_vine_train)) %>%
+          arrange(row_num) %>%
+          mutate(resid = (Realized - Mu) / Sigma) %>%
+          select(resid, shape = Shape, skew = Skew, row_num) %>%
+          data.table::as.data.table() %>%
+          rbind(window_residuals_fitted) %>%
+          dtplyr::lazy_dt() %>%
+          arrange(row_num) %>%
+          # now one has all needed standardized residuals for this window.
+          # Thus the transformed copula scale residuals are still appended using
+          # the skew and shape parameters as well as the marginal distribution
+          # as well as the asset name, the index of the marginal window and
+          # the used marginal distribution used for the fitting.
+          mutate(
+            marg_window_num = window,
+            asset = asset_name,
+            marg_dist = roll_distribution,
+            copula_scale_resid = rugarch::pdist(
+              distribution = roll_distribution,
+              q = resid, shape = shape, skew = skew)) %>%
+          data.table::as.data.table()
+      }, simplify = FALSE) %>%
+      # bind the per marginal window data.tables together (possible as the
+      # column marg_window_num ensures identifyabilty)
+      data.table::rbindlist()
+    list(residuals_dt = residuals_dt, roll_model_fit = roll)
   }, simplify = FALSE, USE.NAMES = TRUE)
   if (trace) cat("\n")
   garch_rolls_list
 }
 
 
-ttt$AAPL@forecast$density %>%
-  dtplyr::lazy_dt() %>%
-  select(Mu, Sigma, Realized, Shape, Skew) %>%
-  mutate(row_num = seq(750 + 1, 1000)) %>%
-  data.table::as.data.table() %>%
-  dim()
+# TBD:
+# Documentation
+# Tests (extract from sample returns a super small example data set (copy and add some noise then add to package))
 
-ttt$AAPL@model$n.refits
-# coefficients of the first marginal window fitting
-ttt$AAPL@model$coef[[1]]$coef[, 1]
-# distribution used for fitting
-ttt$AAPL@model$spec@model$modeldesc$distribution
-rugarch::ugarchspec(distribution.model = "sstd", fixed.pars = ttt$AAPL@model$coef[[1]]$coef[, 1])
 
-tttt <- estimate_marginal_models(
-  data_margmod_input,
-  1000, 750, 50, 100,
-  c("AAPL", "GOOG", "AMZN"),
-  list("AAPL" = default_garch_spec(),
-       "GOOG" = default_garch_spec(),
-       "AMZN" = default_garch_spec()),
-  TRUE)
+
