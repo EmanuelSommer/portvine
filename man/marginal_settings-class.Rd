@@ -4,6 +4,7 @@
 \name{marginal_settings-class}
 \alias{marginal_settings-class}
 \alias{marginal_settings}
+\alias{show,marginal_settings-method}
 \title{S4 class for the marginal settings}
 \usage{
 marginal_settings(
@@ -12,6 +13,19 @@ marginal_settings(
   individual_spec = list(),
   default_spec = default_garch_spec()
 )
+
+\S4method{show}{marginal_settings}(object)
+}
+\arguments{
+\item{train_size}{equivalent to the slot definition below}
+
+\item{refit_size}{equivalent to the slot definition below}
+
+\item{individual_spec}{equivalent to the slot definition below}
+
+\item{default_spec}{equivalent to the slot definition below}
+
+\item{object}{An object of class \code{marginal_settings}}
 }
 \value{
 Object of class \code{marginal_settings}
@@ -28,7 +42,8 @@ come in handy.
 }
 \section{Functions}{
 \itemize{
-\item \code{marginal_settings}: Class constructor taking the arguments specified below
+\item \code{marginal_settings}: Class constructor taking the arguments
+specified in the slots below
 }}
 
 \section{Slots}{
@@ -44,12 +59,12 @@ assets by naming the list entry as the asset and providing a
 \code{\link[rugarch:ugarchspec-methods]{rugarch::ugarchspec}} object.}
 
 \item{\code{default_spec}}{\code{\link[rugarch:ugarchspec-methods]{rugarch::ugarchspec}}
-object specifing the default marginal model (used if model is not specified through
-\code{individual_spec})}
+object specifing the default marginal model (used if the marginal model
+is not specified through \code{individual_spec})}
 }}
 
 \examples{
-marginal_settings(100, 10)
+# marginal_settings(100, 10)
 }
 \seealso{
 \code{\link[=default_garch_spec]{default_garch_spec()}}

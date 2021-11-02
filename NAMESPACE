@@ -2,7 +2,14 @@
 
 export(default_garch_spec)
 export(estimate_risk_roll)
+export(marginal_settings)
 exportClasses(marginal_settings)
+exportMethods(show)
+import(data.table, except = c(first,last,between))
+
 import(dplyr)
 importFrom(dtplyr,lazy_dt)
+importFrom(stats,cor)
+importFrom(stats,resid)
 importFrom(tidyr,pivot_longer)
+importFrom(tidyr,pivot_wider)

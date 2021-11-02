@@ -16,8 +16,21 @@ Imports:
     data.table,
     dplyr,
     dtplyr,
+    methods,
     rugarch,
+    rvinecopulib,
     tidyr
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
+Collate: 
+    'default_garch_spec.R'
+    'S4_classes.R'
+    'datadoc.R'
+    'estimate_dependence_and_risk.R'
+    'estimate_marginal_models.R'
+    'estimate_risk_roll.R'
+    'greedy_tau_ordering.R'
+Depends: 
+    R (>= 2.10)
+LazyData: true

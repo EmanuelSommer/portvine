@@ -2,12 +2,12 @@
 #' TBD
 #'
 #' @param data matrix, data.frame or other object coercible to a data.table
-#'  storing the numeric asset returns in the named columns. Moreover missing
-#'  values must be imputed beforehand.
+#'  storing the numeric asset returns in the named columns (at least 3).
+#'  Moreover missing values must be imputed beforehand.
 #' @param weights corresponding named non-negative weights of the assets
 #'  (conditioning variables must have weight 0).
 #' @param marginal_settings containing the needed information for the ARMA-GARCH
-#'  fitting i.e. marginal models, defaults to ARMA(1,1)-GARCH(1,1) if left out.
+#'  fitting i.e. marginal models.
 #' @param vine_settings containing needed information for the vine fitting
 #' @param alpha a numeric vector specifying the levels at which the risk
 #'  measures should be calculated
@@ -16,7 +16,6 @@
 #' @param cond_vars colnames of the variables to sample conditionally from
 #' @param n_samples number of samples to compute for the risk measure estimates
 #' @param n_cond_samples number of samples of the conditioning variables
-#' @param seed fro reproducibility.
 #' @param trace if set to TRUE the algorithm will print information while
 #'  running.
 #'
@@ -24,21 +23,21 @@
 #' @export
 #'
 #' @importFrom dtplyr lazy_dt
-#' @importFrom tidyr pivot_longer
+#' @importFrom tidyr pivot_longer pivot_wider
 #' @import dplyr
+#' @rawNamespace import(data.table, except = c(first,last,between))
 #'
 #' @examples #TBD
 estimate_risk_roll <- function(
   data,
   weights = NULL,
-  marginal_settings = NULL,
-  vine_settings = NULL,
+  marginal_settings,
+  vine_settings,
   alpha = 0.05,
   risk_measures = c("VaR", "ES_mean"),
   cond_vars = NULL,
   n_samples = 1000,
   n_cond_samples = 100,
-  seed = 2,
   trace = TRUE
 ) {
   # Return also the total run time at the end
@@ -49,7 +48,7 @@ estimate_risk_roll <- function(
   if ("try-error" %in% class(data)) {
     stop("The <data> argument is not coercible to a data.table.")
   }
-  checkmate::assert_data_table(data, any.missing = FALSE,
+  checkmate::assert_data_table(data, any.missing = FALSE, min.cols = 3,
                                types = "numeric", col.names = "unique")
   # cond_vars argument
   all_asset_names <- colnames(data)
@@ -77,10 +76,8 @@ estimate_risk_roll <- function(
   checkmate::assert_integerish(n_cond_samples, lower = 1)
   checkmate::assert_integerish(seed, lower = 1)
   # marginal_settings and vine_settings
-  checkmate::assert_class(marginal_settings, "marginal_settings",
-                          null.ok = TRUE)
-  checkmate::assert_class(vine_settings, "vine_settings",
-                          null.ok = TRUE)
+  checkmate::assert_class(marginal_settings, "marginal_settings")
+  checkmate::assert_class(vine_settings, "vine_settings")
   n_all_obs <- nrow(data)
   n_marg_train <- marginal_settings@train_size
   n_marg_refit <- marginal_settings@refit_size
@@ -133,31 +130,40 @@ estimate_risk_roll <- function(
   # prep the vine_settings
 
   # Estimate the marginal models in a rolling window fashion -------------
-
   marg_mod_result <- estimate_marginal_models(
     data,
-    n_all_obs, n_marg_train, n_marg_refit,
+    n_all_obs, n_marg_train, n_marg_refit, n_vine_train,
     all_asset_names,
     marginal_specs_list,
     trace
   )
-  # get: estimated means, estimated sigma, estimated residuals, estimated u scale, marginal models
-
-
+  # extract and combine all the estimated copula data into one data.table
+  combined_residuals_dt <- rbindlist(
+    lapply(marg_mod_result, function(asset) asset$residuals_dt)
+  )
 
   # Estimate the dependence structure and the risk measures --------------
   # by simulation in a rolling window fashion ----------------------------
+  dep_risk_result <- estimate_dependence_and_risk(
+    combined_residuals_dt,
+    n_all_obs, n_marg_train, n_marg_refit, n_vine_train, n_vine_refit,
+    all_asset_names,
+    vine_specs,
+    alpha,
+    risk_measures,
+    weights,
+    conditional_logical,
+    cond_vars,
+    n_samples,
+    n_cond_samples,
+    trace
+  )
+
+  end_time <- Sys.time()
+  time_taken <- end_time - start_time
 }
 
 
-
-
-# # test the function: (To be removed and used towards testing)
-# load("C:/Users/Emanuel/Documents/Uni/Masterarbeit/sample_returns.rda")
-# test_data <- data.table::as.data.table(sample_returns[,2:4])
-#
-# estimate_risk_roll(test_data)
-#
 
 
 

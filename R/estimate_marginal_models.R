@@ -1,20 +1,35 @@
-#' Title
+#' Estimate the marginals models in a rolling window fashion
 #'
-#' @param data
-#' @param n_all_obs
-#' @param n_marg_train
-#' @param n_marg_refit
-#' @param n_vine_train
-#' @param all_asset_names
-#' @param marginal_specs_list
-#' @param trace
+#' Internal function for the estimation of the marginal models for each asset
+#' and each marginal window. In addition based on these models the standardized
+#' residuals and corresponding copula data are calculated for the respective
+#'  windows.
 #'
-#' @return
-#' @export
+#' @param data data.table with the three columns `row_num`, `asset` and `returns.`
+#'  `row_num` specifies the row number for the wide format input data, `asset`
+#'  is the unique name of the asset and `returns` gives the numeric returns.
+#' @param n_all_obs integer specifying the number of all observations
+#' @param n_marg_train Positive count specifying the training data size for
+#' the ARMA-GARCH models.
+#' @param n_marg_refit Positive count specifying size of the forecasting window.
+#' @param n_vine_train Positive count specifying the training data size for
+#' the vine copula models.
+#' @param all_asset_names character vector with all the asset names
+#' @param marginal_specs_list named list containing the specification for the
+#' marginal ARMA-GARCH model for each asset.
+#' @param trace if set to TRUE the algorithm will print information while
+#'  running.
+#'
+#' @return named list with entry (list again) for each asset with two elements:
+#'  `roll_model_fit` a [`rugarch::ugarchroll`] object (marginal models) and
+#'  `residuals_dt` a datatable containing the standardized residuals `resid`,
+#'  copula scale residuals `copula_scale_resid`, for the corresponding marginal
+#'  window `marg_window_num`, row number `row_num`, asset `asset` and the most
+#'  important marginal model information `shape`, `skew` and `marg_dist`.
 #'
 #' @import dplyr
-#'
-#' @examples
+#' @importFrom stats resid
+#' @noRd
 estimate_marginal_models <- function(
   data,
   n_all_obs, n_marg_train, n_marg_refit, n_vine_train,
@@ -22,14 +37,24 @@ estimate_marginal_models <- function(
   marginal_specs_list,
   trace
 ) {
-  if (trace) cat("Fit marginal models:\n")
+  # very basic input checks as the function will not be exported
+  checkmate::assert_data_table(data, any.missing = FALSE,
+                               ncols = 3, col.names = "unique")
+  checkmate::assert_subset(colnames(data), c("asset", "returns", "row_num"),
+                           empty.ok = FALSE)
+  checkmate::assert_subset(all_asset_names, unique(data$asset),empty.ok = FALSE)
+  checkmate::assert_list(marginal_specs_list, types = "uGARCHspec",
+                         len = length(all_asset_names), any.missing = FALSE,
+                         names = "unique")
+
+  if (trace) cat("\nFit marginal models:\n")
   garch_rolls_list <- sapply(all_asset_names, function(asset_name) {
     if (trace) cat(asset_name, " (", which(asset_name == all_asset_names),
                    "/", length(all_asset_names), ") ", sep = "")
     # fit the model in a rolling window fashion
     roll <- rugarch::ugarchroll(
       spec = marginal_specs_list[[asset_name]],
-      data = data[asset == asset_name]$returns,
+      data = data[data$asset == asset_name, ]$returns,
       forecast.length = n_all_obs - n_marg_train,
       refit.every = n_marg_refit, refit.window = "moving",
       keep.coef = TRUE, solver = "hybrid"
@@ -37,7 +62,7 @@ estimate_marginal_models <- function(
     # extract the density parameters for the window [n_marg_train+1, n_all_obs]
     roll_density_params <- roll@forecast$density %>%
       dtplyr::lazy_dt() %>%
-      select(Mu, Sigma, Realized, Shape, Skew) %>%
+      select("Mu", "Sigma", "Realized", "Shape", "Skew") %>%
       mutate(row_num = seq(n_marg_train + 1, n_all_obs)) %>%
       data.table::as.data.table()
     # extract the conditional innovations distribution
@@ -105,9 +130,6 @@ estimate_marginal_models <- function(
 }
 
 
-# TBD:
-# Documentation
-# Tests (extract from sample returns a super small example data set (copy and add some noise then add to package))
 
 
 

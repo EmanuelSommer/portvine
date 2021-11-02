@@ -1,3 +1,4 @@
+
 #' Default specifications for ARMA-GARCH models
 #'
 #' This function is used as the default for the univariate model fitting i.e.

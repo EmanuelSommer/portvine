@@ -23,9 +23,10 @@
 #' @return Object of class `marginal_settings`
 #' @export
 #'
+#' @include default_garch_spec.R
 #' @seealso [default_garch_spec()]
 #'
-#' @examples marginal_settings(100, 10)
+#' @examples # marginal_settings(100, 10)
 setClass("marginal_settings",
   slots = list(train_size = "numeric",
                refit_size = "numeric",
@@ -52,19 +53,31 @@ setClass("marginal_settings",
   }
 )
 
-#' @describeIn marginal_settings Class constructor taking the arguments specified below
+
+#' Constructor
+#'
+#' @param train_size equivalent to the slot definition below
+#' @param refit_size equivalent to the slot definition below
+#' @param individual_spec equivalent to the slot definition below
+#' @param default_spec equivalent to the slot definition below
+#' @export
+#' @describeIn marginal_settings Class constructor taking the arguments
+#'  specified in the slots below
 marginal_settings <- function(
   train_size, refit_size,
   individual_spec = list(), default_spec = default_garch_spec()
 ) {
-  new("marginal_settings",
-      train_size = train_size,
-      refit_size = refit_size,
-      individual_spec = individual_spec,
-      default_spec = default_spec)
+  methods::new("marginal_settings",
+               train_size = train_size,
+               refit_size = refit_size,
+               individual_spec = individual_spec,
+               default_spec = default_spec)
 }
 
-# simple print method for the marginal_settings class
+
+#' @export
+#' @param object An object of class `marginal_settings`
+#' @rdname marginal_settings-class
 setMethod("show", c("marginal_settings"), function(object) {
   cat("An object of class <marginal_settings>\n")
   cat("train_size:", object@train_size, "\n")

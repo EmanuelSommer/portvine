@@ -7,27 +7,26 @@
 estimate_risk_roll(
   data,
   weights = NULL,
-  marginal_settings = NULL,
-  vine_settings = NULL,
+  marginal_settings,
+  vine_settings,
   alpha = 0.05,
   risk_measures = c("VaR", "ES_mean"),
   cond_vars = NULL,
   n_samples = 1000,
   n_cond_samples = 100,
-  seed = 2,
   trace = TRUE
 )
 }
 \arguments{
 \item{data}{matrix, data.frame or other object coercible to a data.table
-storing the numeric asset returns in the named columns. Moreover missing
-values must be imputed beforehand.}
+storing the numeric asset returns in the named columns (at least 3).
+Moreover missing values must be imputed beforehand.}
 
 \item{weights}{corresponding named non-negative weights of the assets
 (conditioning variables must have weight 0).}
 
 \item{marginal_settings}{containing the needed information for the ARMA-GARCH
-fitting i.e. marginal models, defaults to ARMA(1,1)-GARCH(1,1) if left out.}
+fitting i.e. marginal models.}
 
 \item{vine_settings}{containing needed information for the vine fitting}
 
@@ -42,8 +41,6 @@ measures to compute}
 \item{n_samples}{number of samples to compute for the risk measure estimates}
 
 \item{n_cond_samples}{number of samples of the conditioning variables}
-
-\item{seed}{fro reproducibility.}
 
 \item{trace}{if set to TRUE the algorithm will print information while
 running.}
