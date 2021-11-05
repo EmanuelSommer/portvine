@@ -14,6 +14,7 @@ estimate_risk_roll(
   cond_vars = NULL,
   n_samples = 1000,
   n_cond_samples = 100,
+  n_mc_samples = 1000,
   trace = TRUE
 )
 }
@@ -30,17 +31,21 @@ fitting i.e. marginal models.}
 
 \item{vine_settings}{containing needed information for the vine fitting}
 
-\item{alpha}{a numeric vector specifying the levels at which the risk
-measures should be calculated}
+\item{alpha}{a numeric vector specifying the levels in (0,1) at which the
+risk measures should be calculated}
 
 \item{risk_measures}{a character vector with valid choices for risk
 measures to compute}
 
-\item{cond_vars}{colnames of the variables to sample conditionally from}
+\item{cond_vars}{colnames of the variables to sample conditionally from
+(currently \eqn{\leq 2})}
 
 \item{n_samples}{number of samples to compute for the risk measure estimates}
 
 \item{n_cond_samples}{number of samples of the conditioning variables}
+
+\item{n_mc_samples}{number of samples for the Monte Carlo integration
+if the risk measure \code{ES_mc} is used. (See \code{\link[=est_es]{est_es()}})}
 
 \item{trace}{if set to TRUE the algorithm will print information while
 running.}
