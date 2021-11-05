@@ -1,26 +1,54 @@
-# include greedy tau and risk measures
-
-#' Title
+#' Estimate the dependence and the ris in a rolling window fashion
 #'
-#' @param combined_residuals_dt
-#' @param n_all_obs
-#' @param n_marg_train
-#' @param n_marg_refit
-#' @param n_vine_train
-#' @param n_vine_refit
-#' @param all_asset_names
-#' @param family_set
-#' @param vine_type
-#' @param alpha
-#' @param risk_measures
-#' @param weights
-#' @param cond_vars
-#' @param n_samples
-#' @param n_cond_samples
-#' @param n_mc_samples
-#' @param trace
+#' Internal function for the estimation of the vine copula models for each
+#' vine window. In addition based on these models one samples (un-)conditional
+#' asset returns and estimates risk measures from these sample returns.
 #'
-#' @return
+#' @param combined_residuals_dt data.table with all the combined data from the
+#' marginal window fittings. 10 columns: `resid`, `shape`, `skew`, `mu`,
+#'  `sigma`, `row_num`, `marg_window_num`, `asset`, `marg_dist`,
+#'  `copula_scale_resid`
+#' @param n_all_obs integer specifying the number of all observations
+#' @param n_marg_train Positive count specifying the training data size for
+#' the ARMA-GARCH models.
+#' @param n_marg_refit Positive count specifying size of the forecasting window.
+#' @param n_vine_train Positive count specifying the training data size for
+#' the vine copula models.
+#' @param n_vine_refit Positive count specifying loength of the vine model
+#' usage window.
+#' @param all_asset_names character vector with all the asset names
+#' @param family_set Character vector specifying the family of copulas that are
+#' used. For possible choices see [`rvinecopulib::bicop`].
+#' @param vine_type character value that specifies which vine class should be
+#' fitted. Possible choices right now are `rvine` (regular vine) and `dvine`
+#' (drawable vine).
+#' @param alpha a numeric vector specifying the levels in (0,1) at which the
+#' risk measures should be calculated
+#' @param risk_measures a character vector with valid choices for risk
+#'  measures to compute
+#' @param weights corresponding named non-negative weights of the assets
+#'  (conditioning variables must have weight 0).
+#' @param cond_vars colnames of the variables to sample conditionally from
+#' @param n_samples number of samples to compute for the risk measure estimates
+#' @param n_cond_samples number of samples of the conditioning variables
+#' @param n_mc_samples number of samples for the Monte Carlo integration
+#' if the risk measure `ES_mc` is used. (See [`est_es()`])
+#' @param trace if set to TRUE the algorithm will print information while
+#'  running.
+#'
+#' @return list with 3 entries:
+#'   -  `fitted_vines` a list of all fitted vines one element for each vine
+#'   window
+#'   - `overall_risk_estimates` a data.table with the columns `risk_measure`,
+#'   `risk_est`, `alpha`, `row_num` and `vine_window` (here all samples also
+#'   in the conditional case are used)
+#'   - `cond_risk_estimates` a data.table with the same format like the overall
+#'   one but with the additional column(s) containing the conditional values.
+#'   NULL if the unconditional approach is taken.
+#'
+#' @import dplyr
+#'
+#' @include greedy_tau_ordering.R rcondvinecop.R risk_measures.R
 #'
 #' @noRd
 estimate_dependence_and_risk <- function(
@@ -39,6 +67,17 @@ estimate_dependence_and_risk <- function(
   n_mc_samples,
   trace
 ) {
+  # very basic input checks as the function is internal
+  checkmate::assert_data_table(combined_residuals_dt, all.missing = FALSE,
+                               ncols = 10, col.names = "unique")
+  checkmate::assert_subset(colnames(combined_residuals_dt),
+                           c("resid", "shape", "skew", "mu", "sigma", "row_num",
+                             "marg_window_num", "asset", "marg_dist",
+                             "copula_scale_resid"),
+                           empty.ok = FALSE)
+  checkmate::assert_subset(all_asset_names, unique(combined_residuals_dt$asset),
+                           empty.ok = FALSE)
+
   if (trace) cat("\nFit & simulate from vine copula models. Vine window:\n")
   window_results_list <- lapply(
     seq(ceiling((n_all_obs - n_marg_train) / n_vine_refit)),
@@ -247,21 +286,3 @@ estimate_dependence_and_risk <- function(
        cond_risk_estimates = cond_risk_estimates)
 }
 
-
-
-# t1 <- estimate_dependence_and_risk(
-#   combined_residuals_dt,
-#   1000,
-#   750, 50,
-#   100, 25,
-#   unique(combined_residuals_dt$asset),
-#   "all", "rvine",
-#   c(0.1, 0.2),
-#   c("ES_median", "VaR"),
-#   c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
-#   NULL,
-#   1000,
-#   100,
-#   100,
-#   TRUE
-# )

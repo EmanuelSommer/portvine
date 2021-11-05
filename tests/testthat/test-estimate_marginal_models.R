@@ -13,7 +13,7 @@ test_basic_marginal_models_est <- estimate_marginal_models(
     "GOOG" = default_garch_spec(),
     "AMZN" = default_garch_spec()
   ),
-  trace = TRUE
+  trace = FALSE
 )
 
 test_that("basic output types", {

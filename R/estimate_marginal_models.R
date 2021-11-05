@@ -37,7 +37,7 @@ estimate_marginal_models <- function(
   marginal_specs_list,
   trace
 ) {
-  # very basic input checks as the function will not be exported
+  # very basic input checks as the function is internal
   checkmate::assert_data_table(data, any.missing = FALSE,
                                ncols = 3, col.names = "unique")
   checkmate::assert_subset(colnames(data), c("asset", "returns", "row_num"),

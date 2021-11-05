@@ -9,11 +9,12 @@
 #' @param marginal_settings containing the needed information for the ARMA-GARCH
 #'  fitting i.e. marginal models.
 #' @param vine_settings containing needed information for the vine fitting
-#' @param alpha a numeric vector specifying the levels at which the risk
-#'  measures should be calculated
+#' @param alpha a numeric vector specifying the levels in (0,1) at which the
+#' risk measures should be calculated
 #' @param risk_measures a character vector with valid choices for risk
 #'  measures to compute
 #' @param cond_vars colnames of the variables to sample conditionally from
+#' (currently \eqn{\leq 2})
 #' @param n_samples number of samples to compute for the risk measure estimates
 #' @param n_cond_samples number of samples of the conditioning variables
 #' @param n_mc_samples number of samples for the Monte Carlo integration
