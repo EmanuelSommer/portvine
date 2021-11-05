@@ -16,6 +16,8 @@
 #' @param cond_vars colnames of the variables to sample conditionally from
 #' @param n_samples number of samples to compute for the risk measure estimates
 #' @param n_cond_samples number of samples of the conditioning variables
+#' @param n_mc_samples number of samples for the Monte Carlo integration
+#' if the risk measure `ES_mc` is used. (See [`est_es()`])
 #' @param trace if set to TRUE the algorithm will print information while
 #'  running.
 #'
@@ -38,6 +40,7 @@ estimate_risk_roll <- function(
   cond_vars = NULL,
   n_samples = 1000,
   n_cond_samples = 100,
+  n_mc_samples = 1000,
   trace = TRUE
 ) {
   # Return also the total run time at the end
@@ -83,6 +86,12 @@ estimate_risk_roll <- function(
   n_marg_refit <- marginal_settings@refit_size
   n_vine_train <- vine_settings@train_size
   n_vine_refit <- vine_settings@refit_size
+  vine_family_set <- vine_settings@family_set
+  vine_type <- vine_settings@vine_type
+  # check whether the vine type is implemented for the conditional sampling
+  if (conditional_logical & vine_type == "rvine") {
+    stop(paste("For vine type", vine_type, "the conditional sampling is not implemented yet."))
+  }
   # check whether the individual settings are a valid match
   if (n_marg_train >= n_all_obs |
       n_marg_refit > n_all_obs - n_marg_train |
@@ -127,37 +136,64 @@ estimate_risk_roll <- function(
       marginal_settings@default_spec
     }
   }, simplify = FALSE, USE.NAMES = TRUE)
-  # prep the vine_settings
 
   # Estimate the marginal models in a rolling window fashion -------------
   marg_mod_result <- estimate_marginal_models(
-    data,
-    n_all_obs, n_marg_train, n_marg_refit, n_vine_train,
-    all_asset_names,
-    marginal_specs_list,
-    trace
+    data = data,
+    n_all_obs = n_all_obs,
+    n_marg_train = n_marg_train, n_marg_refit = n_marg_refit,
+    n_vine_train = n_vine_train,
+    all_asset_names = all_asset_names,
+    marginal_specs_list = marginal_specs_list,
+    trace = trace
   )
   # extract and combine all the estimated copula data into one data.table
-  combined_residuals_dt <- rbindlist(
+  combined_residuals_dt <- data.table::rbindlist(
     lapply(marg_mod_result, function(asset) asset$residuals_dt)
   )
 
   # Estimate the dependence structure and the risk measures --------------
   # by simulation in a rolling window fashion ----------------------------
   dep_risk_result <- estimate_dependence_and_risk(
-    combined_residuals_dt,
-    n_all_obs, n_marg_train, n_marg_refit, n_vine_train, n_vine_refit,
-    all_asset_names,
-    vine_specs,
-    alpha,
-    risk_measures,
-    weights,
-    conditional_logical,
-    cond_vars,
-    n_samples,
-    n_cond_samples,
-    trace
+    combined_residuals_dt = combined_residuals_dt,
+    n_all_obs = n_all_obs,
+    n_marg_train = n_marg_train, n_marg_refit = n_marg_refit,
+    n_vine_train = n_vine_train, n_vine_refit = n_vine_refit,
+    all_asset_names = all_asset_names,
+    family_set = vine_family_set, vine_type = vine_type,
+    alpha = alpha,
+    risk_measures = risk_measures,
+    weights = weights,
+    cond_vars = cond_vars,
+    n_samples = n_samples,
+    n_cond_samples = n_cond_samples,
+    n_mc_samples = n_mc_samples,
+    trace = trace
   )
+
+  # the output S4 class will contain:
+  # time_taken
+  # roll_model_fit (ARMAGARCH)
+  # fitted_vines list
+  # risk_estimates
+  # boolean for conditional or not
+  # data ? keep data argument?
+  # marginal settins
+  # vine settings
+  # risk_measures
+  # alpha
+  # n_samples
+  # weights
+  # ???? as.datatable argument else output dataframe?
+
+  # child class with cond_risk_estimates
+  # cond vars
+  # n_cond_samples
+
+  # print and summary methods
+  # no constructor needed
+  # just very basic validity function
+  # no prototype
 
   end_time <- Sys.time()
   time_taken <- end_time - start_time

@@ -93,6 +93,8 @@ estimate_marginal_models <- function(
           resid = fitted_residuals,
           shape = coefs["shape"],
           skew = coefs["skew"],
+          mu = NA_real_,
+          sigma = NA_real_,
           row_num = seq.int(start_window, start_window + n_vine_train - 1)
         )
         # now get the forecasted residuals and append the fitted residuals
@@ -101,7 +103,8 @@ estimate_marginal_models <- function(
           filter(row_num <= end_window & row_num >= (start_window + n_vine_train)) %>%
           arrange(row_num) %>%
           mutate(resid = (Realized - Mu) / Sigma) %>%
-          select(resid, shape = Shape, skew = Skew, row_num) %>%
+          select(resid, shape = Shape, skew = Skew, mu = Mu, sigma = Sigma,
+                 row_num) %>%
           data.table::as.data.table() %>%
           rbind(window_residuals_fitted) %>%
           dtplyr::lazy_dt() %>%

@@ -23,7 +23,7 @@ test_that("basic output types", {
     expect_true(
       checkmate::test_data_table(
         test_basic_marginal_models_est[[i]]$residuals_dt,
-        ncols = 8
+        ncols = 10
       )
     )
   }
