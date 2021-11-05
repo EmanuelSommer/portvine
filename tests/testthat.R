@@ -1,5 +1,5 @@
 library(testthat)
-library(btvine)
+library(portvine)
 data("sample_returns_small")
 
-test_check("btvine")
+test_check("portvine")
