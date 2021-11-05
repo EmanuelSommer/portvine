@@ -172,20 +172,9 @@ estimate_risk_roll <- function(
     trace = trace
   )
 
-  # the output S4 class will contain:
-  # time_taken
-  # roll_model_fit (ARMAGARCH)
-  # fitted_vines list
-  # risk_estimates
-  # boolean for conditional or not
-  # data ? keep data argument?
-  # marginal settins
-  # vine settings
-  # risk_measures
-  # alpha
-  # n_samples
-  # weights
-  # ???? as.datatable argument else output dataframe?
+
+
+  # marginal models in eine liste basteln
 
   # child class with cond_risk_estimates
   # cond vars

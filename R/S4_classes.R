@@ -177,13 +177,99 @@ setMethod("show", c("vine_settings"), function(object) {
 })
 
 
-# vine_risk_roll --------------------------------------------------------
+# portvine_roll --------------------------------------------------------
 
 
+# child class with cond_risk_estimates
+# cond vars
+# n_cond_samples
+
+# print and summary methods
+# no constructor needed
+# just very basic validity function
+# no prototype
 
 
+#' Title
+#'
+#' @slot risk_estimates data.table.
+#' @slot marg_models_fit list.
+#' @slot fitted_vines list.
+#' @slot marginal_settings marginal_settings.
+#' @slot vine_settings vine_settings.
+#' @slot risk_measures character
+#' @slot alpha numeric.
+#' @slot weights numeric.
+#' @slot cond_estimation logical.
+#' @slot n_samples numeric.
+#' @slot time_taken difftime.
+#'
+#' @return
+#' @export
+#'
+setClass("portvine_roll",
+         slots = list(
+           risk_estimates = "data.table",
+           marg_models_fit = "list", # uGARCHroll entries S4
+           fitted_vines = "list", # vinecop objects
+           marginal_settings = "marginal_settings",
+           vine_settings = "vine_settings",
+           risk_measures = "character",
+           alpha = "numeric",
+           weights = "numeric",
+           cond_estimation = "logical",
+           n_samples = "numeric",
+           time_taken = "difftime"
+         ),
+         validity = function(object) {
+           error_mess <- character(0)
+           col_risk_est <- !checkmate::test_subset(
+             colnames(object@risk_estimates), c("risk_measure", "risk_est",
+                                                "alpha", "row_num",
+                                                "vine_window")
+           )
+           marg_mod_entries <- !checkmate::test_list(
+             object@marg_models_fit, types = "uGARCHroll", any.missing = FALSE,
+             names = "unique"
+           )
+           fit_vines_entries <- !checkmate::test_list(
+             object@fitted_vines, types = "vinecop", any.missing = FALSE
+           )
+
+           if (col_risk_est) error_mess <- "risk_estimates is missspecified."
+           if (marg_mod_entries) error_mess <- c(error_mess, "marg_models_fit has invalid entries/ is not named.")
+           if (fit_vines_entries) error_mess <- c(error_mess, "fitted_vines has invalid entries.")
+           if (length(error_mess)) error_mess else TRUE
+         }
+)
 
 
+#' Title
+#'
+#' @slot cond_risk_estimates data.table.
+#' @slot cond_vars character.
+#' @slot n_cond_samples numeric.
+#'
+#' @return
+#' @export
+#'
+setClass("cond_portvine_roll",
+         contains = "portvine_roll",
+         slots = list(
+           cond_risk_estimates = "data.table",
+           cond_vars = "character",
+           n_cond_samples = "numeric"
+         ),
+         validity = function(object) {
+           error_mess <- character(0)
+           col_crisk_est <- !checkmate::test_subset(
+             colnames(object@condrisk_estimates),
+             c("risk_measure", "risk_est", "alpha", "row_num", "vine_window")
+           )
+           if (col_crisk_est) error_mess <- "cond_risk_estimates is missspecified."
+           if (length(error_mess)) error_mess else TRUE
+         }
+)
 
 
 
