@@ -216,3 +216,17 @@ rugarch::VaRTest(
   VaR = e2_var_01$risk_est)
 ```
 
+```{r, error=TRUE}
+estimate_risk_roll(
+  sample_returns_small,
+  weights = NULL, # default -> equal weights
+  marginal_settings = e1_marg_settings,
+  vine_settings = e1_vine_settings,
+  alpha = c(0.01, 0.05),
+  risk_measures = c("VaR", "ES_mean"),
+  n_samples = 1000,
+  cond_vars = "AAPL",
+  trace = TRUE
+)
+```
+
