@@ -180,31 +180,38 @@ setMethod("show", c("vine_settings"), function(object) {
 # portvine_roll --------------------------------------------------------
 
 
-# child class with cond_risk_estimates
-# cond vars
-# n_cond_samples
-
-# print and summary methods
-# no constructor needed
-# just very basic validity function
-# no prototype
-
-
-#' Title
+#' S4 output class for the function [`estimate_risk_roll()`]
 #'
-#' @slot risk_estimates data.table.
-#' @slot marg_models_fit list.
-#' @slot fitted_vines list.
-#' @slot marginal_settings marginal_settings.
-#' @slot vine_settings vine_settings.
-#' @slot risk_measures character
-#' @slot alpha numeric.
-#' @slot weights numeric.
-#' @slot cond_estimation logical.
-#' @slot n_samples numeric.
-#' @slot time_taken difftime.
+#' The main output class is `portvine_roll` but in the conditional case
+#' the child class `cond_portvine_roll` with some extra slots (below visible
+#' by the !C!) is returned.
 #'
-#' @return
+#' @slot risk_estimates data.table with the columns `risk_measure`,
+#' `risk_est`, `alpha`, `row_num`, `vine_window` and `realized` (here all
+#' samples also in the conditional case are used)
+#' @slot marg_models_fit named list with entry for each asset containing an
+#' [`rugarch::ugarchroll`] class object that encompasses the marginal model fit.
+#' @slot fitted_vines list of [`rvinecopulib::vinecop`] class objects each entry
+#'  corresponds to one vine window.
+#' @slot marginal_settings containing the specification used for the ARMA-GARCH
+#'  fitting i.e. marginal models. Is of class `marginal_settings`.
+#' @slot vine_settings containing the specifications used for the vine fitting.
+#'  Is of class `vine_settings`.
+#' @slot risk_measures a character vector displaying the estimated risk
+#'  measures.
+#' @slot alpha numeric vector in (0,1) displaying the confidence levels used
+#' when estimating the risk measures.
+#' @slot weights the numeric positive weights of the assets.
+#' @slot cond_estimation logical value indicating whether the conditional
+#'  estimation approach for the risk measures was used.
+#' @slot n_samples positive numeric count displaying how many return samples
+#' were used for the risk measure estimation.
+#' @slot time_taken difftime displaying how long the whole estimation process
+#' took.
+#'
+#' @seealso [`estimate_risk_roll()`]
+#'
+#' @return object of class `portvine_roll`
 #' @export
 #'
 setClass("portvine_roll",
@@ -226,7 +233,7 @@ setClass("portvine_roll",
            col_risk_est <- !checkmate::test_subset(
              colnames(object@risk_estimates), c("risk_measure", "risk_est",
                                                 "alpha", "row_num",
-                                                "vine_window")
+                                                "vine_window", "realized")
            )
            marg_mod_entries <- !checkmate::test_list(
              object@marg_models_fit, types = "uGARCHroll", any.missing = FALSE,
@@ -243,16 +250,17 @@ setClass("portvine_roll",
          }
 )
 
-
-#' Title
+#' @slot cond_risk_estimates !C! data.table with the same columns as the
+#'  `risk_estimate` slot has + the additional conditional columns with the
+#'  respective sampled conditioning value.
+#' @slot cond_vars !C! character vector with the names of the variables that were
+#' used to sample conditionally from.
+#' @slot n_cond_samples !C! number of samples of the conditioning variables
 #'
-#' @slot cond_risk_estimates data.table.
-#' @slot cond_vars character.
-#' @slot n_cond_samples numeric.
-#'
-#' @return
+#' @return object of class `cond_portvine_roll`
 #' @export
 #'
+#' @rdname portvine_roll-class
 setClass("cond_portvine_roll",
          contains = "portvine_roll",
          slots = list(
@@ -263,18 +271,78 @@ setClass("cond_portvine_roll",
          validity = function(object) {
            error_mess <- character(0)
            col_crisk_est <- !checkmate::test_subset(
-             colnames(object@condrisk_estimates),
-             c("risk_measure", "risk_est", "alpha", "row_num", "vine_window")
+             c("risk_measure", "risk_est", "alpha", "row_num", "vine_window",
+               "realized"),
+             colnames(object@cond_risk_estimates)
+
            )
            if (col_crisk_est) error_mess <- "cond_risk_estimates is missspecified."
            if (length(error_mess)) error_mess else TRUE
          }
 )
 
+#' @export
+#' @param object An object of class `portvine_roll` or `cond_portvine_roll`
+#' @rdname portvine_roll-class
+setMethod("show", c("portvine_roll"), function(object) {
+  if (!object@cond_estimation) cat("An object of class <portvine_roll>\n")
+  cat("Number of ARMA-GARCH/ marginal windows:",
+      object@marg_models_fit[[1]]@model$n.refits, "\n")
+  cat("Number of vine windows:", length(object@fitted_vines), "\n")
+  cat("Risk measures estimated:", object@risk_measures, "\n")
+  cat("Alpha levels used:", object@alpha, "\n")
+  cat("\nTime taken", round(object@time_taken, 2), units(object@time_taken),
+      "\n")
+})
 
+#' @export
+#' @rdname portvine_roll-class
+setMethod("show", c("cond_portvine_roll"), function(object) {
+  cat("An object of class <cond_portvine_roll>\n")
+  cat("Conditional variable(s):", object@cond_vars, "\n")
+  methods::callNextMethod()
+})
 
+#' @export
+#' @param object An object of class `portvine_roll` or `cond_portvine_roll`
+#' @rdname portvine_roll-class
+setMethod("summary", c("portvine_roll"), function(object) {
+  if (!object@cond_estimation) cat("An object of class <portvine_roll>\n")
+  cat("\n--- Marginal models ---\n")
+  cat("Number of ARMA-GARCH/ marginal windows:",
+      object@marg_models_fit[[1]]@model$n.refits, "\n")
+  cat("Train size: ", object@marginal_settings@train_size, "\n")
+  cat("Refit size: ", object@marginal_settings@refit_size, "\n")
 
+  cat("\n--- Vine copula models ---\n")
+  cat("Number of vine windows:", length(object@fitted_vines), "\n")
+  cat("Train size: ", object@vine_settings@train_size, "\n")
+  cat("Refit size: ", object@vine_settings@refit_size, "\n")
+  cat("Vine copula type: ", object@vine_settings@vine_type, "\n")
+  cat("Vine family set: ", object@vine_settings@family_set, "\n")
 
+  cat("\n--- Risk estimation ---\n")
+  cat("Risk measures estimated:", object@risk_measures, "\n")
+  cat("Alpha levels used:", object@alpha, "\n")
+  cat("Number of estimated risk measures:", nrow(object@risk_estimates), "\n")
+  cat("Number of samples for each risk estimation:", object@n_samples, "\n")
 
+  cat("\nTime taken", round(object@time_taken, 2), units(object@time_taken),
+      "\n")
+})
+
+#' @export
+#' @rdname portvine_roll-class
+setMethod("summary", c("cond_portvine_roll"), function(object) {
+  cat("An object of class <cond_portvine_roll>\n")
+
+  cat("\n--- Conditional settings ---\n")
+  cat("Conditional variable(s):", object@cond_vars, "\n")
+  cat("Number of conditional estimated risk measures:",
+      nrow(object@cond_risk_estimates), "\n")
+  cat("Number of conditional samples:", object@n_cond_samples, "\n")
+
+  methods::callNextMethod()
+})
 
 

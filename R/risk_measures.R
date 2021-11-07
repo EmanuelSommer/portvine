@@ -72,7 +72,7 @@ est_es <- function(
   } else if (method == "mc") {
     # sample alpha levels and then average over them
     sapply(alpha, function(alp) {
-      mean(est_var(sample, runif(mc_samples, max = alp)))
+      mean(est_var(sample, stats::runif(mc_samples, max = alp)))
     }, simplify = TRUE)
   }
 }

@@ -22,7 +22,9 @@
 #' @param trace if set to TRUE the algorithm will print information while
 #'  running.
 #'
-#' @return risk_roll class should be specified + link to doc
+#' @return In the unconditional case an S4 object of class `portvine_roll` and
+#' in the conditional case its child class `cond_portvine_roll`. For details
+#' see [`portvine_roll-class`].
 #' @export
 #'
 #' @importFrom dtplyr lazy_dt
@@ -75,10 +77,9 @@ estimate_risk_roll <- function(
   # risk_measures argument
   checkmate::assert_subset(risk_measures, c("VaR", "ES_mean",
                                             "ES_median", "ES_mc"))
-  # n_samples, n_cond_samples, seed arguments
+  # n_samples, n_cond_samples
   checkmate::assert_integerish(n_samples, lower = 1)
   checkmate::assert_integerish(n_cond_samples, lower = 1)
-  checkmate::assert_integerish(seed, lower = 1)
   # marginal_settings and vine_settings
   checkmate::assert_class(marginal_settings, "marginal_settings")
   checkmate::assert_class(vine_settings, "vine_settings")
@@ -131,8 +132,8 @@ estimate_risk_roll <- function(
   }
   # prep the marginal specifications for each asset
   marginal_specs_list <- sapply(all_asset_names, function(asset) {
-    if (asset %in% names(marginal_settings@indicidual_spec)) {
-      marginal_settings@indicidual_spec[[asset]]
+    if (asset %in% names(marginal_settings@individual_spec)) {
+      marginal_settings@individual_spec[[asset]]
     } else {
       marginal_settings@default_spec
     }
@@ -172,21 +173,64 @@ estimate_risk_roll <- function(
     trace = trace
   )
 
-
-
-  # marginal models in eine liste basteln
-
-  # child class with cond_risk_estimates
-  # cond vars
-  # n_cond_samples
-
-  # print and summary methods
-  # no constructor needed
-  # just very basic validity function
-  # no prototype
+  # compute the realized portfolio returns and left join them to the estimated
+  # risk measures (if conditional do it also for the conditional estimates)
+  realized_portfolio_returns <- data %>%
+    dtplyr::lazy_dt() %>%
+    group_by(asset) %>%
+    mutate(weight = weights[asset]) %>%
+    ungroup() %>%
+    group_by(row_num) %>%
+    summarise(realized = sum(weight * returns), .groups = "drop") %>%
+    data.table::as.data.table()
+  risk_estimates <- dep_risk_result[["overall_risk_estimates"]] %>%
+    dtplyr::lazy_dt() %>%
+    left_join(realized_portfolio_returns, by = "row_num") %>%
+    data.table::as.data.table()
+  if (conditional_logical) {
+    cond_risk_estimates <- dep_risk_result[["cond_risk_estimates"]] %>%
+      dtplyr::lazy_dt() %>%
+      left_join(realized_portfolio_returns, by = "row_num") %>%
+      data.table::as.data.table()
+  }
 
   end_time <- Sys.time()
-  time_taken <- end_time - start_time
+
+  # return the correct output class
+  if (!conditional_logical) {
+    methods::new("portvine_roll",
+      risk_estimates = risk_estimates,
+      marg_models_fit = lapply(marg_mod_result,
+                               function(asset) asset$roll_model_fit),
+      fitted_vines = dep_risk_result[["fitted_vines"]],
+      marginal_settings = marginal_settings,
+      vine_settings = vine_settings,
+      risk_measures = risk_measures,
+      alpha = alpha,
+      weights = weights,
+      cond_estimation = conditional_logical,
+      n_samples = n_samples,
+      time_taken = end_time - start_time
+    )
+  } else {
+    methods::new("cond_portvine_roll",
+                 risk_estimates = risk_estimates,
+                 marg_models_fit = lapply(marg_mod_result,
+                                          function(asset) asset$roll_model_fit),
+                 fitted_vines = dep_risk_result[["fitted_vines"]],
+                 marginal_settings = marginal_settings,
+                 vine_settings = vine_settings,
+                 risk_measures = risk_measures,
+                 alpha = alpha,
+                 weights = weights,
+                 cond_estimation = conditional_logical,
+                 n_samples = n_samples,
+                 time_taken = end_time - start_time,
+                 cond_risk_estimates = cond_risk_estimates,
+                 cond_vars = cond_vars,
+                 n_cond_samples = n_cond_samples
+    )
+  }
 }
 
 

@@ -51,7 +51,9 @@ if the risk measure \code{ES_mc} is used. (See \code{\link[=est_es]{est_es()}})}
 running.}
 }
 \value{
-risk_roll class should be specified + link to doc
+In the unconditional case an S4 object of class \code{portvine_roll} and
+in the conditional case its child class \code{cond_portvine_roll}. For details
+see \code{\linkS4class{portvine_roll}}.
 }
 \description{
 TBD

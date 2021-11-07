@@ -1,0 +1,218 @@
+---
+title: "Get started"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Get started}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 4
+)
+```
+
+```{r setup}
+library(portvine)
+```
+
+
+## Basic examples for the unconditional case
+
+First load the small test data set that is contained with the package. It contains 1000 log returns of 3 stocks.
+
+```{r}
+data("sample_returns_small")
+head(sample_returns_small)
+dim(sample_returns_small)
+```
+### Example 1
+
+Specify the marginal models
+
+Have a look at the default model.
+
+```{r}
+default_garch_spec()
+```
+
+
+For the first example do not adjust the default ARMA-GARCH model. So we just need to specify the train and refit size in order to perform the rolling window estimation.
+
+```{r}
+e1_marg_settings <- marginal_settings(
+  train_size = 800,
+  refit_size = 50
+)
+```
+
+Now specify the settings for the vine copula fitting. Here one can for example use only a subset of bivariate copulas as the building blocks of the final vine copula.
+
+```{r}
+e1_vine_settings <- vine_settings(
+  train_size = 100,
+  refit_size = 25,
+  family_set = "onepar", # valid bivariate building blocks
+  vine_type = "rvine"
+)
+```
+
+Now one is ready to call the main function to estimate the risk measures in a rolling fashion using ARMA-GARCH and vine copula models.
+
+```{r}
+e1_risk_roll <- estimate_risk_roll(
+  sample_returns_small,
+  weights = NULL, # default -> equal weights
+  marginal_settings = e1_marg_settings,
+  vine_settings = e1_vine_settings,
+  alpha = c(0.01, 0.05),
+  risk_measures = c("VaR", "ES_mean"),
+  n_samples = 1000,
+  trace = TRUE
+)
+```
+
+```{r}
+e1_risk_roll
+summary(e1_risk_roll)
+```
+
+Now one can access the parts of the whole estimation process as well as the final results.
+
+```{r}
+# for example the marg_models_fit slot cotains a list of all the fitted 
+# marginal models in order to check them.
+e1_risk_roll@marg_models_fit$AAPL@model$spec
+```
+
+```{r}
+# The fitted_vines slot contains a list of all the fitted vine copula models
+e1_risk_roll@fitted_vines[[1]]
+# Thus one can inspect the fitted vines for example visually.
+rvinecopulib:::plot.vinecop(e1_risk_roll@fitted_vines[[1]])
+```
+
+Of course the most interesting slot is the one containing the estimated risk measures.
+
+```{r}
+head(e1_risk_roll@risk_estimates)
+```
+
+Having these estimates one can start by visually exploring these estimates.
+
+```{r, message=FALSE}
+library(ggplot2)
+
+ggplot(e1_risk_roll@risk_estimates) +
+  geom_line(aes(x = row_num, y = realized)) +
+  geom_line(aes(x = row_num, y = risk_est,
+                col = factor(alpha),
+                linetype = factor(risk_measure))) +
+  labs(x = "",
+       y = "portfolio log returns",
+       linetype = "Risk measure",
+       col = bquote(paste(alpha, -level))
+       ) +
+  theme_classic()
+```
+
+
+### Example 2
+
+For the second example adjust the default ARMA-GARCH model and specify an individual model specification for one asset.
+
+```{r}
+e2_marg_settings <- marginal_settings(
+  train_size = 800,
+  refit_size = 60,
+  individual_spec = list("GOOG" = default_garch_spec(dist = "std")),
+  default_spec = default_garch_spec(ar = 2)
+)
+```
+
+Now again specify the settings for the vine copula fitting. Here one can specify to only use D vine copula models.
+
+```{r}
+e2_vine_settings <- vine_settings(
+  train_size = 100,
+  refit_size = 20,
+  family_set = "onepar", # valid bivariate building blocks
+  vine_type = "dvine"
+)
+```
+
+Estimate the risk measures in a rolling fashion using ARMA-GARCH and vine copula models.
+
+```{r}
+e2_risk_roll <- estimate_risk_roll(
+  sample_returns_small,
+  weights = NULL, # default -> equal weights
+  marginal_settings = e2_marg_settings,
+  vine_settings = e2_vine_settings,
+  alpha = c(0.01, 0.1),
+  risk_measures = c("VaR", "ES_median"),
+  n_samples = 1000,
+  trace = TRUE
+)
+```
+
+```{r}
+e2_risk_roll
+summary(e2_risk_roll)
+```
+
+Having these estimates again one can start by visually exploring these estimates.
+
+```{r}
+ggplot(e2_risk_roll@risk_estimates) +
+  geom_line(aes(x = row_num, y = realized)) +
+  geom_line(aes(x = row_num, y = risk_est,
+                col = factor(alpha),
+                linetype = factor(risk_measure))) +
+  labs(x = "",
+       y = "portfolio log returns",
+       linetype = "Risk measure",
+       col = bquote(paste(alpha, -level))
+       ) +
+  theme_classic()
+```
+
+```{r}
+library(dplyr)
+
+e2_risk_roll@risk_estimates %>%
+  dtplyr::lazy_dt() %>%
+  filter(risk_measure == "ES_median", alpha == 0.1) %>%
+  mutate(exceeded = if_else(risk_est > realized, "Yes", "No")) %>%
+  data.table::as.data.table() %>%
+  ggplot() +
+  geom_line(aes(x = row_num, y = realized), col = "lightgrey") +
+  geom_point(aes(x = row_num, y = realized, col = exceeded)) +
+  geom_line(aes(x = row_num, y = risk_est), col = "blue") +
+  scale_color_manual(values = c("lightgrey", "red")) +
+  labs(x = "",
+       y = "portfolio log returns",
+       col = "Exceeded",
+       subtitle = bquote(paste("Risk measure: ES (median estimation) with ",
+                               alpha, "-level 0.1"))
+       ) +
+  theme_classic()
+```
+Then one can also use conditional and unconditional backtesting procedures on the VaR.
+
+```{r}
+e2_var_01 <- e2_risk_roll@risk_estimates %>%
+  dtplyr::lazy_dt() %>%
+  filter(risk_measure == "VaR", alpha == 0.01) %>%
+  as.data.frame()
+
+rugarch::VaRTest(
+  alpha = 0.01,
+  actual = e2_var_01$realized,
+  VaR = e2_var_01$risk_est)
+```
+
