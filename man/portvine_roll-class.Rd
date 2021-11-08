@@ -64,7 +64,7 @@ estimation approach for the risk measures was used.}
 \item{\code{n_samples}}{positive numeric count displaying how many return samples
 were used for the risk measure estimation.}
 
-\item{\code{time_taken}}{difftime displaying how long the whole estimation process
+\item{\code{time_taken}}{numeric value displaying how many minutes the whole estimation process
 took.}
 
 \item{\code{cond_risk_estimates}}{!C! data.table with the same columns as the

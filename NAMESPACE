@@ -16,6 +16,7 @@ import(data.table, except = c(first,last,between))
 
 import(dplyr)
 importFrom(dtplyr,lazy_dt)
+importFrom(methods,show)
 importFrom(stats,cor)
 importFrom(stats,resid)
 importFrom(tidyr,pivot_longer)

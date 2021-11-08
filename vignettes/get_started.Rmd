@@ -34,14 +34,14 @@ dim(sample_returns_small)
 
 Specify the marginal models
 
-Have a look at the default model.
+Have a look at the default marginal model.
 
 ```{r}
 default_garch_spec()
 ```
 
 
-For the first example do not adjust the default ARMA-GARCH model. So we just need to specify the train and refit size in order to perform the rolling window estimation.
+For the first example do not adjust the default ARMA-GARCH model specification. So one just needs to specify the train and refit size in order to perform the rolling window estimation.
 
 ```{r}
 e1_marg_settings <- marginal_settings(
@@ -50,7 +50,7 @@ e1_marg_settings <- marginal_settings(
 )
 ```
 
-Now specify the settings for the vine copula fitting. Here one can for example use only a subset of bivariate copulas as the building blocks of the final vine copula.
+Now specify the settings for the vine copula fitting. Here one can for example use only a subset of all the one-parametric bivariate copulas as the building blocks of the final fitted vine copulas.
 
 ```{r}
 e1_vine_settings <- vine_settings(
@@ -92,8 +92,6 @@ e1_risk_roll@marg_models_fit$AAPL@model$spec
 ```{r}
 # The fitted_vines slot contains a list of all the fitted vine copula models
 e1_risk_roll@fitted_vines[[1]]
-# Thus one can inspect the fitted vines for example visually.
-rvinecopulib:::plot.vinecop(e1_risk_roll@fitted_vines[[1]])
 ```
 
 Of course the most interesting slot is the one containing the estimated risk measures.
@@ -215,6 +213,8 @@ rugarch::VaRTest(
   actual = e2_var_01$realized,
   VaR = e2_var_01$risk_est)
 ```
+
+Package is written with extensive input checks that prevent the user from using the functions in an unintended way. An example for this is given below.
 
 ```{r, error=TRUE}
 estimate_risk_roll(

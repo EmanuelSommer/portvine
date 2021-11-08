@@ -195,6 +195,9 @@ estimate_risk_roll <- function(
   }
 
   end_time <- Sys.time()
+  time_taken_minutes <- as.numeric(
+    difftime(end_time, start_time), units = "mins"
+  )
 
   # return the correct output class
   if (!conditional_logical) {
@@ -210,7 +213,7 @@ estimate_risk_roll <- function(
       weights = weights,
       cond_estimation = conditional_logical,
       n_samples = n_samples,
-      time_taken = end_time - start_time
+      time_taken = time_taken_minutes
     )
   } else {
     methods::new("cond_portvine_roll",
@@ -225,7 +228,7 @@ estimate_risk_roll <- function(
                  weights = weights,
                  cond_estimation = conditional_logical,
                  n_samples = n_samples,
-                 time_taken = end_time - start_time,
+                 time_taken = time_taken_minutes,
                  cond_risk_estimates = cond_risk_estimates,
                  cond_vars = cond_vars,
                  n_cond_samples = n_cond_samples

@@ -79,6 +79,7 @@ marginal_settings <- function(
 
 #' @export
 #' @param object An object of class `marginal_settings`
+#' @importFrom methods show
 #' @rdname marginal_settings-class
 setMethod("show", c("marginal_settings"), function(object) {
   cat("An object of class <marginal_settings>\n")
@@ -167,6 +168,7 @@ vine_settings <- function(
 
 #' @export
 #' @param object An object of class `vine_settings`
+#' @importFrom methods show
 #' @rdname vine_settings-class
 setMethod("show", c("vine_settings"), function(object) {
   cat("An object of class <vine_settings>\n")
@@ -206,7 +208,7 @@ setMethod("show", c("vine_settings"), function(object) {
 #'  estimation approach for the risk measures was used.
 #' @slot n_samples positive numeric count displaying how many return samples
 #' were used for the risk measure estimation.
-#' @slot time_taken difftime displaying how long the whole estimation process
+#' @slot time_taken numeric value displaying how many minutes the whole estimation process
 #' took.
 #'
 #' @seealso [`estimate_risk_roll()`]
@@ -226,7 +228,7 @@ setClass("portvine_roll",
            weights = "numeric",
            cond_estimation = "logical",
            n_samples = "numeric",
-           time_taken = "difftime"
+           time_taken = "numeric"
          ),
          validity = function(object) {
            error_mess <- character(0)
@@ -283,6 +285,7 @@ setClass("cond_portvine_roll",
 
 #' @export
 #' @param object An object of class `portvine_roll` or `cond_portvine_roll`
+#' @importFrom methods show
 #' @rdname portvine_roll-class
 setMethod("show", c("portvine_roll"), function(object) {
   if (!object@cond_estimation) cat("An object of class <portvine_roll>\n")
@@ -291,11 +294,12 @@ setMethod("show", c("portvine_roll"), function(object) {
   cat("Number of vine windows:", length(object@fitted_vines), "\n")
   cat("Risk measures estimated:", object@risk_measures, "\n")
   cat("Alpha levels used:", object@alpha, "\n")
-  cat("\nTime taken", round(object@time_taken, 2), units(object@time_taken),
+  cat("\nTime taken:", round(object@time_taken, 4), "minutes",
       "\n")
 })
 
 #' @export
+#' @importFrom methods show
 #' @rdname portvine_roll-class
 setMethod("show", c("cond_portvine_roll"), function(object) {
   cat("An object of class <cond_portvine_roll>\n")
@@ -327,7 +331,7 @@ setMethod("summary", c("portvine_roll"), function(object) {
   cat("Number of estimated risk measures:", nrow(object@risk_estimates), "\n")
   cat("Number of samples for each risk estimation:", object@n_samples, "\n")
 
-  cat("\nTime taken", round(object@time_taken, 2), units(object@time_taken),
+  cat("\nTime taken:", round(object@time_taken, 4), "minutes",
       "\n")
 })
 
