@@ -1,15 +1,22 @@
 #' Sample cond from a vine copula
 #'
-#' @param n_samples TBD
-#' @param n_cond_samples TBD
+#' @param n_samples number of samples to compute for the risk measure estimates
+#' @param cond_alpha a numeric vector specifying the corresponding quantiles
+#'  in (0,1) of the conditional variable(s) conditioned on which the conditional
+#'  risk measures should be calculated.
 #' @param fitted_vine TBD
 #' @param vine_type TBD
 #'
-#' @return TBD
+#' @return list with 2 entries:
+#' - `sample_dt` data.table with `n_samples` times `length(cond_alpha)` rows
+#'  each corresponding to one multivariate sample, each column is one of the
+#' assets (named)
+#' - `cond_alpha_vec` dimensions s.t. it would fit as an extra column to
+#'  `sample_dt` indicating the level of `cond_alpha` used.
 #'
 #' @noRd
 rcondvinecop <- function(
-  n_samples, n_cond_samples,
+  n_samples, cond_alpha,
   fitted_vine, vine_type
 ) {
   stop("NOT yet implemented")

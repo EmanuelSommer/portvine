@@ -16,7 +16,9 @@
 #' @param cond_vars colnames of the variables to sample conditionally from
 #' (currently \eqn{\leq 2})
 #' @param n_samples number of samples to compute for the risk measure estimates
-#' @param n_cond_samples number of samples of the conditioning variables
+#' @param cond_alpha a numeric vector specifying the corresponding quantiles
+#'  in (0,1) of the conditional variable(s) conditioned on which the conditional
+#'  risk measures should be calculated.
 #' @param n_mc_samples number of samples for the Monte Carlo integration
 #' if the risk measure `ES_mc` is used. (See [`est_es()`])
 #' @param trace if set to TRUE the algorithm will print information while
@@ -42,7 +44,7 @@ estimate_risk_roll <- function(
   risk_measures = c("VaR", "ES_mean"),
   cond_vars = NULL,
   n_samples = 1000,
-  n_cond_samples = 100,
+  cond_alpha = 0.05,
   n_mc_samples = 1000,
   trace = TRUE
 ) {
@@ -77,9 +79,10 @@ estimate_risk_roll <- function(
   # risk_measures argument
   checkmate::assert_subset(risk_measures, c("VaR", "ES_mean",
                                             "ES_median", "ES_mc"))
-  # n_samples, n_cond_samples
+  # n_samples, cond_alpha
   checkmate::assert_integerish(n_samples, lower = 1)
-  checkmate::assert_integerish(n_cond_samples, lower = 1)
+  checkmate::assert_numeric(cond_alpha, lower = 0, upper = 1,
+                            any.missing = FALSE, min.len = 1)
   # marginal_settings and vine_settings
   checkmate::assert_class(marginal_settings, "marginal_settings")
   checkmate::assert_class(vine_settings, "vine_settings")
@@ -168,7 +171,7 @@ estimate_risk_roll <- function(
     weights = weights,
     cond_vars = cond_vars,
     n_samples = n_samples,
-    n_cond_samples = n_cond_samples,
+    cond_alpha = cond_alpha,
     n_mc_samples = n_mc_samples,
     trace = trace
   )
@@ -231,7 +234,7 @@ estimate_risk_roll <- function(
                  time_taken = time_taken_minutes,
                  cond_risk_estimates = cond_risk_estimates,
                  cond_vars = cond_vars,
-                 n_cond_samples = n_cond_samples
+                 cond_alpha = cond_alpha
     )
   }
 }

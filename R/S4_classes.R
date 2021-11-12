@@ -254,10 +254,13 @@ setClass("portvine_roll",
 
 #' @slot cond_risk_estimates !C! data.table with the same columns as the
 #'  `risk_estimate` slot has + the additional conditional columns with the
-#'  respective sampled conditioning value.
+#'  respective conditioning value and the column `cond_alpha` that indicates
+#'   the used conditional quantile level.
 #' @slot cond_vars !C! character vector with the names of the variables that were
 #' used to sample conditionally from.
-#' @slot n_cond_samples !C! number of samples of the conditioning variables
+#' @slot cond_alpha !C! a numeric vector specifying the corresponding quantiles
+#'  in (0,1) of the conditional variable(s) conditioned on which the conditional
+#'  risk measures were calculated.
 #'
 #' @return object of class `cond_portvine_roll`
 #' @export
@@ -268,7 +271,7 @@ setClass("cond_portvine_roll",
          slots = list(
            cond_risk_estimates = "data.table",
            cond_vars = "character",
-           n_cond_samples = "numeric"
+           cond_alpha = "numeric"
          ),
          validity = function(object) {
            error_mess <- character(0)
@@ -282,6 +285,8 @@ setClass("cond_portvine_roll",
            if (length(error_mess)) error_mess else TRUE
          }
 )
+
+### print methods
 
 #' @export
 #' @param object An object of class `portvine_roll` or `cond_portvine_roll`
@@ -306,6 +311,9 @@ setMethod("show", c("cond_portvine_roll"), function(object) {
   cat("Conditional variable(s):", object@cond_vars, "\n")
   methods::callNextMethod()
 })
+
+
+### summary methods
 
 #' @export
 #' @param object An object of class `portvine_roll` or `cond_portvine_roll`
@@ -344,9 +352,97 @@ setMethod("summary", c("cond_portvine_roll"), function(object) {
   cat("Conditional variable(s):", object@cond_vars, "\n")
   cat("Number of conditional estimated risk measures:",
       nrow(object@cond_risk_estimates), "\n")
-  cat("Number of conditional samples:", object@n_cond_samples, "\n")
+  cat("Conditioning quantiles:", object@cond_alpha, "\n")
 
   methods::callNextMethod()
 })
 
+### accessor methods for the risk estimates
 
+#' Accessor methods for the risk estimates of `(cond_)portvine_roll` objects
+#'
+#' @param roll Object of class `portvine_roll` or a child class
+#' @param risk_measures character vector of risk measures to filter for. Note
+#' that they must be fitted in the `roll` argument. The default will return all
+#' fitted risk measures
+#' @param alpha numeric \eqn{\alpha} levels of the estimated risk measures to
+#' filter
+#' for. Note that they must be fitted in the `roll` argument. The default will
+#' return all fitted \eqn{\alpha} levels
+#' @param ... Additional parameters for child class methods
+#'
+#' @return possibly filtered data.table with at least the columns
+#' `risk_measure`, `risk_est`, `alpha`, `row_num`, `vine_window` and `realized`.
+#' In the conditional case further columns are available (see:
+#'  [`portvine_roll-class`].
+#' @export
+#'
+#' @seealso [`portvine_roll-class`]
+setGeneric(
+  "risk_estimates",
+  function(roll, risk_measures = NULL, alpha = NULL, ...) {
+    standardGeneric("risk_estimates")
+  }
+)
+
+#' @export
+#' @rdname risk_estimates
+setMethod("risk_estimates",
+  signature = c("portvine_roll"),
+  function(roll, risk_measures = NULL, alpha = NULL) {
+    # check whether the risk_measures and alpha levels were fitted for this roll
+    checkmate::assert_subset(risk_measures, roll@risk_measures, empty.ok = TRUE)
+    if (is.null(risk_measures)) risk_measures <- roll@risk_measures
+    checkmate::assert_subset(alpha, roll@alpha, empty.ok = TRUE)
+    if (is.null(alpha)) alpha <- roll@alpha
+
+    roll@risk_estimates %>%
+      dtplyr::lazy_dt() %>%
+      filter(risk_measure %in% risk_measures,
+             alpha %in% (!!alpha)) %>%
+      data.table::as.data.table()
+  }
+)
+
+#'
+#' @param cond if set to TRUE returns the conditional risk estimates and
+#' otherwise returns the overall risk estimates.
+#' @param cond_alpha a numeric vector specifying the corresponding quantiles
+#'  in (0,1) of the conditional variable(s) conditioned on which the conditional
+#'  risk measures were calculated to filter for. Note
+#' that they must be fitted in the `roll` argument. The default will return all
+#' fitted risk measures
+#'
+#' @export
+#'
+#' @rdname risk_estimates
+setMethod("risk_estimates",
+  signature = c("cond_portvine_roll"),
+  function(roll, risk_measures = NULL, alpha = NULL, cond = TRUE,
+           cond_alpha = NULL) {
+    # check whether the risk_measures and alpha levels were fitted for this roll
+    checkmate::assert_subset(risk_measures, roll@risk_measures, empty.ok = TRUE)
+    if (is.null(risk_measures)) risk_measures <- roll@risk_measures
+    checkmate::assert_subset(alpha, roll@alpha, empty.ok = TRUE)
+    if (is.null(alpha)) alpha <- roll@alpha
+    checkmate::assert_flag(cond, null.ok = FALSE)
+    checkmate::assert_subset(cond_alpha, roll@cond_alpha, empty.ok = TRUE)
+    if (is.null(alpha)) cond_alpha <- roll@cond_alpha
+
+    if (cond) {
+      roll@cond_risk_estimates %>%
+        dtplyr::lazy_dt() %>%
+        filter(risk_measure %in% risk_measures,
+               alpha %in% (!!alpha),
+               cond_alpha %in% (!!cond_alpha)) %>%
+        data.table::as.data.table()
+    } else {
+      roll@risk_estimates %>%
+        dtplyr::lazy_dt() %>%
+        filter(risk_measure %in% risk_measures,
+               alpha %in% (!!alpha)) %>%
+        data.table::as.data.table()
+    }
+
+  }
+)

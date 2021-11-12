@@ -33,7 +33,7 @@ estimate_dependence_and_risk(
   c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
   NULL,
   1000,
-  100,
+  0.05,
   100,
   FALSE
 )
@@ -54,7 +54,7 @@ test_that("unconditional case", {
         c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
         NULL,
         1000,
-        100,
+        0.05,
         100,
         FALSE
       )[["cond_risk_estimates"]]
@@ -73,7 +73,7 @@ test_that("unconditional case", {
       c("GOOG" = 2, "AAPL" = 30, "AMZN" = 5),
       NULL,
       1000,
-      100,
+      0.05,
       100,
       FALSE
     )[["overall_risk_estimates"]],
@@ -92,7 +92,7 @@ test_that("unconditional case", {
       c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
       NULL,
       1000,
-      100,
+      0.05,
       100,
       FALSE
     )[["overall_risk_estimates"]]),
@@ -112,7 +112,7 @@ test_that("unconditional case", {
         c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
         NULL,
         1000,
-        100,
+        0.05,
         100,
         FALSE
       )[["fitted_vines"]],
@@ -134,7 +134,7 @@ test_that("unconditional case", {
         c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
         NULL,
         1000,
-        100,
+        0.05,
         100,
         FALSE
       )[["cond_risk_estimates"]]
@@ -153,7 +153,7 @@ test_that("unconditional case", {
       c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
       NULL,
       1000,
-      100,
+      0.05,
       100,
       FALSE
     )[["overall_risk_estimates"]],
@@ -172,7 +172,7 @@ test_that("unconditional case", {
       c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
       NULL,
       1000,
-      100,
+      0.05,
       100,
       FALSE
     )[["overall_risk_estimates"]]),
@@ -192,7 +192,7 @@ test_that("unconditional case", {
         c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
         NULL,
         1000,
-        100,
+        0.05,
         100,
         FALSE
       )[["fitted_vines"]],
@@ -214,7 +214,7 @@ test_that("unconditional case", {
         c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
         NULL,
         1000,
-        100,
+        0.05,
         100,
         FALSE
       )[["fitted_vines"]],
@@ -235,7 +235,7 @@ test_that("unconditional case", {
       c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
       NULL,
       1000,
-      100,
+      0.05,
       100,
       FALSE
     )[["overall_risk_estimates"]]),

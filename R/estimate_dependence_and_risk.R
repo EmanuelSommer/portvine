@@ -30,7 +30,9 @@
 #'  (conditioning variables must have weight 0).
 #' @param cond_vars colnames of the variables to sample conditionally from
 #' @param n_samples number of samples to compute for the risk measure estimates
-#' @param n_cond_samples number of samples of the conditioning variables
+#' @param cond_alpha a numeric vector specifying the corresponding quantiles
+#'  in (0,1) of the conditional variable(s) conditioned on which the conditional
+#'  risk measures should be calculated.
 #' @param n_mc_samples number of samples for the Monte Carlo integration
 #' if the risk measure `ES_mc` is used. (See [`est_es()`])
 #' @param trace if set to TRUE the algorithm will print information while
@@ -43,7 +45,8 @@
 #'   `risk_est`, `alpha`, `row_num` and `vine_window` (here all samples also
 #'   in the conditional case are used)
 #'   - `cond_risk_estimates` a data.table with the same format like the overall
-#'   one but with the additional column(s) containing the conditional values.
+#'   one but with the additional column(s) containing the conditional values and
+#'   the column `cond_alpha` that indicates the used conditional quantile level.
 #'   NULL if the unconditional approach is taken.
 #'
 #' @import dplyr
@@ -63,7 +66,7 @@ estimate_dependence_and_risk <- function(
   weights,
   cond_vars,
   n_samples,
-  n_cond_samples,
+  cond_alpha,
   n_mc_samples,
   trace
 ) {
@@ -131,15 +134,19 @@ estimate_dependence_and_risk <- function(
                 n_marg_train + n_vine_refit * vine_window)),
         function(row_num_window) {
           # simulate from the fitted vine
-          # get a data.table with n_samples rows or n_samples*n_cond_samples
+          # get a data.table with n_samples rows or n_samples*length(cond_alpha)
           # rows, each column is one of the assets
           if (length(cond_vars) == 0) {
             sim_dt <- data.table::as.data.table(
               rvinecopulib::rvinecop(n_samples, fitted_vine)
             )
           } else {
-            sim_dt <- rcondvinecop(n_samples, n_cond_samples,
-                                  fitted_vine, vine_type)
+            rcondvinecop_res <- rcondvinecop(
+              n_samples, cond_alpha,
+              fitted_vine, vine_type
+            )
+            cond_alpha_vec <- rcondvinecop_res$cond_alpha_vec
+            sim_dt <- rcondvinecop_res$sample_dt
           }
           # transform the simulated data on the copula scale to the original
           # scale and then compute the weighted sum of the return in order to
@@ -196,48 +203,58 @@ estimate_dependence_and_risk <- function(
           if (length(cond_vars) == 0) {
             cond_risk_estimates <- NULL
           } else if (length(cond_vars) == 1) {
-            unique_cond <- unique(sim_dt[, -1])
-            cond_risk_estimates <- lapply(unique_cond[[1]], function(cond_val) {
+            cond_name <- colnames(sim_dt[, -1])
+            sim_dt <- cbind(sim_dt, cond_alpha_vec)
+            # estimate the risk for each conditional quantile
+            cond_risk_estimates <- lapply(cond_alpha, function(cond_level) {
+              cond_val <- sim_dt[[2]][sim_dt[["cond_alpha_vec"]] ==
+                                        cond_level][1]
               names(cond_val) <- colnames(unique_cond)
+              names(cond_level) <- "cond_alpha"
               cbind(
                 est_risk_measures(
                   risk_measures = risk_measures,
-                  sample = sim_dt$portfolio_value[sim_dt[[2]] == cond_val],
+                  sample = sim_dt$portfolio_value[sim_dt[["cond_alpha_vec"]] ==
+                                                    cond_level],
                   alpha = alpha,
                   n_mc_samples = n_mc_samples,
                   row_num = row_num_window
                 ),
-                cond_val
+                cond_val,
+                cond_level
               )
             }) %>% data.table::rbindlist()
           } else if (length(cond_vars) == 2) {
-            unique_cond <- unique(sim_dt[, -1])
-            cond_vals1 <- unique_cond[[1]]
-            cond_vals2 <- unique_cond[[2]]
-            cond_risk_estimates <- lapply(seq(length(cond_vals1)),
-                                          function(i) {
-              cond_val1 <- cond_vals1[i]
-              cond_val2 <- cond_vals2[i]
-              names(cond_val1) <- colnames(unique_cond)[1]
-              names(cond_val2) <- colnames(unique_cond)[2]
+            cond_names <- colnames(sim_dt[, -1])
+            sim_dt <- cbind(sim_dt, cond_alpha_vec)
+            # estimate the risk for each conditional quantile
+            cond_risk_estimates <- lapply(cond_alpha, function(cond_level) {
+              cond_val1 <- sim_dt[[2]][sim_dt[["cond_alpha_vec"]] ==
+                                         cond_level][1]
+              cond_val2 <- sim_dt[[3]][sim_dt[["cond_alpha_vec"]] ==
+                                         cond_level][1]
+              names(cond_val1) <- cond_names[1]
+              names(cond_val2) <- cond_names[2]
+              names(cond_level) <- "cond_alpha"
               cbind(
                 est_risk_measures(
                   risk_measures = risk_measures,
-                  sample = sim_dt$portfolio_value[sim_dt[[2]] == cond_val1 &
-                                                    sim_dt[[3]] == cond_val2],
+                  sample = sim_dt$portfolio_value[sim_dt[["cond_alpha_vec"]] ==
+                                                    cond_level],
                   alpha = alpha,
                   n_mc_samples = n_mc_samples,
                   row_num = row_num_window
                 ),
                 cond_val1,
-                cond_val2
+                cond_val2,
+                cond_level
               )
             }) %>% data.table::rbindlist()
           }
           list(overall_risk_estimates = overall_risk_estimates,
                cond_risk_estimates = cond_risk_estimates)
       })
-      # collect the results in two data.tables
+      # collect the observation level results in two data.tables
       overall_risk_estimates <- lapply(list_risk_est, function(row_num_entry) {
         row_num_entry[["overall_risk_estimates"]]
       }) %>% data.table::rbindlist()
@@ -253,7 +270,7 @@ estimate_dependence_and_risk <- function(
            cond_risk_estimates = cond_risk_estimates,
            fitted_vine = fitted_vine, vine_window = vine_window)
   })
-  # collect the results again in two data.tables
+  # collect the windowwise results again in two data.tables
   overall_risk_estimates <- lapply(
     window_results_list,
     function(vine_window_entry) {

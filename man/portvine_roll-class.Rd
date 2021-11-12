@@ -69,12 +69,15 @@ took.}
 
 \item{\code{cond_risk_estimates}}{!C! data.table with the same columns as the
 \code{risk_estimate} slot has + the additional conditional columns with the
-respective sampled conditioning value.}
+respective conditioning value and the column \code{cond_alpha} that indicates
+the used conditional quantile level.}
 
 \item{\code{cond_vars}}{!C! character vector with the names of the variables that were
 used to sample conditionally from.}
 
-\item{\code{n_cond_samples}}{!C! number of samples of the conditioning variables}
+\item{\code{cond_alpha}}{!C! a numeric vector specifying the corresponding quantiles
+in (0,1) of the conditional variable(s) conditioned on which the conditional
+risk measures were calculated.}
 }}
 
 \seealso{
