@@ -1,3 +1,5 @@
+### TBD: conditional case
+
 test_that("input checks", {
   valid_marg_settings <- marginal_settings(
     train_size = 800,

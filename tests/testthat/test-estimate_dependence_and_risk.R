@@ -1,3 +1,6 @@
+
+### TBD: conditional case
+
 vine_input_sample_returns_small <- lazy_dt(sample_returns_small) %>%
   mutate(row_num = seq.int(nrow(sample_returns_small))) %>%
   pivot_longer(-row_num, names_to = "asset", values_to = "returns") %>%
@@ -242,3 +245,5 @@ test_that("unconditional case", {
     c("risk_measure", "risk_est", "alpha", "row_num", "vine_window")
   )
 })
+
+
