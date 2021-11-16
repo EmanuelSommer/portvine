@@ -143,6 +143,7 @@ estimate_dependence_and_risk <- function(
           } else {
             rcondvinecop_res <- rcondvinecop(
               n_samples, cond_alpha,
+              cond_vars,
               fitted_vine, vine_type
             )
             cond_alpha_vec <- rcondvinecop_res$cond_alpha_vec
