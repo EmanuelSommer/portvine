@@ -324,4 +324,9 @@ test_that("basic functionality (unconditionally)", {
     t2_risk_roll@marg_models_fit[[1]]@model$n.refits,
     2
   )
+  ### conditional estimation with dvines ------------------------------
+
+  # TBD
+
+
 })

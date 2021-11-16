@@ -92,7 +92,93 @@ r1conddvine <- function(n_samples, cond_alpha, fitted_vine){
 #'
 #' @noRd
 r2conddvine <- function(n_samples, cond_alpha, fitted_vine) {
-  stop("not yet implemented")
+  asset_names <- fitted_vine$names
+  n_assets <- length(asset_names)
+  # the cond_alpha value will be set for the second rightmost value (the market
+  #index with the strongest relationship to the assets) as the copula scale
+  # conditional value. To mimic the cond_alpha level quantile of both
+  # conditional variables the conditional value of the rightmost variable will
+  # be computed based on the copula between the two variables
+  cond_alpha_second <- rvinecopulib::hbicop(
+    u = matrix(
+      c(cond_alpha, cond_alpha),
+      ncol = 2, byrow = FALSE,
+    ),
+    cond_var = 2,
+    family = fitted_vine$pair_copulas[[1]][[1]]$family,
+    rotation = fitted_vine$pair_copulas[[1]][[1]]$rotation,
+    parameters = fitted_vine$pair_copulas[[1]][[1]]$parameters,
+    inverse = TRUE
+  )
+  # for each cond_alpha level get the n_samples samples
+  sample_dt <- lapply(seq(length(cond_alpha)), function(cond_alpha_ind) {
+    sample_matrix <- replicate(n_samples, {
+      aux_matrix <- matrix(data = NA_real_,
+                           nrow = n_assets,
+                           ncol = n_assets)
+      # initialize the diagonal/first two entries of the first row with the
+      # conditional values as well as the sampled values. Note that the value
+      # 2,2 of the auxiliary matrix is calculated as it will be used to
+      # compute the the first conditional asset sample
+      aux_matrix[1, 2] <- cond_alpha_second[cond_alpha_ind]
+
+      diag(aux_matrix) <- c(
+        cond_alpha[cond_alpha_ind],
+        rvinecopulib::hbicop(
+          u = matrix(
+            c(cond_alpha[cond_alpha_ind], cond_alpha_second[cond_alpha_ind]),
+            ncol = 2, byrow = FALSE,
+          ),
+          cond_var = 2,
+          family = fitted_vine$pair_copulas[[1]][[1]]$family,
+          rotation = fitted_vine$pair_copulas[[1]][[1]]$rotation,
+          parameters = fitted_vine$pair_copulas[[1]][[1]]$parameters,
+          inverse = FALSE
+        ),
+        runif(n_assets - 2)
+      )
+
+      for (j in 3:n_assets) {
+        for (k in (j - 1):1) {
+          current_bicop <- fitted_vine$pair_copulas[[k]][[j - k]]
+          aux_matrix[k, j] <- rvinecopulib::hbicop(
+            u = matrix(
+              c(aux_matrix[k + 1, j], aux_matrix[k, j - 1]),
+              ncol = 2
+            ),
+            cond_var = 2,
+            family = current_bicop$family,
+            rotation = current_bicop$rotation,
+            parameters = current_bicop$parameters,
+            inverse = TRUE
+          )
+          if (j < n_assets) {
+            aux_matrix[k + 1, j] <- rvinecopulib::hbicop(
+              u = matrix(
+                c(aux_matrix[k, j - 1], aux_matrix[k, j]),
+                ncol = 2
+              ),
+              cond_var = 2,
+              family = current_bicop$family,
+              rotation = current_bicop$rotation,
+              parameters = current_bicop$parameters,
+              inverse = FALSE
+            )
+          }
+        }
+      }
+      # return the first row containing the multivariate conditional sample with
+      # the conditioning value
+      aux_matrix[1, ]
+    }) %>%
+      t()
+    sample_matrix <- sample_matrix[, fitted_vine$structure$order]
+    colnames(sample_matrix) <- asset_names
+    data.table::as.data.table(sample_matrix)
+  }) %>% data.table::rbindlist()
+
+  list(sample_dt = sample_dt,
+       cond_alpha_vec = sample_dt[[fitted_vine$structure$order[1]]])
 }
 
 

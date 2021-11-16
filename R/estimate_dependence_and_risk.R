@@ -210,20 +210,20 @@ estimate_dependence_and_risk <- function(
             cond_risk_estimates <- lapply(cond_alpha, function(cond_level) {
               cond_val <- sim_dt[[2]][sim_dt[["cond_alpha_vec"]] ==
                                         cond_level][1]
-              names(cond_val) <- colnames(unique_cond)
-              names(cond_level) <- "cond_alpha"
-              cbind(
-                est_risk_measures(
-                  risk_measures = risk_measures,
-                  sample = sim_dt$portfolio_value[sim_dt[["cond_alpha_vec"]] ==
+              est_risk_measures(
+                risk_measures = risk_measures,
+                sample = sim_dt$portfolio_value[sim_dt[["cond_alpha_vec"]] ==
                                                     cond_level],
-                  alpha = alpha,
-                  n_mc_samples = n_mc_samples,
-                  row_num = row_num_window
-                ),
-                cond_val,
-                cond_level
-              )
+                alpha = alpha,
+                n_mc_samples = n_mc_samples,
+                row_num = row_num_window
+              ) %>%
+                dtplyr::lazy_dt() %>%
+                mutate(
+                  !! cond_name := cond_val,
+                  "cond_alpha" = cond_level
+                ) %>%
+                data.table::as.data.table()
             }) %>% data.table::rbindlist()
           } else if (length(cond_vars) == 2) {
             cond_names <- colnames(sim_dt[, -1])
@@ -234,22 +234,21 @@ estimate_dependence_and_risk <- function(
                                          cond_level][1]
               cond_val2 <- sim_dt[[3]][sim_dt[["cond_alpha_vec"]] ==
                                          cond_level][1]
-              names(cond_val1) <- cond_names[1]
-              names(cond_val2) <- cond_names[2]
-              names(cond_level) <- "cond_alpha"
-              cbind(
-                est_risk_measures(
-                  risk_measures = risk_measures,
-                  sample = sim_dt$portfolio_value[sim_dt[["cond_alpha_vec"]] ==
+              est_risk_measures(
+                risk_measures = risk_measures,
+                sample = sim_dt$portfolio_value[sim_dt[["cond_alpha_vec"]] ==
                                                     cond_level],
-                  alpha = alpha,
-                  n_mc_samples = n_mc_samples,
-                  row_num = row_num_window
-                ),
-                cond_val1,
-                cond_val2,
-                cond_level
-              )
+                alpha = alpha,
+                n_mc_samples = n_mc_samples,
+                row_num = row_num_window
+              ) %>%
+                dtplyr::lazy_dt() %>%
+                mutate(
+                  !! cond_names[1] := cond_val1,
+                  !! cond_names[2] := cond_val2,
+                  "cond_alpha" = cond_level
+                ) %>%
+                data.table::as.data.table()
             }) %>% data.table::rbindlist()
           }
           list(overall_risk_estimates = overall_risk_estimates,
