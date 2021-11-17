@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_risk_roll.R
 \name{estimate_risk_roll}
 \alias{estimate_risk_roll}
-\title{TBD}
+\title{TBD!}
 \usage{
 estimate_risk_roll(
   data,
@@ -58,8 +58,13 @@ in the conditional case its child class \code{cond_portvine_roll}. For details
 see \code{\linkS4class{portvine_roll}}.
 }
 \description{
-TBD
+Address all dependencies of the vine and marginal settings parameters like
+n_all_obs - n_marg_train > n_marg_refit. i.e. there must be at least 2
+marginal and thus also 2 vine windows.
 }
 \examples{
 #TBD
+}
+\seealso{
+\code{\linkS4class{portvine_roll}}
 }

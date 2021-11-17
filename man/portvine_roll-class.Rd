@@ -38,7 +38,7 @@ by the !C!) is returned.
 \code{risk_est}, \code{alpha}, \code{row_num}, \code{vine_window} and \code{realized} (here all
 samples also in the conditional case are used)}
 
-\item{\code{marg_models_fit}}{named list with entry for each asset containing an
+\item{\code{fitted_marginals}}{named list with an entry for each asset containing a
 \code{\link[rugarch:ugarchroll-methods]{rugarch::ugarchroll}} class object that encompasses the marginal model fit.}
 
 \item{\code{fitted_vines}}{list of \code{\link[rvinecopulib:vinecop]{rvinecopulib::vinecop}} class objects each entry

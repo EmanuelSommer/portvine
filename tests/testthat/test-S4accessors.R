@@ -1,6 +1,6 @@
-### TBD: conditional case
 
-test_that("basic functionality & input checks", {
+
+test_that("risk_estimates() basic functionality & input checks", {
   t1_marg_settings <- marginal_settings(
     train_size = 800,
     refit_size = 100
@@ -202,6 +202,44 @@ test_that("basic functionality & input checks", {
         cond_alpha = NULL,
         cond = FALSE
       ), any.missing = FALSE, nrows = 6 * 100 * 1
+    )
+  )
+})
+
+test_that("fitted_vines() & fitted_marginals() basic functionality", {
+  t1_marg_settings <- marginal_settings(
+    train_size = 960,
+    refit_size = 20
+  )
+  t1_vine_settings <- vine_settings(
+    train_size = 100,
+    refit_size = 20,
+    family_set = "onepar",
+    vine_type = "dvine"
+  )
+  t1_risk_roll <- estimate_risk_roll(
+    sample_returns_small,
+    weights = NULL, # default -> equal weights
+    marginal_settings = t1_marg_settings,
+    vine_settings = t1_vine_settings,
+    alpha = c(0.01),
+    risk_measures = c("VaR"),
+    n_samples = 10,
+    cond_vars = "AAPL",
+    cond_alpha = 0.5,
+    trace = FALSE
+  )
+  expect_true(
+    checkmate::test_list(
+      fitted_vines(t1_risk_roll),
+      types = "vinecop", any.missing = FALSE, null.ok = FALSE, len = 2
+    )
+  )
+  expect_true(
+    checkmate::test_list(
+      fitted_marginals(t1_risk_roll),
+      types = "uGARCHroll", any.missing = FALSE, null.ok = FALSE, len = 3,
+      names = "unique"
     )
   )
 })

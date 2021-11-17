@@ -1,6 +1,8 @@
 # S4 classes --------------------------------------------------------
 
-# marginal_settings --------------------------------------------------------
+########################################################################
+# marginal_settings ----------------------------------------------------
+########################################################################
 
 #' S4 class for the marginal settings
 #'
@@ -96,9 +98,9 @@ setMethod("show", c("marginal_settings"), function(object) {
   }
 })
 
-
+########################################################################
 # vine_settings --------------------------------------------------------
-
+########################################################################
 
 #' S4 class for the vine settings
 #'
@@ -178,9 +180,9 @@ setMethod("show", c("vine_settings"), function(object) {
   cat("vine_type:", object@vine_type, "\n")
 })
 
-
+########################################################################
 # portvine_roll --------------------------------------------------------
-
+########################################################################
 
 #' S4 output class for the function [`estimate_risk_roll()`]
 #'
@@ -191,7 +193,7 @@ setMethod("show", c("vine_settings"), function(object) {
 #' @slot risk_estimates data.table with the columns `risk_measure`,
 #' `risk_est`, `alpha`, `row_num`, `vine_window` and `realized` (here all
 #' samples also in the conditional case are used)
-#' @slot marg_models_fit named list with entry for each asset containing an
+#' @slot fitted_marginals named list with an entry for each asset containing a
 #' [`rugarch::ugarchroll`] class object that encompasses the marginal model fit.
 #' @slot fitted_vines list of [`rvinecopulib::vinecop`] class objects each entry
 #'  corresponds to one vine window.
@@ -219,7 +221,7 @@ setMethod("show", c("vine_settings"), function(object) {
 setClass("portvine_roll",
          slots = list(
            risk_estimates = "data.table",
-           marg_models_fit = "list", # uGARCHroll entries S4
+           fitted_marginals = "list", # uGARCHroll entries S4
            fitted_vines = "list", # vinecop objects
            marginal_settings = "marginal_settings",
            vine_settings = "vine_settings",
@@ -238,7 +240,7 @@ setClass("portvine_roll",
                                                 "vine_window", "realized")
            )
            marg_mod_entries <- !checkmate::test_list(
-             object@marg_models_fit, types = "uGARCHroll", any.missing = FALSE,
+             object@fitted_marginals, types = "uGARCHroll", any.missing = FALSE,
              names = "unique"
            )
            fit_vines_entries <- !checkmate::test_list(
@@ -246,7 +248,7 @@ setClass("portvine_roll",
            )
 
            if (col_risk_est) error_mess <- "risk_estimates is missspecified."
-           if (marg_mod_entries) error_mess <- c(error_mess, "marg_models_fit has invalid entries/ is not named.")
+           if (marg_mod_entries) error_mess <- c(error_mess, "fitted_marginals has invalid entries/ is not named.")
            if (fit_vines_entries) error_mess <- c(error_mess, "fitted_vines has invalid entries.")
            if (length(error_mess)) error_mess else TRUE
          }
@@ -286,7 +288,7 @@ setClass("cond_portvine_roll",
          }
 )
 
-### print methods
+### print methods ---------------------------------------------------------
 
 #' @export
 #' @param object An object of class `portvine_roll` or `cond_portvine_roll`
@@ -295,7 +297,7 @@ setClass("cond_portvine_roll",
 setMethod("show", c("portvine_roll"), function(object) {
   if (!object@cond_estimation) cat("An object of class <portvine_roll>\n")
   cat("Number of ARMA-GARCH/ marginal windows:",
-      object@marg_models_fit[[1]]@model$n.refits, "\n")
+      object@fitted_marginals[[1]]@model$n.refits, "\n")
   cat("Number of vine windows:", length(object@fitted_vines), "\n")
   cat("Risk measures estimated:", object@risk_measures, "\n")
   cat("Alpha levels used:", object@alpha, "\n")
@@ -313,7 +315,7 @@ setMethod("show", c("cond_portvine_roll"), function(object) {
 })
 
 
-### summary methods
+### summary methods ---------------------------------------------------------
 
 #' @export
 #' @param object An object of class `portvine_roll` or `cond_portvine_roll`
@@ -322,7 +324,7 @@ setMethod("summary", c("portvine_roll"), function(object) {
   if (!object@cond_estimation) cat("An object of class <portvine_roll>\n")
   cat("\n--- Marginal models ---\n")
   cat("Number of ARMA-GARCH/ marginal windows:",
-      object@marg_models_fit[[1]]@model$n.refits, "\n")
+      object@fitted_marginals[[1]]@model$n.refits, "\n")
   cat("Train size: ", object@marginal_settings@train_size, "\n")
   cat("Refit size: ", object@marginal_settings@refit_size, "\n")
 
@@ -358,7 +360,7 @@ setMethod("summary", c("cond_portvine_roll"), function(object) {
   invisible(NULL)
 })
 
-### accessor methods for the risk estimates
+### accessor methods for the risk estimates --------------------------------
 
 #' Accessor methods for the risk estimates of `(cond_)portvine_roll` objects
 #'
@@ -446,4 +448,64 @@ setMethod("risk_estimates",
     }
 
   }
+)
+
+
+### accessor methods for fitted_vines &  fitted_marginals---------------------
+
+#' Accessor method for the fitted vine copula models of `(cond_)portvine_roll`
+#'  objects
+#'
+#' @param roll Object of class `portvine_roll` or a child class
+#' @param ... Additional parameters for child class methods
+#'
+#' @return list of [`rvinecopulib::vinecop`] class objects each entry
+#'  corresponds to one fitted vine copula model for the respective vine window.
+#' @export
+#'
+#' @seealso [`portvine_roll-class`]
+setGeneric(
+  "fitted_vines",
+  function(roll, ...) {
+    standardGeneric("fitted_vines")
+  }
+)
+
+#' @export
+#' @rdname fitted_vines
+setMethod("fitted_vines",
+          signature = c("portvine_roll"),
+          function(roll) {
+            roll@fitted_vines
+          }
+)
+
+#' Accessor method for the fitted marginal models of `(cond_)portvine_roll`
+#'  objects
+#'
+#'  The marginal models are ARMA-GARCH models fitted in a rolling
+#'  window fashion using [`rugarch::ugarchroll`].
+#'
+#' @param roll Object of class `portvine_roll` or a child class
+#' @param ... Additional parameters for child class methods
+#'
+#' @return named list with an entry for each asset containing a
+#' [`rugarch::ugarchroll`] class object that encompasses the marginal model fit.
+#' @export
+#'
+#' @seealso [`portvine_roll-class`]
+setGeneric(
+  "fitted_marginals",
+  function(roll, ...) {
+    standardGeneric("fitted_marginals")
+  }
+)
+
+#' @export
+#' @rdname fitted_marginals
+setMethod("fitted_marginals",
+          signature = c("portvine_roll"),
+          function(roll) {
+            roll@fitted_marginals
+          }
 )

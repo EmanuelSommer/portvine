@@ -1,5 +1,9 @@
 
-#' TBD
+#' TBD!
+#'
+#' Address all dependencies of the vine and marginal settings parameters like
+#' n_all_obs - n_marg_train > n_marg_refit. i.e. there must be at least 2
+#' marginal and thus also 2 vine windows.
 #'
 #' @param data matrix, data.frame or other object coercible to a data.table
 #'  storing the numeric asset returns in the named columns (at least 3).
@@ -28,6 +32,8 @@
 #' in the conditional case its child class `cond_portvine_roll`. For details
 #' see [`portvine_roll-class`].
 #' @export
+#'
+#' @seealso [`portvine_roll-class`]
 #'
 #' @importFrom dtplyr lazy_dt
 #' @importFrom tidyr pivot_longer pivot_wider
@@ -99,11 +105,12 @@ estimate_risk_roll <- function(
   }
   # check whether the individual settings are a valid match
   if (n_marg_train >= n_all_obs |
-      n_marg_refit > n_all_obs - n_marg_train |
+      n_marg_refit >= n_all_obs - n_marg_train |
       n_vine_train > n_marg_train |
       n_vine_refit > n_marg_refit |
       n_marg_refit %% n_vine_refit != 0) {
-    stop("The train and refit sizes of the marginal and vine settings are not a valid combination.")
+    stop("The train and refit sizes of the marginal and vine settings are not a valid combination.
+         Have a look at the help page for details.")
   }
   if ((n_all_obs - n_marg_train) %% n_marg_refit != 0) {
     message(paste(
@@ -206,7 +213,7 @@ estimate_risk_roll <- function(
   if (!conditional_logical) {
     methods::new("portvine_roll",
       risk_estimates = risk_estimates,
-      marg_models_fit = lapply(marg_mod_result,
+      fitted_marginals = lapply(marg_mod_result,
                                function(asset) asset$roll_model_fit),
       fitted_vines = dep_risk_result[["fitted_vines"]],
       marginal_settings = marginal_settings,
@@ -221,7 +228,7 @@ estimate_risk_roll <- function(
   } else {
     methods::new("cond_portvine_roll",
                  risk_estimates = risk_estimates,
-                 marg_models_fit = lapply(marg_mod_result,
+                 fitted_marginals = lapply(marg_mod_result,
                                           function(asset) asset$roll_model_fit),
                  fitted_vines = dep_risk_result[["fitted_vines"]],
                  marginal_settings = marginal_settings,

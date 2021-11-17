@@ -287,7 +287,7 @@ test_that("basic functionality (unconditionally)", {
     4
   )
   expect_equal(
-    t1_risk_roll@marg_models_fit[[1]]@model$n.refits,
+    t1_risk_roll@fitted_marginals[[1]]@model$n.refits,
     2
   )
   # dvine and n_all_obs - train_size is NOT dividable by refit size
@@ -328,7 +328,7 @@ test_that("basic functionality (unconditionally)", {
     2
   )
   expect_equal(
-    t2_risk_roll@marg_models_fit[[1]]@model$n.refits,
+    t2_risk_roll@fitted_marginals[[1]]@model$n.refits,
     2
   )
 })
@@ -380,7 +380,7 @@ test_that("basic functionality (conditionally)", {
     4
   )
   expect_equal(
-    t1_risk_roll@marg_models_fit[[1]]@model$n.refits,
+    t1_risk_roll@fitted_marginals[[1]]@model$n.refits,
     2
   )
 
@@ -433,7 +433,7 @@ test_that("basic functionality (conditionally)", {
     2
   )
   expect_equal(
-    t2_risk_roll@marg_models_fit[[1]]@model$n.refits,
+    t2_risk_roll@fitted_marginals[[1]]@model$n.refits,
     2
   )
 })
