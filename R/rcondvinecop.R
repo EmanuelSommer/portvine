@@ -29,7 +29,7 @@ r1conddvine <- function(n_samples, cond_alpha, fitted_vine){
                               ncol = n_assets)
       # initialize the diagonal with the conditional value as well as the
       # sampled values
-      diag(aux_matrix) <- c(cond_alpha_level, runif(n_assets - 1))
+      diag(aux_matrix) <- c(cond_alpha_level, stats::runif(n_assets - 1))
 
       for (j in 2:n_assets) {
         for (k in (j - 1):1) {
@@ -65,7 +65,10 @@ r1conddvine <- function(n_samples, cond_alpha, fitted_vine){
       aux_matrix[1, ]
     }) %>%
       t()
-    sample_matrix <- sample_matrix[, fitted_vine$structure$order]
+
+    reorder_indices <- sapply(seq(asset_names), function(ind) {
+      which(fitted_vine$structure$order == ind)}, simplify = TRUE)
+    sample_matrix <- sample_matrix[, reorder_indices]
     colnames(sample_matrix) <- asset_names
     data.table::as.data.table(sample_matrix)
   }) %>% data.table::rbindlist()
@@ -135,7 +138,7 @@ r2conddvine <- function(n_samples, cond_alpha, fitted_vine) {
           parameters = fitted_vine$pair_copulas[[1]][[1]]$parameters,
           inverse = FALSE
         ),
-        runif(n_assets - 2)
+        stats::runif(n_assets - 2)
       )
 
       for (j in 3:n_assets) {
@@ -172,7 +175,9 @@ r2conddvine <- function(n_samples, cond_alpha, fitted_vine) {
       aux_matrix[1, ]
     }) %>%
       t()
-    sample_matrix <- sample_matrix[, fitted_vine$structure$order]
+    reorder_indices <- sapply(seq(asset_names), function(ind) {
+      which(fitted_vine$structure$order == ind)}, simplify = TRUE)
+    sample_matrix <- sample_matrix[, reorder_indices]
     colnames(sample_matrix) <- asset_names
     data.table::as.data.table(sample_matrix)
   }) %>% data.table::rbindlist()

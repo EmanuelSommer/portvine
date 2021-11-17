@@ -1,4 +1,3 @@
-### TBD: conditional case
 
 test_that("input checks", {
   valid_marg_settings <- marginal_settings(
@@ -264,6 +263,10 @@ test_that("basic functionality (unconditionally)", {
     trace = FALSE
   )
   expect_s4_class(t1_risk_roll, "portvine_roll")
+  expect_true(
+    checkmate::test_data_table(t1_risk_roll@risk_estimates,
+                               any.missing = FALSE)
+  )
   expect_equal(
     colnames(t1_risk_roll@risk_estimates),
     c("risk_measure", "risk_est", "alpha", "row_num", "vine_window", "realized")
@@ -312,6 +315,10 @@ test_that("basic functionality (unconditionally)", {
     ), regexp = "^The last window of interest is shorter*"
   )
   expect_s4_class(t2_risk_roll, "portvine_roll")
+  expect_true(
+    checkmate::test_data_table(t2_risk_roll@risk_estimates,
+                               any.missing = FALSE)
+  )
   expect_equal(
     dim(t2_risk_roll@risk_estimates),
     c(200 * 1 * 3, 6)
@@ -324,9 +331,109 @@ test_that("basic functionality (unconditionally)", {
     t2_risk_roll@marg_models_fit[[1]]@model$n.refits,
     2
   )
-  ### conditional estimation with dvines ------------------------------
-
-  # TBD
+})
 
 
+test_that("basic functionality (conditionally)", {
+  # dvine 1 conditional variable
+  t1_marg_settings <- marginal_settings(
+    train_size = 800,
+    refit_size = 100
+  )
+  t1_vine_settings <- vine_settings(
+    train_size = 100,
+    refit_size = 50,
+    family_set = "all",
+    vine_type = "dvine"
+  )
+  t1_risk_roll <- estimate_risk_roll(
+    sample_returns_small,
+    weights = NULL, # default -> equal weights
+    marginal_settings = t1_marg_settings,
+    vine_settings = t1_vine_settings,
+    alpha = c(0.01, 0.05),
+    risk_measures = c("VaR", "ES_mean"),
+    n_samples = 50,
+    cond_vars = "GOOG",
+    cond_alpha = c(0.05, 0.5),
+    trace = TRUE
+  )
+  expect_s4_class(t1_risk_roll, "cond_portvine_roll")
+  expect_true(
+    "GOOG" %in% colnames(t1_risk_roll@cond_risk_estimates)
+  )
+  expect_true(
+    checkmate::test_data_table(t1_risk_roll@risk_estimates,
+                               any.missing = FALSE,
+                               ncols = 6, nrows = 4 * 200)
+  )
+  expect_true(
+    checkmate::test_data_table(t1_risk_roll@cond_risk_estimates,
+                               any.missing = FALSE, ncols = 8,
+                               nrows = 4 * 200 * 2)
+  )
+  expect_true(
+    t1_risk_roll@cond_estimation
+  )
+  expect_equal(
+    length(t1_risk_roll@fitted_vines),
+    4
+  )
+  expect_equal(
+    t1_risk_roll@marg_models_fit[[1]]@model$n.refits,
+    2
+  )
+
+  # dvine 2 conditional variables
+  t2_marg_settings <- marginal_settings(
+    train_size = 800,
+    refit_size = 199
+  )
+  t2_vine_settings <- vine_settings(
+    train_size = 200,
+    refit_size = 199,
+    family_set = c("frank", "gumbel"),
+    vine_type = "dvine"
+  )
+  expect_message(
+    t2_risk_roll <- estimate_risk_roll(
+      sample_returns_small,
+      weights = NULL,
+      marginal_settings = t2_marg_settings,
+      vine_settings = t2_vine_settings,
+      alpha = 0.01,
+      risk_measures = c("VaR", "ES_median", "ES_mc"),
+      n_samples = 10,
+      n_mc_samples = 100,
+      cond_vars = c("GOOG", "AMZN"),
+      cond_alpha = 0.1,
+      trace = FALSE
+    ), regexp = "^The last window of interest is shorter*"
+  )
+  expect_s4_class(t2_risk_roll, "cond_portvine_roll")
+  expect_true(
+    "GOOG" %in% colnames(t2_risk_roll@cond_risk_estimates) &
+      "AMZN" %in% colnames(t2_risk_roll@cond_risk_estimates)
+  )
+  expect_true(
+    checkmate::test_data_table(t2_risk_roll@risk_estimates,
+                               any.missing = FALSE,
+                               ncols = 6, nrows = 3 * 200)
+  )
+  expect_true(
+    checkmate::test_data_table(t2_risk_roll@cond_risk_estimates,
+                               any.missing = FALSE, ncols = 9,
+                               nrows = 3 * 200 * 1)
+  )
+  expect_true(
+    t2_risk_roll@cond_estimation
+  )
+  expect_equal(
+    length(t2_risk_roll@fitted_vines),
+    2
+  )
+  expect_equal(
+    t2_risk_roll@marg_models_fit[[1]]@model$n.refits,
+    2
+  )
 })

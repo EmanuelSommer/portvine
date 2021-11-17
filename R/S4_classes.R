@@ -339,8 +339,9 @@ setMethod("summary", c("portvine_roll"), function(object) {
   cat("Number of estimated risk measures:", nrow(object@risk_estimates), "\n")
   cat("Number of samples for each risk estimation:", object@n_samples, "\n")
 
-  cat("\nTime taken:", round(object@time_taken, 4), "minutes",
+  cat("\nTime taken:", round(object@time_taken, 4), "minutes.",
       "\n")
+  invisible(NULL)
 })
 
 #' @export
@@ -353,8 +354,8 @@ setMethod("summary", c("cond_portvine_roll"), function(object) {
   cat("Number of conditional estimated risk measures:",
       nrow(object@cond_risk_estimates), "\n")
   cat("Conditioning quantiles:", object@cond_alpha, "\n")
-
   methods::callNextMethod()
+  invisible(NULL)
 })
 
 ### accessor methods for the risk estimates
@@ -427,7 +428,7 @@ setMethod("risk_estimates",
     if (is.null(alpha)) alpha <- roll@alpha
     checkmate::assert_flag(cond, null.ok = FALSE)
     checkmate::assert_subset(cond_alpha, roll@cond_alpha, empty.ok = TRUE)
-    if (is.null(alpha)) cond_alpha <- roll@cond_alpha
+    if (is.null(cond_alpha)) cond_alpha <- roll@cond_alpha
 
     if (cond) {
       roll@cond_risk_estimates %>%
