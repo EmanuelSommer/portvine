@@ -1,31 +1,65 @@
-
-#' TBD!
+#' (Un-)conditional rolling risk estimation using vine copulas
 #'
-#' Address all dependencies of the vine and marginal settings parameters like
+#' TBD! Shortly discuss the overall algorithm but reference a hands on get started
+#' vignette / theoretical vignette and the paper/ thesis
+#'
+#' TBD! Address all dependencies of the vine and marginal settings parameters like
 #' n_all_obs - n_marg_train > n_marg_refit. i.e. there must be at least 2
-#' marginal and thus also 2 vine windows.
+#' marginal and thus also 2 vine windows. Maybe in a table (markdown) give short
+#' notice about availble risk_measures
 #'
-#' @param data matrix, data.frame or other object coercible to a data.table
+#' @section Parallel processing:
+#' This function uses the [`future`](https://www.futureverse.org/)
+#' framework for parallelization that allows maximum flexibility for the user
+#' while having safe speedups for example regarding random number generation.
+#' The default is of course the standard non parallel sequential evaluation.
+#' The user has to do nothing in order for this default to work. If the user
+#' wants to run the code in parallel there are many options from parallel on a
+#' single machine up to a high performance compute (HPC) cluster, all of this
+#' with just one setting switch i.e. by calling the function [`future::plan()`]
+#' with the respective argument before the function call. Common options are
+#' `future::plan("multisession")` which works on all major operating systems
+#' and uses all available cores to run the code in parallel local R sessions.
+#' To specify the number of workers use
+#' `future::plan("multisession", workers = 2)`. To go back to sequential
+#'  processing and to shut down the clusters use `future::plan("sequential")`.
+#'  For more information have a look at [`future::plan()`]. The two following
+#'  loops are processed in parallel if a parallel [`future::plan()`] is set:
+#'  - The marginal model fitting i.e. all assets individually in parallel.
+#'  - The vine windows i.e. the risk estimates and the corresponding vine copula
+#'  models are computed in parallel for each rolling vine window.
+#'
+#'
+#' @param data Matrix, data.frame or other object coercible to a data.table
 #'  storing the numeric asset returns in the named columns (at least 3).
 #'  Moreover missing values must be imputed beforehand.
-#' @param weights corresponding named non-negative weights of the assets
-#'  (conditioning variables must have weight 0).
-#' @param marginal_settings containing the needed information for the ARMA-GARCH
-#'  fitting i.e. marginal models.
-#' @param vine_settings containing needed information for the vine fitting
-#' @param alpha a numeric vector specifying the levels in (0,1) at which the
-#' risk measures should be calculated
-#' @param risk_measures a character vector with valid choices for risk
-#'  measures to compute
-#' @param cond_vars colnames of the variables to sample conditionally from
-#' (currently \eqn{\leq 2})
-#' @param n_samples number of samples to compute for the risk measure estimates
-#' @param cond_alpha a numeric vector specifying the corresponding quantiles
+#' @param weights Corresponding named non-negative weights of the assets
+#'  (conditioning variables must have weight 0). Default `NULL` gives equal
+#'  weight to each non conditional asset.
+#' @param marginal_settings [`marginal_settings`] S4 object containing the
+#'  needed information for the ARMA-GARCH i.e. marginal models fitting. Note
+#'  that the `marginal_settings` and `vine_settings` objects have to match as
+#'  described further below.
+#' @param vine_settings [`vine_settings`] S4 object containing the
+#'  needed information for the vine copula model fitting. Note
+#'  that the `marginal_settings` and `vine_settings` objects have to match as
+#'  described further below.
+#' @param alpha Numeric vector specifying the confidence levels in (0,1) at
+#' which the risk measures should be calculated.
+#' @param risk_measures Character vector with valid choices for risk
+#'  measures to compute. Currently available are the Value at Risk `VaR` which
+#'  is implemented in [`est_var()`] and 3 estimation methods of the Expected
+#'  Shortfall `ES_mean`, `ES_median` and `ES_mc` all implemented in [`est_es()`].
+#' @param n_samples Positive count of samples to be used at the base of the risk
+#'  measure estimation.
+#' @param cond_vars Names of the variables to sample conditionally from
+#' (currently \eqn{\le 2} variables).
+#' @param cond_alpha Numeric vector specifying the corresponding quantiles
 #'  in (0,1) of the conditional variable(s) conditioned on which the conditional
 #'  risk measures should be calculated.
-#' @param n_mc_samples number of samples for the Monte Carlo integration
+#' @param n_mc_samples Positive count of samples for the Monte Carlo integration
 #' if the risk measure `ES_mc` is used. (See [`est_es()`])
-#' @param trace if set to TRUE the algorithm will print information while
+#' @param trace If set to TRUE the algorithm will print basic information while
 #'  running.
 #'
 #' @return In the unconditional case an S4 object of class `portvine_roll` and
@@ -33,7 +67,10 @@
 #' see [`portvine_roll-class`].
 #' @export
 #'
-#' @seealso [`portvine_roll-class`]
+#' @seealso [`portvine_roll-class`], [`marginal_settings`], [`vine_settings`],
+#'  [`est_var()`], [`est_es()`]
+#'
+#' @author Emanuel Sommer
 #'
 #' @importFrom dtplyr lazy_dt
 #' @importFrom tidyr pivot_longer pivot_wider
@@ -48,11 +85,11 @@ estimate_risk_roll <- function(
   vine_settings,
   alpha = 0.05,
   risk_measures = c("VaR", "ES_mean"),
-  cond_vars = NULL,
   n_samples = 1000,
+  cond_vars = NULL,
   cond_alpha = 0.05,
   n_mc_samples = 1000,
-  trace = TRUE
+  trace = FALSE
 ) {
   # Return also the total run time at the end
   start_time <- Sys.time()

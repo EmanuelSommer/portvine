@@ -16,7 +16,7 @@ fitted_vines(roll, ...)
 \item{...}{Additional parameters for child class methods}
 }
 \value{
-list of \code{\link[rvinecopulib:vinecop]{rvinecopulib::vinecop}} class objects each entry
+List of \code{\link[rvinecopulib:vinecop]{rvinecopulib::vinecop}} class objects each entry
 corresponds to one fitted vine copula model for the respective vine window.
 }
 \description{

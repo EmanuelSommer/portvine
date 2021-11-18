@@ -437,3 +437,48 @@ test_that("basic functionality (conditionally)", {
     2
   )
 })
+
+test_that("parallel functionality", {
+  future::plan("multisession")
+  # dvine 2 conditional variables
+  multi_marg_settings <- marginal_settings(
+    train_size = 800,
+    refit_size = 100
+  )
+  multi_vine_settings <- vine_settings(
+    train_size = 200,
+    refit_size = 50,
+    family_set = c("all"),
+    vine_type = "dvine"
+  )
+  multi_risk_roll <- estimate_risk_roll(
+    sample_returns_small,
+    weights = NULL,
+    marginal_settings = multi_marg_settings,
+    vine_settings = multi_vine_settings,
+    alpha = 0.01,
+    risk_measures = c("VaR", "ES_median", "ES_mc"),
+    n_samples = 100,
+    n_mc_samples = 100,
+    cond_vars = c("GOOG", "AMZN"),
+    cond_alpha = c(0.1, 0.5),
+    trace = FALSE
+  )
+  future::plan("sequential")
+
+  expect_s4_class(multi_risk_roll, "cond_portvine_roll")
+  expect_true(
+    "GOOG" %in% colnames(multi_risk_roll@cond_risk_estimates) &
+      "AMZN" %in% colnames(multi_risk_roll@cond_risk_estimates)
+  )
+  expect_true(
+    checkmate::test_data_table(multi_risk_roll@risk_estimates,
+                               any.missing = FALSE,
+                               ncols = 6, nrows = 3 * 200)
+  )
+  expect_true(
+    checkmate::test_data_table(multi_risk_roll@cond_risk_estimates,
+                               any.missing = FALSE, ncols = 9,
+                               nrows = 3 * 200 * 2)
+  )
+})

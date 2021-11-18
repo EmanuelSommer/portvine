@@ -21,28 +21,28 @@ risk_estimates(roll, risk_measures = NULL, alpha = NULL, ...)
 \arguments{
 \item{roll}{Object of class \code{portvine_roll} or a child class}
 
-\item{risk_measures}{character vector of risk measures to filter for. Note
+\item{risk_measures}{Character vector of risk measures to filter for. Note
 that they must be fitted in the \code{roll} argument. The default will return all
 fitted risk measures}
 
-\item{alpha}{numeric \eqn{\alpha} levels of the estimated risk measures to
+\item{alpha}{Numeric \eqn{\alpha} levels of the estimated risk measures to
 filter
 for. Note that they must be fitted in the \code{roll} argument. The default will
 return all fitted \eqn{\alpha} levels}
 
 \item{...}{Additional parameters for child class methods}
 
-\item{cond}{if set to TRUE returns the conditional risk estimates and
+\item{cond}{If set to TRUE returns the conditional risk estimates and
 otherwise returns the overall risk estimates.}
 
-\item{cond_alpha}{a numeric vector specifying the corresponding quantiles
+\item{cond_alpha}{Numeric vector specifying the corresponding quantiles
 in (0,1) of the conditional variable(s) conditioned on which the conditional
 risk measures were calculated to filter for. Note
 that they must be fitted in the \code{roll} argument. The default will return all
-fitted risk measures}
+fitted risk measures.}
 }
 \value{
-possibly filtered data.table with at least the columns
+(Un-)filtered data.table with at least the columns
 \code{risk_measure}, \code{risk_est}, \code{alpha}, \code{row_num}, \code{vine_window} and \code{realized}.
 In the conditional case further columns are available (see:
 \code{\linkS4class{portvine_roll}}.

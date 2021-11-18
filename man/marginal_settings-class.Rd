@@ -33,7 +33,9 @@ Object of class \code{marginal_settings}
 \description{
 Specify which marginal models (\code{individual_spec} & \code{default_specs}) are
 fitted and how often they are refit as well as how big the training data
-set is. Remember that the forecasting is done in a rolling window fashion.
+set is. Remember that the forecasting is done in a rolling window fashion
+and the arguments (train and refit size) will have to match with
+the arguments of the also to be specified \code{\link{vine_settings}}.
 }
 \details{
 For specifying the list for \code{individual_spec} or the argument \code{default_spec}
@@ -64,8 +66,8 @@ is not specified through \code{individual_spec})}
 }}
 
 \examples{
-# marginal_settings(100, 10)
+marginal_settings(100, 10)
 }
 \seealso{
-\code{\link[=default_garch_spec]{default_garch_spec()}}
+\code{\link[=default_garch_spec]{default_garch_spec()}}, \code{\link{vine_settings}}
 }

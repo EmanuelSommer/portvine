@@ -29,7 +29,8 @@ Object of class \code{vine_settings}
 Specify which vine copula models are
 fitted and how often they are refit as well as how big the training data
 set is. Remember that the estimation process is done in a rolling window
-fashion.
+fashion and the arguments (train and refit size) will have to match with
+the arguments of the also to be specified \code{\link{marginal_settings}}.
 }
 \section{Functions}{
 \itemize{
@@ -54,5 +55,8 @@ fitted. Possible choices right now are \code{rvine} (regular vine) and \code{dvi
 }}
 
 \examples{
-# vine_settings(100, 25)
+vine_settings(100, 25)
+}
+\seealso{
+\code{\link{marginal_settings}}
 }

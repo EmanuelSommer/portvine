@@ -16,6 +16,8 @@ Imports:
     data.table,
     dplyr,
     dtplyr,
+    future,
+    future.apply,
     methods,
     rugarch,
     rvinecopulib,
@@ -23,7 +25,8 @@ Imports:
 Suggests: 
     rmarkdown,
     knitr,
-    testthat (>= 3.0.0)
+    testthat (>= 3.0.0),
+    ggplot2
 Config/testthat/edition: 3
 Collate: 
     'default_garch_spec.R'

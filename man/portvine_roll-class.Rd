@@ -31,6 +31,11 @@ The main output class is \code{portvine_roll} but in the conditional case
 the child class \code{cond_portvine_roll} with some extra slots (below visible
 by the !C!) is returned.
 }
+\details{
+For easy access for the most important slots and some filtering functionality
+have a look at the accessor methods \code{\link[=risk_estimates]{risk_estimates()}}, \code{\link[=fitted_vines]{fitted_vines()}},
+\code{\link[=fitted_marginals]{fitted_marginals()}}.
+}
 \section{Slots}{
 
 \describe{
@@ -81,5 +86,6 @@ risk measures were calculated.}
 }}
 
 \seealso{
-\code{\link[=estimate_risk_roll]{estimate_risk_roll()}}
+\code{\link[=estimate_risk_roll]{estimate_risk_roll()}}, \code{\link[=risk_estimates]{risk_estimates()}}, \code{\link[=fitted_vines]{fitted_vines()}},
+\code{\link[=fitted_marginals]{fitted_marginals()}}
 }

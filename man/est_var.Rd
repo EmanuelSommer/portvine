@@ -2,20 +2,20 @@
 % Please edit documentation in R/risk_measures.R
 \name{est_var}
 \alias{est_var}
-\title{Estimate the Value-at-risk}
+\title{Estimate the Value at Risk (VaR)}
 \usage{
 est_var(sample, alpha)
 }
 \arguments{
-\item{sample}{numeric vector representing the sample upon which the value at
-risk is calculated.}
+\item{sample}{Numeric vector representing the sample upon which the Value at
+Risk is calculated.}
 
-\item{alpha}{numeric vector with entries in (0,1) specifying the levels at
-which the VaR is calculated}
+\item{alpha}{Numeric vector with entries in (0,1) specifying the levels at
+which the VaR is calculated.}
 }
 \value{
-numeric vector with VaR estimates
-(same length as \code{alpha})
+Numeric vector with VaR estimates
+(same length as \code{alpha}).
 }
 \description{
 The VaR is defined as the empirical \eqn{\alpha} level quantile of the

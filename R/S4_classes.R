@@ -8,7 +8,9 @@
 #'
 #' Specify which marginal models (`individual_spec` & `default_specs`) are
 #'  fitted and how often they are refit as well as how big the training data
-#'  set is. Remember that the forecasting is done in a rolling window fashion.
+#'  set is. Remember that the forecasting is done in a rolling window fashion
+#'  and the arguments (train and refit size) will have to match with
+#'  the arguments of the also to be specified [`vine_settings`].
 #'
 #' For specifying the list for `individual_spec` or the argument `default_spec`
 #'  the function [`default_garch_spec()`] might
@@ -28,9 +30,9 @@
 #' @export
 #'
 #' @include default_garch_spec.R
-#' @seealso [default_garch_spec()]
+#' @seealso [`default_garch_spec()`], [`vine_settings`]
 #'
-#' @examples # marginal_settings(100, 10)
+#' @examples marginal_settings(100, 10)
 setClass("marginal_settings",
   slots = list(train_size = "numeric",
                refit_size = "numeric",
@@ -107,7 +109,8 @@ setMethod("show", c("marginal_settings"), function(object) {
 #' Specify which vine copula models are
 #'  fitted and how often they are refit as well as how big the training data
 #'  set is. Remember that the estimation process is done in a rolling window
-#'  fashion.
+#'  fashion and the arguments (train and refit size) will have to match with
+#'  the arguments of the also to be specified [`marginal_settings`].
 #'
 #' @slot train_size Positive count specifying the training data size.
 #' @slot refit_size Positive count specifying for how many periods a vine is
@@ -121,7 +124,9 @@ setMethod("show", c("marginal_settings"), function(object) {
 #' @return Object of class `vine_settings`
 #' @export
 #'
-#' @examples # vine_settings(100, 25)
+#' @seealso [`marginal_settings`]
+#'
+#' @examples vine_settings(100, 25)
 setClass("vine_settings",
          slots = list(train_size = "numeric",
                       refit_size = "numeric",
@@ -190,6 +195,10 @@ setMethod("show", c("vine_settings"), function(object) {
 #' the child class `cond_portvine_roll` with some extra slots (below visible
 #' by the !C!) is returned.
 #'
+#' For easy access for the most important slots and some filtering functionality
+#' have a look at the accessor methods [`risk_estimates()`], [`fitted_vines()`],
+#' [`fitted_marginals()`].
+#'
 #' @slot risk_estimates data.table with the columns `risk_measure`,
 #' `risk_est`, `alpha`, `row_num`, `vine_window` and `realized` (here all
 #' samples also in the conditional case are used)
@@ -213,7 +222,8 @@ setMethod("show", c("vine_settings"), function(object) {
 #' @slot time_taken numeric value displaying how many minutes the whole estimation process
 #' took.
 #'
-#' @seealso [`estimate_risk_roll()`]
+#' @seealso [`estimate_risk_roll()`], [`risk_estimates()`], [`fitted_vines()`],
+#' [`fitted_marginals()`]
 #'
 #' @return object of class `portvine_roll`
 #' @export
@@ -365,16 +375,16 @@ setMethod("summary", c("cond_portvine_roll"), function(object) {
 #' Accessor methods for the risk estimates of `(cond_)portvine_roll` objects
 #'
 #' @param roll Object of class `portvine_roll` or a child class
-#' @param risk_measures character vector of risk measures to filter for. Note
+#' @param risk_measures Character vector of risk measures to filter for. Note
 #' that they must be fitted in the `roll` argument. The default will return all
 #' fitted risk measures
-#' @param alpha numeric \eqn{\alpha} levels of the estimated risk measures to
+#' @param alpha Numeric \eqn{\alpha} levels of the estimated risk measures to
 #' filter
 #' for. Note that they must be fitted in the `roll` argument. The default will
 #' return all fitted \eqn{\alpha} levels
 #' @param ... Additional parameters for child class methods
 #'
-#' @return possibly filtered data.table with at least the columns
+#' @return (Un-)filtered data.table with at least the columns
 #' `risk_measure`, `risk_est`, `alpha`, `row_num`, `vine_window` and `realized`.
 #' In the conditional case further columns are available (see:
 #'  [`portvine_roll-class`].
@@ -408,13 +418,13 @@ setMethod("risk_estimates",
 )
 
 #'
-#' @param cond if set to TRUE returns the conditional risk estimates and
+#' @param cond If set to TRUE returns the conditional risk estimates and
 #' otherwise returns the overall risk estimates.
-#' @param cond_alpha a numeric vector specifying the corresponding quantiles
+#' @param cond_alpha Numeric vector specifying the corresponding quantiles
 #'  in (0,1) of the conditional variable(s) conditioned on which the conditional
 #'  risk measures were calculated to filter for. Note
 #' that they must be fitted in the `roll` argument. The default will return all
-#' fitted risk measures
+#' fitted risk measures.
 #'
 #' @export
 #'
@@ -459,7 +469,7 @@ setMethod("risk_estimates",
 #' @param roll Object of class `portvine_roll` or a child class
 #' @param ... Additional parameters for child class methods
 #'
-#' @return list of [`rvinecopulib::vinecop`] class objects each entry
+#' @return List of [`rvinecopulib::vinecop`] class objects each entry
 #'  corresponds to one fitted vine copula model for the respective vine window.
 #' @export
 #'
@@ -483,13 +493,13 @@ setMethod("fitted_vines",
 #' Accessor method for the fitted marginal models of `(cond_)portvine_roll`
 #'  objects
 #'
-#'  The marginal models are ARMA-GARCH models fitted in a rolling
-#'  window fashion using [`rugarch::ugarchroll`].
+#' The marginal models are ARMA-GARCH models which were fitted in a rolling
+#' window fashion using [`rugarch::ugarchroll`].
 #'
 #' @param roll Object of class `portvine_roll` or a child class
 #' @param ... Additional parameters for child class methods
 #'
-#' @return named list with an entry for each asset containing a
+#' @return Named list with an entry for each asset containing a
 #' [`rugarch::ugarchroll`] class object that encompasses the marginal model fit.
 #' @export
 #'

@@ -2,7 +2,7 @@
 % Please edit documentation in R/estimate_risk_roll.R
 \name{estimate_risk_roll}
 \alias{estimate_risk_roll}
-\title{TBD!}
+\title{(Un-)conditional rolling risk estimation using vine copulas}
 \usage{
 estimate_risk_roll(
   data,
@@ -11,45 +11,54 @@ estimate_risk_roll(
   vine_settings,
   alpha = 0.05,
   risk_measures = c("VaR", "ES_mean"),
-  cond_vars = NULL,
   n_samples = 1000,
+  cond_vars = NULL,
   cond_alpha = 0.05,
   n_mc_samples = 1000,
-  trace = TRUE
+  trace = FALSE
 )
 }
 \arguments{
-\item{data}{matrix, data.frame or other object coercible to a data.table
+\item{data}{Matrix, data.frame or other object coercible to a data.table
 storing the numeric asset returns in the named columns (at least 3).
 Moreover missing values must be imputed beforehand.}
 
-\item{weights}{corresponding named non-negative weights of the assets
-(conditioning variables must have weight 0).}
+\item{weights}{Corresponding named non-negative weights of the assets
+(conditioning variables must have weight 0). Default \code{NULL} gives equal
+weight to each non conditional asset.}
 
-\item{marginal_settings}{containing the needed information for the ARMA-GARCH
-fitting i.e. marginal models.}
+\item{marginal_settings}{\code{\link{marginal_settings}} S4 object containing the
+needed information for the ARMA-GARCH i.e. marginal models fitting. Note
+that the \code{marginal_settings} and \code{vine_settings} objects have to match as
+described further below.}
 
-\item{vine_settings}{containing needed information for the vine fitting}
+\item{vine_settings}{\code{\link{vine_settings}} S4 object containing the
+needed information for the vine copula model fitting. Note
+that the \code{marginal_settings} and \code{vine_settings} objects have to match as
+described further below.}
 
-\item{alpha}{a numeric vector specifying the levels in (0,1) at which the
-risk measures should be calculated}
+\item{alpha}{Numeric vector specifying the confidence levels in (0,1) at
+which the risk measures should be calculated.}
 
-\item{risk_measures}{a character vector with valid choices for risk
-measures to compute}
+\item{risk_measures}{Character vector with valid choices for risk
+measures to compute. Currently available are the Value at Risk \code{VaR} which
+is implemented in \code{\link[=est_var]{est_var()}} and 3 estimation methods of the Expected
+Shortfall \code{ES_mean}, \code{ES_median} and \code{ES_mc} all implemented in \code{\link[=est_es]{est_es()}}.}
 
-\item{cond_vars}{colnames of the variables to sample conditionally from
-(currently \eqn{\leq 2})}
+\item{n_samples}{Positive count of samples to be used at the base of the risk
+measure estimation.}
 
-\item{n_samples}{number of samples to compute for the risk measure estimates}
+\item{cond_vars}{Names of the variables to sample conditionally from
+(currently \eqn{\le 2} variables).}
 
-\item{cond_alpha}{a numeric vector specifying the corresponding quantiles
+\item{cond_alpha}{Numeric vector specifying the corresponding quantiles
 in (0,1) of the conditional variable(s) conditioned on which the conditional
 risk measures should be calculated.}
 
-\item{n_mc_samples}{number of samples for the Monte Carlo integration
+\item{n_mc_samples}{Positive count of samples for the Monte Carlo integration
 if the risk measure \code{ES_mc} is used. (See \code{\link[=est_es]{est_es()}})}
 
-\item{trace}{if set to TRUE the algorithm will print information while
+\item{trace}{If set to TRUE the algorithm will print basic information while
 running.}
 }
 \value{
@@ -58,13 +67,47 @@ in the conditional case its child class \code{cond_portvine_roll}. For details
 see \code{\linkS4class{portvine_roll}}.
 }
 \description{
-Address all dependencies of the vine and marginal settings parameters like
-n_all_obs - n_marg_train > n_marg_refit. i.e. there must be at least 2
-marginal and thus also 2 vine windows.
+TBD! Shortly discuss the overall algorithm but reference a hands on get started
+vignette / theoretical vignette and the paper/ thesis
 }
+\details{
+TBD! Address all dependencies of the vine and marginal settings parameters like
+n_all_obs - n_marg_train > n_marg_refit. i.e. there must be at least 2
+marginal and thus also 2 vine windows. Maybe in a table (markdown) give short
+notice about availble risk_measures
+}
+\section{Parallel processing}{
+
+This function uses the \href{https://www.futureverse.org/}{\code{future}}
+framework for parallelization that allows maximum flexibility for the user
+while having safe speedups for example regarding random number generation.
+The default is of course the standard non parallel sequential evaluation.
+The user has to do nothing in order for this default to work. If the user
+wants to run the code in parallel there are many options from parallel on a
+single machine up to a high performance compute (HPC) cluster, all of this
+with just one setting switch i.e. by calling the function \code{\link[future:plan]{future::plan()}}
+with the respective argument before the function call. Common options are
+\code{future::plan("multisession")} which works on all major operating systems
+and uses all available cores to run the code in parallel local R sessions.
+To specify the number of workers use
+\code{future::plan("multisession", workers = 2)}. To go back to sequential
+processing and to shut down the clusters use \code{future::plan("sequential")}.
+For more information have a look at \code{\link[future:plan]{future::plan()}}. The two following
+loops are processed in parallel if a parallel \code{\link[future:plan]{future::plan()}} is set:
+\itemize{
+\item The marginal model fitting i.e. all assets individually in parallel.
+\item The vine windows i.e. the risk estimates and the corresponding vine copula
+models are computed in parallel for each rolling vine window.
+}
+}
+
 \examples{
 #TBD
 }
 \seealso{
-\code{\linkS4class{portvine_roll}}
+\code{\linkS4class{portvine_roll}}, \code{\link{marginal_settings}}, \code{\link{vine_settings}},
+\code{\link[=est_var]{est_var()}}, \code{\link[=est_es]{est_es()}}
+}
+\author{
+Emanuel Sommer
 }

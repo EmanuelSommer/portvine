@@ -4,6 +4,11 @@
 #' vine window. In addition based on these models one samples (un-)conditional
 #' asset returns and estimates risk measures from these sample returns.
 #'
+#' The vine windows are parallelized using the future framework i.e. the risk
+#'  estimates and the corresponding vine copula models are computed in parallel
+#'   for each rolling vine window. Details can be found in the doc of the
+#'  `estimate_risk_roll` function.
+#'
 #' @param combined_residuals_dt data.table with all the combined data from the
 #' marginal window fittings. 10 columns: `resid`, `shape`, `skew`, `mu`,
 #'  `sigma`, `row_num`, `marg_window_num`, `asset`, `marg_dist`,
@@ -81,8 +86,8 @@ estimate_dependence_and_risk <- function(
   checkmate::assert_subset(all_asset_names, unique(combined_residuals_dt$asset),
                            empty.ok = FALSE)
 
-  if (trace) cat("\nFit & simulate from vine copula models. Vine window:\n")
-  window_results_list <- lapply(
+  if (trace) cat("\nFit vine copula models and estimate risk.\nVine windows:\n")
+  window_results_list <- future.apply::future_lapply(
     seq(ceiling((n_all_obs - n_marg_train) / n_vine_refit)),
     function(vine_window) {
       if (trace) cat("(", vine_window, "/",
@@ -142,9 +147,11 @@ estimate_dependence_and_risk <- function(
             )
           } else {
             rcondvinecop_res <- rcondvinecop(
-              n_samples, cond_alpha,
-              cond_vars,
-              fitted_vine, vine_type
+              n_samples = n_samples,
+              cond_alpha = cond_alpha,
+              cond_vars = cond_vars,
+              fitted_vine = fitted_vine,
+              vine_type = vine_type
             )
             cond_alpha_vec <- rcondvinecop_res$cond_alpha_vec
             sim_dt <- rcondvinecop_res$sample_dt
@@ -269,7 +276,7 @@ estimate_dependence_and_risk <- function(
       list(overall_risk_estimates = overall_risk_estimates,
            cond_risk_estimates = cond_risk_estimates,
            fitted_vine = fitted_vine, vine_window = vine_window)
-  })
+  }, future.seed = TRUE)
   # collect the windowwise results again in two data.tables
   overall_risk_estimates <- lapply(
     window_results_list,

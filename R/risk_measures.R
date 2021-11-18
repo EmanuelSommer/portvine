@@ -2,18 +2,18 @@
 # they just take a numeric vector and output a value for each alpha level,
 # note extra inputs for ES_mc (n_mc_samples as  extra argument for main fun)
 
-#' Estimate the Value-at-risk
+#' Estimate the Value at Risk (VaR)
 #'
 #' The VaR is defined as the empirical \eqn{\alpha} level quantile of the
 #' empirical distribution based on a return sample.
 #'
-#' @param sample numeric vector representing the sample upon which the value at
-#' risk is calculated.
-#' @param alpha numeric vector with entries in (0,1) specifying the levels at
-#' which the VaR is calculated
+#' @param sample Numeric vector representing the sample upon which the Value at
+#' Risk is calculated.
+#' @param alpha Numeric vector with entries in (0,1) specifying the levels at
+#' which the VaR is calculated.
 #'
-#' @return numeric vector with VaR estimates
-#'  (same length as `alpha`)
+#' @return Numeric vector with VaR estimates
+#'  (same length as `alpha`).
 #' @export
 #'
 #' @seealso [`est_es()`]
@@ -29,26 +29,26 @@ est_var <- function(sample, alpha) {
 
 #' Estimate the Expected Shortfall (ES)
 #'
-#' The expected shortfall at level \eqn{\alpha} is defined as the expected value
+#' The Expected Shortfall at level \eqn{\alpha} is defined as the expected value
 #' of the returns under the condition that the returns are smaller than the
 #' value at risk for the same \eqn{\alpha} level.
 #' The three estimation methods are:
-#'   - `mean` the mean of the samples that fall under the corresponding VaR
-#'   - `median` the median of the samples that fall under the corresponding VaR
+#'   - `mean` the mean of the samples that fall under the corresponding VaR.
+#'   - `median` the median of the samples that fall under the corresponding VaR.
 #'   - `mc` Calculation of the expected value using Monte Carlo integration over
 #'   the \eqn{\alpha} levels. The confidence level is assumed to be uniformly
 #'   distributed and `mc_samples` Monte Carlo samples are drawn.
 #'
-#' @param sample numeric vector representing the sample upon which the expected
-#' shortfall is calculated.
-#' @param alpha numeric vector with entries in (0,1) specifying the levels at
-#' which the ES is calculated
-#' @param method method of estimation one of `mean`, `median`, `mc`. For more
+#' @param sample Numeric vector representing the sample upon which the Expected
+#' Shortfall is calculated.
+#' @param alpha Numeric vector with entries in (0,1) specifying the levels at
+#' which the ES is calculated.
+#' @param method Method of estimation one of `mean`, `median`, `mc`. For more
 #'  information see the Description section.
 #' @param mc_samples Number of Monte Carlo samples used for the `mc` method.
 #'
-#' @return numeric vector with expected shortfall estimates
-#'  (same length as `alpha`)
+#' @return Numeric vector with Expected Shortfall estimates
+#'  (same length as `alpha`).
 #' @export
 #'
 #' @seealso [`est_var()`]

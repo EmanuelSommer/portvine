@@ -86,7 +86,7 @@ Now one can access the parts of the whole estimation process as well as the fina
 ```{r}
 # for example the marg_models_fit slot cotains a list of all the fitted 
 # marginal models in order to check them.
-e1_risk_roll@marg_models_fit$AAPL@model$spec
+# TBD new accessor
 ```
 
 ```{r}

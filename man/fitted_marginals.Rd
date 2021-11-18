@@ -16,11 +16,11 @@ fitted_marginals(roll, ...)
 \item{...}{Additional parameters for child class methods}
 }
 \value{
-named list with an entry for each asset containing a
+Named list with an entry for each asset containing a
 \code{\link[rugarch:ugarchroll-methods]{rugarch::ugarchroll}} class object that encompasses the marginal model fit.
 }
 \description{
-The marginal models are ARMA-GARCH models fitted in a rolling
+The marginal models are ARMA-GARCH models which were fitted in a rolling
 window fashion using \code{\link[rugarch:ugarchroll-methods]{rugarch::ugarchroll}}.
 }
 \seealso{

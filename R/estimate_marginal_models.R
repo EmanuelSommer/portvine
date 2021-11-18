@@ -5,6 +5,10 @@
 #' residuals and corresponding copula data are calculated for the respective
 #'  windows.
 #'
+#' The marginal model fitting is parallelized using the future framework i.e.
+#'  all assets individually in parallel. Details can be found in the doc of the
+#'  `estimate_risk_roll` function.
+#'
 #' @param data data.table with the three columns `row_num`, `asset` and `returns.`
 #'  `row_num` specifies the row number for the wide format input data, `asset`
 #'  is the unique name of the asset and `returns` gives the numeric returns.
@@ -48,9 +52,9 @@ estimate_marginal_models <- function(
                          names = "unique")
 
   if (trace) cat("\nFit marginal models:\n")
-  garch_rolls_list <- sapply(all_asset_names, function(asset_name) {
-    if (trace) cat(asset_name, " (", which(asset_name == all_asset_names),
-                   "/", length(all_asset_names), ") ", sep = "")
+  garch_rolls_list <- future.apply::future_sapply(all_asset_names,
+                                                  function(asset_name) {
+    if (trace) cat(asset_name, " ")
     # fit the model in a rolling window fashion
     roll <- rugarch::ugarchroll(
       spec = marginal_specs_list[[asset_name]],
@@ -127,7 +131,7 @@ estimate_marginal_models <- function(
       # column marg_window_num ensures identifyabilty)
       data.table::rbindlist()
     list(residuals_dt = residuals_dt, roll_model_fit = roll)
-  }, simplify = FALSE, USE.NAMES = TRUE)
+  }, simplify = FALSE, USE.NAMES = TRUE, future.seed = TRUE)
   if (trace) cat("\n")
   garch_rolls_list
 }
