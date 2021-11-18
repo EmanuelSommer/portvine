@@ -8,7 +8,7 @@
 \alias{show,cond_portvine_roll-method}
 \alias{summary,portvine_roll-method}
 \alias{summary,cond_portvine_roll-method}
-\title{S4 output class for the function \code{\link[=estimate_risk_roll]{estimate_risk_roll()}}}
+\title{S4 output class for the function \code{estimate_risk_roll()}}
 \usage{
 \S4method{show}{portvine_roll}(object)
 
@@ -27,7 +27,8 @@ object of class \code{portvine_roll}
 object of class \code{cond_portvine_roll}
 }
 \description{
-The main output class is \code{portvine_roll} but in the conditional case
+The main output class for the function \code{\link[=estimate_risk_roll]{estimate_risk_roll()}}is
+\code{portvine_roll} but in the conditional case
 the child class \code{cond_portvine_roll} with some extra slots (below visible
 by the !C!) is returned.
 }

@@ -27,7 +27,6 @@
 #'   is not specified through `individual_spec`)
 #'
 #' @return Object of class `marginal_settings`
-#' @export
 #'
 #' @include default_garch_spec.R
 #' @seealso [`default_garch_spec()`], [`vine_settings`]
@@ -122,7 +121,6 @@ setMethod("show", c("marginal_settings"), function(object) {
 #' (drawable vine).
 #'
 #' @return Object of class `vine_settings`
-#' @export
 #'
 #' @seealso [`marginal_settings`]
 #'
@@ -189,9 +187,10 @@ setMethod("show", c("vine_settings"), function(object) {
 # portvine_roll --------------------------------------------------------
 ########################################################################
 
-#' S4 output class for the function [`estimate_risk_roll()`]
+#' S4 output class for the function `estimate_risk_roll()`
 #'
-#' The main output class is `portvine_roll` but in the conditional case
+#' The main output class for the function [`estimate_risk_roll()`]is
+#' `portvine_roll` but in the conditional case
 #' the child class `cond_portvine_roll` with some extra slots (below visible
 #' by the !C!) is returned.
 #'
@@ -226,7 +225,6 @@ setMethod("show", c("vine_settings"), function(object) {
 #' [`fitted_marginals()`]
 #'
 #' @return object of class `portvine_roll`
-#' @export
 #'
 setClass("portvine_roll",
          slots = list(
@@ -275,7 +273,6 @@ setClass("portvine_roll",
 #'  risk measures were calculated.
 #'
 #' @return object of class `cond_portvine_roll`
-#' @export
 #'
 #' @rdname portvine_roll-class
 setClass("cond_portvine_roll",
@@ -398,7 +395,6 @@ setGeneric(
   }
 )
 
-#' @export
 #' @rdname risk_estimates
 setMethod("risk_estimates",
   signature = c("portvine_roll"),
@@ -426,7 +422,6 @@ setMethod("risk_estimates",
 #' that they must be fitted in the `roll` argument. The default will return all
 #' fitted risk measures.
 #'
-#' @export
 #'
 #' @rdname risk_estimates
 setMethod("risk_estimates",
@@ -481,7 +476,6 @@ setGeneric(
   }
 )
 
-#' @export
 #' @rdname fitted_vines
 setMethod("fitted_vines",
           signature = c("portvine_roll"),
@@ -511,7 +505,6 @@ setGeneric(
   }
 )
 
-#' @export
 #' @rdname fitted_marginals
 setMethod("fitted_marginals",
           signature = c("portvine_roll"),
