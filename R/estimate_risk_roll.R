@@ -135,6 +135,10 @@ estimate_risk_roll <- function(
   n_vine_train <- vine_settings@train_size
   n_vine_refit <- vine_settings@refit_size
   vine_family_set <- vine_settings@family_set
+  if (conditional_logical  & any(vine_family_set %in% c("all", "tll"))) {
+    stop("Nonparametric vine copula classes are not supported for conditional
+         sampling.")
+  }
   vine_type <- vine_settings@vine_type
   # check whether the vine type is implemented for the conditional sampling
   if (conditional_logical & vine_type == "rvine") {

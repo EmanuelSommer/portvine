@@ -115,7 +115,9 @@ setMethod("show", c("marginal_settings"), function(object) {
 #' @slot refit_size Positive count specifying for how many periods a vine is
 #' used
 #' @slot family_set Character vector specifying the family of copulas that are
-#' used. For possible choices see [`rvinecopulib::bicop`].
+#' used. For possible choices see [`rvinecopulib::bicop`]. Note for conditional
+#' sampling just parametric copula families are possible so do not use the
+#' family arguments `all` and `tll`.
 #' @slot vine_type character value that specifies which vine class should be
 #' fitted. Possible choices right now are `rvine` (regular vine) and `dvine`
 #' (drawable vine).
@@ -132,7 +134,7 @@ setClass("vine_settings",
                       vine_type = "character"),
          prototype = list(train_size = NA_real_,
                           refit_size = NA_real_,
-                          family_set = "all",
+                          family_set = "parametric",
                           vine_type = "rvine"),
          validity = function(object) {
            error_mess <- character(0)
@@ -379,10 +381,17 @@ setMethod("summary", c("cond_portvine_roll"), function(object) {
 #' filter
 #' for. Note that they must be fitted in the `roll` argument. The default will
 #' return all fitted \eqn{\alpha} levels
+#' @param df Logical value if `TRUE` a `data.frame` is returned otherwise a
+#' `data.table` is returned.
+#' @param exceeded Logical value. If set to `TRUE` a column named `exceeded`
+#' will be appended that contains logical values telling whether the realized
+#' portfolio value exceeded the estimated risk.
 #' @param ... Additional parameters for child class methods
 #'
-#' @return (Un-)filtered data.table with at least the columns
+#' @return (Un-)filtered `data.frame` or `data.table` (see `df` argument) with
+#'  at least the columns
 #' `risk_measure`, `risk_est`, `alpha`, `row_num`, `vine_window` and `realized`.
+#' `exceeded` column if the corresponding argument is set to `TRUE`.
 #' In the conditional case further columns are available (see:
 #'  [`portvine_roll-class`].
 #' @export
@@ -390,7 +399,8 @@ setMethod("summary", c("cond_portvine_roll"), function(object) {
 #' @seealso [`portvine_roll-class`]
 setGeneric(
   "risk_estimates",
-  function(roll, risk_measures = NULL, alpha = NULL, ...) {
+  function(roll, risk_measures = NULL, alpha = NULL,
+           df = TRUE, exceeded = FALSE, ...) {
     standardGeneric("risk_estimates")
   }
 )
@@ -398,18 +408,23 @@ setGeneric(
 #' @rdname risk_estimates
 setMethod("risk_estimates",
   signature = c("portvine_roll"),
-  function(roll, risk_measures = NULL, alpha = NULL) {
+  function(roll, risk_measures = NULL, alpha = NULL,
+           df = TRUE, exceeded = FALSE) {
     # check whether the risk_measures and alpha levels were fitted for this roll
     checkmate::assert_subset(risk_measures, roll@risk_measures, empty.ok = TRUE)
     if (is.null(risk_measures)) risk_measures <- roll@risk_measures
     checkmate::assert_subset(alpha, roll@alpha, empty.ok = TRUE)
     if (is.null(alpha)) alpha <- roll@alpha
+    # check the flags
+    checkmate::assert_flag(df)
+    checkmate::assert_flag(exceeded)
 
     roll@risk_estimates %>%
       dtplyr::lazy_dt() %>%
       filter(risk_measure %in% risk_measures,
              alpha %in% (!!alpha)) %>%
-      data.table::as.data.table()
+      {if (exceeded) mutate(., exceeded = realized < risk_est) else .} %>%
+      {if (df) as.data.frame(.) else data.table::as.data.table(.)}
   }
 )
 
@@ -426,32 +441,28 @@ setMethod("risk_estimates",
 #' @rdname risk_estimates
 setMethod("risk_estimates",
   signature = c("cond_portvine_roll"),
-  function(roll, risk_measures = NULL, alpha = NULL, cond = TRUE,
+  function(roll, risk_measures = NULL, alpha = NULL,
+           df = TRUE, exceeded = FALSE, cond = TRUE,
            cond_alpha = NULL) {
     # check whether the risk_measures and alpha levels were fitted for this roll
     checkmate::assert_subset(risk_measures, roll@risk_measures, empty.ok = TRUE)
     if (is.null(risk_measures)) risk_measures <- roll@risk_measures
     checkmate::assert_subset(alpha, roll@alpha, empty.ok = TRUE)
     if (is.null(alpha)) alpha <- roll@alpha
-    checkmate::assert_flag(cond, null.ok = FALSE)
     checkmate::assert_subset(cond_alpha, roll@cond_alpha, empty.ok = TRUE)
     if (is.null(cond_alpha)) cond_alpha <- roll@cond_alpha
+    # check the flags
+    checkmate::assert_flag(df)
+    checkmate::assert_flag(exceeded)
+    checkmate::assert_flag(cond)
 
-    if (cond) {
-      roll@cond_risk_estimates %>%
-        dtplyr::lazy_dt() %>%
-        filter(risk_measure %in% risk_measures,
-               alpha %in% (!!alpha),
-               cond_alpha %in% (!!cond_alpha)) %>%
-        data.table::as.data.table()
-    } else {
-      roll@risk_estimates %>%
-        dtplyr::lazy_dt() %>%
-        filter(risk_measure %in% risk_measures,
-               alpha %in% (!!alpha)) %>%
-        data.table::as.data.table()
-    }
-
+     {if (cond) roll@cond_risk_estimates else roll@risk_estimates} %>%
+      dtplyr::lazy_dt() %>%
+      filter(risk_measure %in% risk_measures,
+             alpha %in% (!!alpha)) %>%
+      {if (cond) filter(., cond_alpha %in% (!!cond_alpha)) else .} %>%
+      {if (exceeded) mutate(., exceeded = realized < risk_est) else .} %>%
+      {if (df) as.data.frame(.) else data.table::as.data.table(.)}
   }
 )
 

@@ -153,6 +153,19 @@ test_that("input checks", {
       sample_returns_small,
       weights = NULL,
       marginal_settings = marginal_settings(800, 100),
+      vine_settings = vine_settings(100, 50, family_set = "all"),
+      alpha = c(0.01, 0.05),
+      risk_measures = c("VaR", "ES_mean"),
+      n_samples = 1000,
+      cond_vars = "GOOG",
+      trace = FALSE
+    )
+  )
+  expect_error(
+    estimate_risk_roll(
+      sample_returns_small,
+      weights = NULL,
+      marginal_settings = marginal_settings(800, 100),
       vine_settings = vine_settings(200, 51),
       alpha = c(0.01, 0.05),
       risk_measures = c("VaR", "ES_mean"),
@@ -343,7 +356,7 @@ test_that("basic functionality (conditionally)", {
   t1_vine_settings <- vine_settings(
     train_size = 100,
     refit_size = 50,
-    family_set = "all",
+    family_set = "parametric",
     vine_type = "dvine"
   )
   t1_risk_roll <- estimate_risk_roll(
@@ -448,7 +461,7 @@ test_that("parallel functionality", {
   multi_vine_settings <- vine_settings(
     train_size = 200,
     refit_size = 50,
-    family_set = c("all"),
+    family_set = c("parametric"),
     vine_type = "dvine"
   )
   multi_risk_roll <- estimate_risk_roll(

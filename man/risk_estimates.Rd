@@ -6,14 +6,29 @@
 \alias{risk_estimates,cond_portvine_roll-method}
 \title{Accessor methods for the risk estimates of \verb{(cond_)portvine_roll} objects}
 \usage{
-risk_estimates(roll, risk_measures = NULL, alpha = NULL, ...)
+risk_estimates(
+  roll,
+  risk_measures = NULL,
+  alpha = NULL,
+  df = TRUE,
+  exceeded = FALSE,
+  ...
+)
 
-\S4method{risk_estimates}{portvine_roll}(roll, risk_measures = NULL, alpha = NULL)
+\S4method{risk_estimates}{portvine_roll}(
+  roll,
+  risk_measures = NULL,
+  alpha = NULL,
+  df = TRUE,
+  exceeded = FALSE
+)
 
 \S4method{risk_estimates}{cond_portvine_roll}(
   roll,
   risk_measures = NULL,
   alpha = NULL,
+  df = TRUE,
+  exceeded = FALSE,
   cond = TRUE,
   cond_alpha = NULL
 )
@@ -30,6 +45,13 @@ filter
 for. Note that they must be fitted in the \code{roll} argument. The default will
 return all fitted \eqn{\alpha} levels}
 
+\item{df}{Logical value if \code{TRUE} a \code{data.frame} is returned otherwise a
+\code{data.table} is returned.}
+
+\item{exceeded}{Logical value. If set to \code{TRUE} a column named \code{exceeded}
+will be appended that contains logical values telling whether the realized
+portfolio value exceeded the estimated risk.}
+
 \item{...}{Additional parameters for child class methods}
 
 \item{cond}{If set to TRUE returns the conditional risk estimates and
@@ -42,8 +64,10 @@ that they must be fitted in the \code{roll} argument. The default will return al
 fitted risk measures.}
 }
 \value{
-(Un-)filtered data.table with at least the columns
+(Un-)filtered \code{data.frame} or \code{data.table} (see \code{df} argument) with
+at least the columns
 \code{risk_measure}, \code{risk_est}, \code{alpha}, \code{row_num}, \code{vine_window} and \code{realized}.
+\code{exceeded} column if the corresponding argument is set to \code{TRUE}.
 In the conditional case further columns are available (see:
 \code{\linkS4class{portvine_roll}}.
 }

@@ -47,7 +47,9 @@ specified in the slots below
 used}
 
 \item{\code{family_set}}{Character vector specifying the family of copulas that are
-used. For possible choices see \code{\link[rvinecopulib:bicop]{rvinecopulib::bicop}}.}
+used. For possible choices see \code{\link[rvinecopulib:bicop]{rvinecopulib::bicop}}. Note for conditional
+sampling just parametric copula families are possible so do not use the
+family arguments \code{all} and \code{tll}.}
 
 \item{\code{vine_type}}{character value that specifies which vine class should be
 fitted. Possible choices right now are \code{rvine} (regular vine) and \code{dvine}

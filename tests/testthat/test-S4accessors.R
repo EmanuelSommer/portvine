@@ -40,10 +40,36 @@ test_that("risk_estimates() basic functionality & input checks", {
       alpha = NULL
     )
   )
+  expect_error(
+    risk_estimates(
+      roll = t1_risk_roll,
+      risk_measures = NULL,
+      alpha = NULL,
+      df = "Yes"
+    )
+  )
+  expect_error(
+    risk_estimates(
+      roll = t1_risk_roll,
+      risk_measures = NULL,
+      alpha = NULL,
+      exceeded = 2
+    )
+  )
 
   # basic unconditional functionality
   expect_true(
     checkmate::test_data_table(
+      risk_estimates(
+        roll = t1_risk_roll,
+        risk_measures = NULL,
+        alpha = NULL,
+        df = FALSE
+      ), any.missing = FALSE, nrows = 6 * 200
+    )
+  )
+  expect_true(
+    checkmate::test_data_frame(
       risk_estimates(
         roll = t1_risk_roll,
         risk_measures = NULL,
@@ -58,6 +84,16 @@ test_that("risk_estimates() basic functionality & input checks", {
       alpha = NULL
     )),
     c("risk_measure", "risk_est", "alpha", "row_num", "vine_window", "realized")
+  )
+  expect_equal(
+    colnames(risk_estimates(
+      roll = t1_risk_roll,
+      risk_measures = NULL,
+      alpha = NULL,
+      exceeded = TRUE
+    )),
+    c("risk_measure", "risk_est", "alpha", "row_num", "vine_window", "realized",
+      "exceeded")
   )
   expect_equal(
     colnames(risk_estimates(
@@ -138,7 +174,18 @@ test_that("risk_estimates() basic functionality & input checks", {
       risk_estimates(
         roll = t2_risk_roll,
         risk_measures = NULL,
-        alpha = NULL
+        alpha = NULL,
+        df = FALSE
+      ), any.missing = FALSE, nrows = 6 * 100 * 3
+    )
+  )
+  expect_true(
+    checkmate::test_data_frame(
+      risk_estimates(
+        roll = t2_risk_roll,
+        risk_measures = NULL,
+        alpha = NULL,
+        df = TRUE
       ), any.missing = FALSE, nrows = 6 * 100 * 3
     )
   )
@@ -175,7 +222,7 @@ test_that("risk_estimates() basic functionality & input checks", {
     sort(c(0.1, 0.5, 0.9))
   )
   expect_true(
-    checkmate::test_data_table(
+    checkmate::test_data_frame(
       risk_estimates(
         roll = t2_risk_roll,
         risk_measures = c("ES_median", "ES_mean"),
@@ -189,7 +236,8 @@ test_that("risk_estimates() basic functionality & input checks", {
         roll = t2_risk_roll,
         risk_measures = c("ES_median", "ES_mean"),
         alpha = 0.05,
-        cond_alpha = c(0.5, 0.9)
+        cond_alpha = c(0.5, 0.9),
+        df = FALSE
       ), any.missing = FALSE, nrows = 2 * 100 * 2
     )
   )
@@ -200,7 +248,8 @@ test_that("risk_estimates() basic functionality & input checks", {
         risk_measures = NULL,
         alpha = NULL,
         cond_alpha = NULL,
-        cond = FALSE
+        cond = FALSE,
+        df = FALSE
       ), any.missing = FALSE, nrows = 6 * 100 * 1
     )
   )

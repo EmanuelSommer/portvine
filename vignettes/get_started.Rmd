@@ -81,28 +81,10 @@ e1_risk_roll
 summary(e1_risk_roll)
 ```
 
-Now one can access the parts of the whole estimation process as well as the final results.
-
-```{r}
-# for example the marg_models_fit slot cotains a list of all the fitted 
-# marginal models in order to check them.
-# TBD new accessor
-```
-
-```{r}
-# The fitted_vines slot contains a list of all the fitted vine copula models
-e1_risk_roll@fitted_vines[[1]]
-```
-
-Of course the most interesting slot is the one containing the estimated risk measures.
-
-```{r}
-head(e1_risk_roll@risk_estimates)
-```
 
 Having these estimates one can start by visually exploring these estimates.
 
-```{r, message=FALSE}
+```{r, message=FALSE, eval=FALSE}
 library(ggplot2)
 
 ggplot(e1_risk_roll@risk_estimates) +
@@ -123,7 +105,7 @@ ggplot(e1_risk_roll@risk_estimates) +
 
 For the second example adjust the default ARMA-GARCH model and specify an individual model specification for one asset.
 
-```{r}
+```{r, eval=FALSE}
 e2_marg_settings <- marginal_settings(
   train_size = 800,
   refit_size = 60,
@@ -134,7 +116,7 @@ e2_marg_settings <- marginal_settings(
 
 Now again specify the settings for the vine copula fitting. Here one can specify to only use D vine copula models.
 
-```{r}
+```{r, eval=FALSE}
 e2_vine_settings <- vine_settings(
   train_size = 100,
   refit_size = 20,
@@ -145,7 +127,7 @@ e2_vine_settings <- vine_settings(
 
 Estimate the risk measures in a rolling fashion using ARMA-GARCH and vine copula models.
 
-```{r}
+```{r, eval=FALSE}
 e2_risk_roll <- estimate_risk_roll(
   sample_returns_small,
   weights = NULL, # default -> equal weights
@@ -158,14 +140,14 @@ e2_risk_roll <- estimate_risk_roll(
 )
 ```
 
-```{r}
+```{r, eval=FALSE}
 e2_risk_roll
 summary(e2_risk_roll)
 ```
 
 Having these estimates again one can start by visually exploring these estimates.
 
-```{r}
+```{r, eval=FALSE}
 ggplot(e2_risk_roll@risk_estimates) +
   geom_line(aes(x = row_num, y = realized)) +
   geom_line(aes(x = row_num, y = risk_est,
@@ -179,7 +161,7 @@ ggplot(e2_risk_roll@risk_estimates) +
   theme_classic()
 ```
 
-```{r}
+```{r, eval=FALSE}
 library(dplyr)
 
 e2_risk_roll@risk_estimates %>%
@@ -202,7 +184,7 @@ e2_risk_roll@risk_estimates %>%
 ```
 Then one can also use conditional and unconditional backtesting procedures on the VaR.
 
-```{r}
+```{r, eval=FALSE}
 e2_var_01 <- e2_risk_roll@risk_estimates %>%
   dtplyr::lazy_dt() %>%
   filter(risk_measure == "VaR", alpha == 0.01) %>%
@@ -216,7 +198,7 @@ rugarch::VaRTest(
 
 Package is written with extensive input checks that prevent the user from using the functions in an unintended way. An example for this is given below.
 
-```{r, error=TRUE}
+```{r, error=TRUE, eval=FALSE}
 estimate_risk_roll(
   sample_returns_small,
   weights = NULL, # default -> equal weights

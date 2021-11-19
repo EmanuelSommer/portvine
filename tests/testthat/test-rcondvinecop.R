@@ -9,7 +9,7 @@ rcondvine_test_struct <- rvinecopulib::dvine_structure(c(3,4,1,5,2))
 
 rcondvine_test_fitted <- rvinecopulib::vinecop(
   data = rcondvine_test_input,
-  family_set = "all", structure = rcondvine_test_struct,
+  family_set = "parametric", structure = rcondvine_test_struct,
   presel = FALSE
 )
 
