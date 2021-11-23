@@ -34,7 +34,7 @@ r1conddvine <- function(n_samples, cond_alpha, fitted_vine){
       for (j in 2:n_assets) {
         for (k in (j - 1):1) {
           current_bicop <- fitted_vine$pair_copulas[[k]][[j - k]]
-          aux_matrix[k, j] <- rvinecopulib:::bicop_hinv2_cpp(
+          aux_matrix[k, j] <- bicop_hinv2_cpp(
             u = matrix(
               c(aux_matrix[k + 1, j], aux_matrix[k, j - 1]),
               ncol = 2
@@ -42,7 +42,7 @@ r1conddvine <- function(n_samples, cond_alpha, fitted_vine){
             bicop_r = current_bicop
           )
           if (j < n_assets) {
-            aux_matrix[k + 1, j] <- rvinecopulib:::bicop_hfunc2_cpp(
+            aux_matrix[k + 1, j] <- bicop_hfunc2_cpp(
               u = matrix(
                 c(aux_matrix[k, j - 1], aux_matrix[k, j]),
                 ncol = 2
@@ -97,7 +97,7 @@ r2conddvine <- function(n_samples, cond_alpha, fitted_vine) {
   # conditional value. To mimic the cond_alpha level quantile of both
   # conditional variables the conditional value of the rightmost variable will
   # be computed based on the copula between the two variables
-  cond_alpha_second <- rvinecopulib:::bicop_hinv2_cpp(
+  cond_alpha_second <- bicop_hinv2_cpp(
     u = matrix(
       c(cond_alpha, cond_alpha),
       ncol = 2, byrow = FALSE,
@@ -118,7 +118,7 @@ r2conddvine <- function(n_samples, cond_alpha, fitted_vine) {
 
       diag(aux_matrix) <- c(
         cond_alpha[cond_alpha_ind],
-        rvinecopulib:::bicop_hfunc2_cpp(
+        bicop_hfunc2_cpp(
           u = matrix(
             c(cond_alpha[cond_alpha_ind], cond_alpha_second[cond_alpha_ind]),
             ncol = 2, byrow = FALSE,
@@ -131,7 +131,7 @@ r2conddvine <- function(n_samples, cond_alpha, fitted_vine) {
       for (j in 3:n_assets) {
         for (k in (j - 1):1) {
           current_bicop <- fitted_vine$pair_copulas[[k]][[j - k]]
-          aux_matrix[k, j] <- rvinecopulib:::bicop_hinv2_cpp(
+          aux_matrix[k, j] <- bicop_hinv2_cpp(
             u = matrix(
               c(aux_matrix[k + 1, j], aux_matrix[k, j - 1]),
               ncol = 2
@@ -139,7 +139,7 @@ r2conddvine <- function(n_samples, cond_alpha, fitted_vine) {
             bicop_r = current_bicop
           )
           if (j < n_assets) {
-            aux_matrix[k + 1, j] <- rvinecopulib:::bicop_hfunc2_cpp(
+            aux_matrix[k + 1, j] <- bicop_hfunc2_cpp(
               u = matrix(
                 c(aux_matrix[k, j - 1], aux_matrix[k, j]),
                 ncol = 2

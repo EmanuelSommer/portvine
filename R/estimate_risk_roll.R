@@ -1,3 +1,15 @@
+# for the RCPP functionality ----------------------------------------------
+
+#' @useDynLib portvine, .registration = TRUE
+#' @importFrom Rcpp sourceCpp
+NULL
+
+.onUnload <- function(libpath) {
+  library.dynam.unload("portvine", libpath)
+}
+
+# estimate_risk_roll ------------------------------------------------------
+
 #' (Un-)conditional rolling risk estimation using vine copulas
 #'
 #' TBD! Shortly discuss the overall algorithm but reference a hands on get started
