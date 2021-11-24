@@ -1,5 +1,5 @@
 #include "vinecopulib-wrappers.hpp"
-#include "kde1d-wrappers.hpp"
+// #include "kde1d-wrappers.hpp"
 
 using namespace vinecopulib;
 
@@ -53,28 +53,29 @@ using namespace vinecopulib;
 
  return bicop_wrap(bicop_cpp, TRUE);
  }
- */
 
-// [[Rcpp::export()]]
+
+// hereRCPPexporttag
 Eigen::VectorXd bicop_pdf_cpp(const Eigen::MatrixXd& u,
                               const Rcpp::List& bicop_r)
 {
   return bicop_wrap(bicop_r).pdf(u);
 }
 
-// [[Rcpp::export()]]
+// hereRCPPexporttag
 Eigen::VectorXd bicop_cdf_cpp(const Eigen::MatrixXd& u,
                               const Rcpp::List& bicop_r)
 {
   return bicop_wrap(bicop_r).cdf(u);
 }
 
-// [[Rcpp::export()]]
+// hereRCPPexporttag
 Eigen::VectorXd bicop_hfunc1_cpp(const Eigen::MatrixXd& u,
                                  const Rcpp::List& bicop_r)
 {
   return bicop_wrap(bicop_r).hfunc1(u);
 }
+*/
 
 // [[Rcpp::export()]]
 Eigen::VectorXd bicop_hfunc2_cpp(const Eigen::MatrixXd& u,
@@ -83,12 +84,13 @@ Eigen::VectorXd bicop_hfunc2_cpp(const Eigen::MatrixXd& u,
   return bicop_wrap(bicop_r).hfunc2(u);
 }
 
-// [[Rcpp::export()]]
+/* hereRCPPexporttag
 Eigen::VectorXd bicop_hinv1_cpp(const Eigen::MatrixXd& u,
                                 const Rcpp::List& bicop_r)
 {
   return bicop_wrap(bicop_r).hinv1(u);
 }
+*/
 
 // [[Rcpp::export()]]
 Eigen::VectorXd bicop_hinv2_cpp(const Eigen::MatrixXd& u,
@@ -105,14 +107,15 @@ Eigen::VectorXd bicop_hinv2_cpp(const Eigen::MatrixXd& u,
  {
  return bicop_wrap(bicop_r).simulate(n, qrng, seeds);
  }
- */
 
-// [[Rcpp::export()]]
+
+// hereRCPPexporttag
 double bicop_loglik_cpp(Eigen::MatrixXd& u,
                         const Rcpp::List& bicop_r)
 {
   return bicop_wrap(bicop_r).loglik(u);
 }
+ */
 
 /* hereRCPPexporttag
  double bicop_par_to_tau_cpp(const Rcpp::List& bicop_r)

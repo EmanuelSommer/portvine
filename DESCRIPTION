@@ -35,7 +35,7 @@ Collate:
     'RcppExports.R'
     'default_garch_spec.R'
     'S4_classes.R'
-    'datadoc.R'
+    'datadoc_and_rcpp.R'
     'risk_measures.R'
     'rcondvinecop.R'
     'greedy_tau_ordering.R'

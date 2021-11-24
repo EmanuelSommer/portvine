@@ -1,3 +1,5 @@
+# data documentation ------------------------------------------------------
+
 #' A sample of log returns for 3 assets.
 #'
 #' Data extracted from Yahoo Finance representing the daily og returns for
@@ -22,3 +24,14 @@
 #' data(sample_returns_small)
 #' head(sample_returns_small)
 "sample_returns_small"
+
+
+# for the RCPP functionality ----------------------------------------------
+
+#' @useDynLib portvine, .registration = TRUE
+#' @importFrom Rcpp sourceCpp
+NULL
+
+.onUnload <- function(libpath) {
+  library.dynam.unload("portvine", libpath)
+}
