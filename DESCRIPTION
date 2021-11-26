@@ -48,6 +48,7 @@ LazyData: true
 VignetteBuilder: knitr
 LinkingTo: 
     BH,
+    rvinecopulib,
     Rcpp,
     RcppEigen,
     RcppThread,
