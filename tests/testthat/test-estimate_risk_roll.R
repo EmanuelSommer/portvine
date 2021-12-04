@@ -452,7 +452,7 @@ test_that("basic functionality (conditionally)", {
 })
 
 test_that("parallel functionality", {
-  future::plan("multisession")
+  future::plan("multisession", workers = 2)
   # dvine 2 conditional variables
   multi_marg_settings <- marginal_settings(
     train_size = 800,

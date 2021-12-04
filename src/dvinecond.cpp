@@ -1,57 +1,59 @@
-// #include "vinecopulib-wrappers.hpp"
-//
-// using namespace vinecopulib;
-//
-// // [[Rcpp::export]]
-// Eigen::MatrixXd
-//   cond_dvine1_cpp(
-//     const double n_samples
-//     const double cond_alpha,
-//     const Rcpp::List& vinecop_r)
-//   {
-//     auto vinecop_cpp = vinecop_wrap(vinecop_r);
-//     auto vine_struct_ = vinecop_cpp.get_rvine_structure();
-//     auto copula_dimension = vine_struct_.get_dim();
-//
-//     auto order = vine_struct_.get_order();
-//     auto inverse_order = tools_stl::invert_permutation(order);
-//
-//     // initialize output matrix with n_samples rows and copula dimension columns
-//     Eigen::MatrixXd output_matrix(n_samples, copula_dimension)
-//
-//     // first loop over n_samples
-//     for (size_t sample = 0; sample < n_samples; ++sample) {
-//       // temporary object to store the results of the hfunctions
-//       TriangularArray<Eigen::VectorXd> auxilary_matrix(d + 1, trunc_lvl + 1);
-//
-//       // simulate random numbers standard uniform
-//       auto u_vector = Rcpp::runif(copula_dimension - 1)
-//       // above is probably class NUmericVector (should i consider using
-//      // the matrix also from rcpp)
-//
-//       // any kind of reordering necessary?
-//
-//       // fill diagonal of this auxiliary matrix with vector (cond_alpha, u_vector)
-//       auxilary_matrix.diag() = blabla
-//
-//       // now loop over the copula to build up the sample
-//       for (size_t tree = 1; tree <= copula_dimension; ++tree) {
-//         for (size_t edge = tree - 2; edge < 0; --edge) {
-//           tools_interface::check_user_interrupt();
-//           auto edge_copula = vinecop_cpp.get_pair_copula(tree, tree - edge);
-//           hinv_input = Eigen::MatrixXd(1, 2);
-//           hinv_input.col(0) = aux_matrix(tree + 1, edge);
-//           hinv_input.col(1) = aux_matrix(tree, edge - 1);
-//           aux_matrix(k,j) = edge_copula.hinv2(hinv_input))
-//           if (tree < copula_dimension) {
-//             hfunc_input = Eigen::MatrixXd(1, 2);
-//             hfunc_input.col(0) = aux_matrix(tree, edge - 1);
-//             hfunc_input.col(1) = aux_matrix(tree, edge);
-//             aux_matrix[k + 1, j] = edge_copula.hfunc2(hfunc_input));
-//           }
-//         }
-//       }
-//       // put first row in output matrix
-//     }
-//     return ouptut matrix
-//   }
+#include "vinecopulib-wrappers.hpp"
+
+using namespace vinecopulib;
+
+// [[Rcpp::export]]
+Eigen::MatrixXd
+  cond_dvine1_cpp(
+    const int n_samples,
+    const double cond_alpha,
+    const Rcpp::List& vinecop_r)
+  {
+    auto vinecop_cpp = vinecop_wrap(vinecop_r);
+    auto vine_struct_ = vinecop_cpp.get_rvine_structure();
+    auto copula_dimension = vine_struct_.get_dim();
+
+    // // vector<long long unsigned int>
+    // auto order = vine_struct_.get_order();
+    // auto inverse_order = tools_stl::invert_permutation(order);
+
+    // initialize output matrix with n_samples rows and copula dimension columns
+    Eigen::MatrixXd output_matrix(n_samples, int(copula_dimension));
+
+    // create auxiliary matrix to build up the sample
+    Eigen::MatrixXd auxiliary_matrix(copula_dimension, copula_dimension);
+
+    // first loop over n_samples (just repeat n_samples times)
+    for (size_t sample = 0; sample < n_samples; ++sample) {
+      // create the uniform samples
+      Rcpp::NumericVector uniform_samples = Rcpp::runif(copula_dimension - 1);
+      // set the diagonal
+      auxiliary_matrix(0, 0) = cond_alpha;
+      for(int i = 1; i < auxiliary_matrix.rows(); ++i) {
+        auxiliary_matrix(i, i) = uniform_samples[i - 1];
+      }
+
+      // iterate over the auxiliary matrix (columns first then rows)
+      // according to the conditional sampling algorithm
+      for (size_t column_iter = 1; column_iter < copula_dimension; ++column_iter) {
+        for (size_t row_iter = column_iter - 1; row_iter < copula_dimension; --row_iter) {
+          tools_interface::check_user_interrupt();
+          auto edge_copula = vinecop_cpp.get_pair_copula(row_iter, column_iter - 1 - row_iter);
+          Eigen::MatrixXd hinv_input(1, 2);
+          hinv_input(0, 0) = auxiliary_matrix(row_iter + 1, column_iter);
+          hinv_input(0, 1) = auxiliary_matrix(row_iter, column_iter - 1);
+          auxiliary_matrix(row_iter, column_iter) = edge_copula.hinv2(hinv_input)(0, 0);
+          if (column_iter < copula_dimension) {
+            Eigen::MatrixXd hfunc_input(1, 2);
+            hfunc_input(0, 0) = auxiliary_matrix(row_iter, column_iter - 1);
+            hfunc_input(0, 1) = auxiliary_matrix(row_iter, column_iter);
+            auxiliary_matrix(row_iter + 1, column_iter) = edge_copula.hfunc2(hfunc_input)(0, 0);
+          }
+        }
+      }
+      // write samples to row of the the output matrix
+      output_matrix.row(sample) = auxiliary_matrix.row(0);
+    }
+    return output_matrix;
+  }
+

@@ -23,40 +23,13 @@ r1conddvine <- function(n_samples, cond_alpha, fitted_vine){
   n_assets <- length(asset_names)
   # for each cond_alpha level get the n_samples samples
   sample_dt <- lapply(cond_alpha, function(cond_alpha_level) {
-    replicate(n_samples, {
-      aux_matrix <- matrix(data = NA_real_,
-                           nrow = n_assets,
-                           ncol = n_assets)
-      # initialize the diagonal with the conditional value as well as the
-      # sampled values
-      diag(aux_matrix) <- c(cond_alpha_level, stats::runif(n_assets - 1))
-
-      for (j in 2:n_assets) {
-        for (k in (j - 1):1) {
-          current_bicop <- fitted_vine$pair_copulas[[k]][[j - k]]
-          aux_matrix[k, j] <- bicop_hinv2_cpp(
-            u = matrix(
-              c(aux_matrix[k + 1, j], aux_matrix[k, j - 1]),
-              ncol = 2
-            ),
-            bicop_r = current_bicop
-          )
-          if (j < n_assets) {
-            aux_matrix[k + 1, j] <- bicop_hfunc2_cpp(
-              u = matrix(
-                c(aux_matrix[k, j - 1], aux_matrix[k, j]),
-                ncol = 2
-              ),
-              bicop_r = current_bicop
-            )
-          }
-        }
-      }
-      # return the first row containing the multivariate conditional sample with
-      # the conditioning value
-      aux_matrix[1, ]
-    }) %>%
-      t() %>%
+    # call lower level cpp function for the actual sampling i.e. speed up
+    # memory consumption down :)
+    cond_dvine1_cpp(
+      n_samples = n_samples,
+      cond_alpha = cond_alpha_level,
+      vinecop_r = fitted_vine
+    ) %>%
       data.table::as.data.table()
   }) %>% data.table::rbindlist()
 
