@@ -33,8 +33,8 @@ greedy_tau_ordering <- function(
     ind2 = rep(1:(ncol(vine_train_data) - 1),
                rev(1:(ncol(vine_train_data) - 1)))
   ) %>%
-    group_by(ind2) %>%
-    mutate(ind1 = seq(unique(ind2) + 1, ncol(vine_train_data))) %>%
+    group_by(.data$ind2) %>%
+    mutate(ind1 = seq(unique(.data$ind2) + 1, ncol(vine_train_data))) %>%
     ungroup() %>%
     mutate(id = seq.int(length(pairwise_tau)))
   # now determine the ordering
@@ -47,10 +47,10 @@ greedy_tau_ordering <- function(
     pairwise_tau_df <- pairwise_tau_df[-max_ind, , drop = FALSE]
     for (i in 3:ncol(vine_train_data)) {
       filtered_df <- pairwise_tau_df %>%
-        filter((ind1 == order_vec[i - 1] &
-                  !ind2 %in% order_vec[seq.int(i - 2)]) |
-                 (ind2 == order_vec[i - 1] &
-                    !ind1 %in% order_vec[seq.int(i - 2)]))
+        filter((.data$ind1 == order_vec[i - 1] &
+                  !.data$ind2 %in% order_vec[seq.int(i - 2)]) |
+                 (.data$ind2 == order_vec[i - 1] &
+                    !.data$ind1 %in% order_vec[seq.int(i - 2)]))
       max_ind <- which.max(filtered_df$tau)
       order_vec[i] <- ifelse(filtered_df$ind1[max_ind] == order_vec[i - 1],
                              filtered_df$ind2[max_ind],
@@ -61,10 +61,10 @@ greedy_tau_ordering <- function(
     order_vec[1] <- which(colnames(vine_train_data) == cond_vars)
     for (i in 2:ncol(vine_train_data)) {
       filtered_df <- pairwise_tau_df %>%
-        filter((ind1 == order_vec[i - 1] &
-                  !ind2 %in% order_vec[seq.int(i - 2)]) |
-                 (ind2 == order_vec[i - 1] &
-                    !ind1 %in% order_vec[seq.int(i - 2)]))
+        filter((.data$ind1 == order_vec[i - 1] &
+                  !.data$ind2 %in% order_vec[seq.int(i - 2)]) |
+                 (.data$ind2 == order_vec[i - 1] &
+                    !.data$ind1 %in% order_vec[seq.int(i - 2)]))
       max_ind <- which.max(filtered_df$tau)
       order_vec[i] <- ifelse(filtered_df$ind1[max_ind] == order_vec[i - 1],
                              filtered_df$ind2[max_ind],
@@ -76,10 +76,10 @@ greedy_tau_ordering <- function(
     cond_positions <- c(which(colnames(vine_train_data) == cond_vars[1]),
                         which(colnames(vine_train_data) == cond_vars[2]))
     filtered_df <- pairwise_tau_df %>%
-      filter((ind1 %in% cond_positions &
-                !ind2 %in% cond_positions) |
-               (ind2 %in% cond_positions &
-                  !ind1 %in% cond_positions))
+      filter((.data$ind1 %in% cond_positions &
+                !.data$ind2 %in% cond_positions) |
+               (.data$ind2 %in% cond_positions &
+                  !.data$ind1 %in% cond_positions))
     max_ind <- which.max(filtered_df$tau)
     order_vec[2] <- ifelse(filtered_df$ind1[max_ind] %in% cond_positions,
                            filtered_df$ind1[max_ind],
@@ -93,10 +93,10 @@ greedy_tau_ordering <- function(
     if (ncol(vine_train_data) > 3) {
       for (i in 4:ncol(vine_train_data)) {
         filtered_df <- pairwise_tau_df %>%
-          filter((ind1 == order_vec[i - 1] &
-                    !ind2 %in% order_vec[seq.int(i - 2)]) |
-                   (ind2 == order_vec[i - 1] &
-                      !ind1 %in% order_vec[seq.int(i - 2)]))
+          filter((.data$ind1 == order_vec[i - 1] &
+                    !.data$ind2 %in% order_vec[seq.int(i - 2)]) |
+                   (.data$ind2 == order_vec[i - 1] &
+                      !.data$ind1 %in% order_vec[seq.int(i - 2)]))
         max_ind <- which.max(filtered_df$tau)
         order_vec[i] <- ifelse(filtered_df$ind1[max_ind] == order_vec[i - 1],
                                filtered_df$ind2[max_ind],

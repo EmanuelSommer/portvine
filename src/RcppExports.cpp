@@ -24,35 +24,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// bicop_hfunc2_cpp
-Eigen::VectorXd bicop_hfunc2_cpp(const Eigen::MatrixXd& u, const Rcpp::List& bicop_r);
-RcppExport SEXP _portvine_bicop_hfunc2_cpp(SEXP uSEXP, SEXP bicop_rSEXP) {
+// cond_dvine2_cpp
+Eigen::MatrixXd cond_dvine2_cpp(const int n_samples, const double cond_alpha, const Rcpp::List& vinecop_r);
+RcppExport SEXP _portvine_cond_dvine2_cpp(SEXP n_samplesSEXP, SEXP cond_alphaSEXP, SEXP vinecop_rSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type u(uSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type bicop_r(bicop_rSEXP);
-    rcpp_result_gen = Rcpp::wrap(bicop_hfunc2_cpp(u, bicop_r));
-    return rcpp_result_gen;
-END_RCPP
-}
-// bicop_hinv2_cpp
-Eigen::VectorXd bicop_hinv2_cpp(const Eigen::MatrixXd& u, const Rcpp::List& bicop_r);
-RcppExport SEXP _portvine_bicop_hinv2_cpp(SEXP uSEXP, SEXP bicop_rSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const Eigen::MatrixXd& >::type u(uSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type bicop_r(bicop_rSEXP);
-    rcpp_result_gen = Rcpp::wrap(bicop_hinv2_cpp(u, bicop_r));
+    Rcpp::traits::input_parameter< const int >::type n_samples(n_samplesSEXP);
+    Rcpp::traits::input_parameter< const double >::type cond_alpha(cond_alphaSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List& >::type vinecop_r(vinecop_rSEXP);
+    rcpp_result_gen = Rcpp::wrap(cond_dvine2_cpp(n_samples, cond_alpha, vinecop_r));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
     {"_portvine_cond_dvine1_cpp", (DL_FUNC) &_portvine_cond_dvine1_cpp, 3},
-    {"_portvine_bicop_hfunc2_cpp", (DL_FUNC) &_portvine_bicop_hfunc2_cpp, 2},
-    {"_portvine_bicop_hinv2_cpp", (DL_FUNC) &_portvine_bicop_hinv2_cpp, 2},
+    {"_portvine_cond_dvine2_cpp", (DL_FUNC) &_portvine_cond_dvine2_cpp, 3},
     {NULL, NULL, 0}
 };
 

@@ -84,6 +84,8 @@ estimate_marginal_models <- function(
         start_window <- 1 + n_marg_train - n_vine_train +
           (window - 1) * n_marg_refit
         end_window <- min(n_all_obs, n_marg_train + n_marg_refit * window)
+        # evade r CMD check note:
+        asset <- NULL
         window_returns <- data[asset == asset_name]$returns[seq(start_window,
                                                                 end_window)]
         filtered_model <- rugarch::ugarchfilter(
@@ -104,15 +106,17 @@ estimate_marginal_models <- function(
         # now get the forecasted residuals and append the fitted residuals
         roll_density_params %>%
           dtplyr::lazy_dt() %>%
-          filter(row_num <= end_window & row_num >= (start_window + n_vine_train)) %>%
-          arrange(row_num) %>%
-          mutate(resid = (Realized - Mu) / Sigma) %>%
-          select(resid, shape = Shape, skew = Skew, mu = Mu, sigma = Sigma,
-                 row_num) %>%
+          filter(.data$row_num <= end_window &
+                   .data$row_num >= (start_window + n_vine_train)) %>%
+          arrange(.data$row_num) %>%
+          mutate(resid = (.data$Realized - .data$Mu) / .data$Sigma) %>%
+          select(.data$resid, shape = .data$Shape, skew = .data$Skew,
+                 mu = .data$Mu, sigma = .data$Sigma,
+                 .data$row_num) %>%
           data.table::as.data.table() %>%
           rbind(window_residuals_fitted) %>%
           dtplyr::lazy_dt() %>%
-          arrange(row_num) %>%
+          arrange(.data$row_num) %>%
           # now one has all needed standardized residuals for this window.
           # Thus the transformed copula scale residuals are still appended using
           # the skew and shape parameters as well as the marginal distribution
@@ -124,7 +128,7 @@ estimate_marginal_models <- function(
             marg_dist = roll_distribution,
             copula_scale_resid = rugarch::pdist(
               distribution = roll_distribution,
-              q = resid, shape = shape, skew = skew)) %>%
+              q = .data$resid, shape = .data$shape, skew = .data$skew)) %>%
           data.table::as.data.table()
       }, simplify = FALSE) %>%
       # bind the per marginal window data.tables together (possible as the

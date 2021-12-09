@@ -24,7 +24,8 @@ Imports:
     kde1d (>= 1.0.2),
     rugarch,
     rvinecopulib,
-    tidyr
+    tidyr,
+    rlang
 Suggests: 
     rmarkdown,
     knitr,

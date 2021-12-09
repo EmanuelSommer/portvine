@@ -98,10 +98,11 @@ estimate_dependence_and_risk <- function(
       window_residuals_dt <- combined_residuals_dt %>%
         dtplyr::lazy_dt() %>%
         filter(
-          marg_window_num == ceiling(n_vine_refit * vine_window / n_marg_refit),
-          row_num >= 1 + n_marg_train - n_vine_train +
+          .data$marg_window_num == ceiling(n_vine_refit * vine_window /
+                                             n_marg_refit),
+          .data$row_num >= 1 + n_marg_train - n_vine_train +
             n_vine_refit * (vine_window - 1),
-          row_num <= n_marg_train + n_vine_refit * (vine_window - 1)
+          .data$row_num <= n_marg_train + n_vine_refit * (vine_window - 1)
         ) %>%
         data.table::as.data.table()
       # now an appropriate vine copula model has to be fitted
@@ -109,10 +110,10 @@ estimate_dependence_and_risk <- function(
       # restrictions
       vine_train_data <- window_residuals_dt %>%
         dtplyr::lazy_dt() %>%
-        select(asset, copula_scale_resid, row_num) %>%
-        tidyr::pivot_wider(names_from = asset,
-                           values_from = copula_scale_resid) %>%
-        select(-row_num) %>%
+        select("asset", "copula_scale_resid", "row_num") %>%
+        tidyr::pivot_wider(names_from = .data$asset,
+                           values_from = .data$copula_scale_resid) %>%
+        select(-"row_num") %>%
         as.data.frame()
 
       if (vine_type == "rvine") {
@@ -162,40 +163,43 @@ estimate_dependence_and_risk <- function(
           trans_vals <- combined_residuals_dt %>%
             dtplyr::lazy_dt() %>%
             filter(
-              marg_window_num == ceiling(n_vine_refit * vine_window /
+              .data$marg_window_num == ceiling(n_vine_refit * vine_window /
                                            n_marg_refit),
-              row_num == row_num_window) %>%
+              .data$row_num == row_num_window) %>%
             as.data.frame()
           sim_dt <- sim_dt %>%
             dtplyr::lazy_dt() %>%
             mutate(sample_id = seq(nrow(sim_dt))) %>%
-            tidyr::pivot_longer(-sample_id, names_to = "asset",
+            tidyr::pivot_longer(-"sample_id", names_to = "asset",
                          values_to = "sample") %>%
-            group_by(asset) %>%
+            group_by(.data$asset) %>%
             # here transform from copula to original scale
             mutate(
-              sample = trans_vals[["mu"]][trans_vals[["asset"]] == asset] +
-                trans_vals[["sigma"]][trans_vals[["asset"]] == asset] *
+              sample = trans_vals[["mu"]][trans_vals[["asset"]] ==
+                                            .data$asset] +
+                trans_vals[["sigma"]][trans_vals[["asset"]] == .data$asset] *
                 rugarch::qdist(
                   distribution = trans_vals[["marg_dist"]][trans_vals[["asset"]]
-                                                           == asset],
+                                                           == .data$asset],
                   p = sample,
-                  skew = trans_vals[["skew"]][trans_vals[["asset"]] == asset]
+                  skew = trans_vals[["skew"]][trans_vals[["asset"]] ==
+                                                .data$asset]
                 )
             ) %>%
             # add the corresponding weight
-            mutate(weight = weights[asset]) %>%
+            mutate(weight = weights[.data$asset]) %>%
             ungroup() %>%
-            group_by(sample_id) %>%
+            group_by(.data$sample_id) %>%
             # get the portfolio value by a weighted sum
-            mutate(portfolio_value = sum(sample * weight)) %>%
+            mutate(portfolio_value = sum(.data$sample * .data$weight)) %>%
             ungroup() %>%
-            select(-weight) %>%
-            tidyr::pivot_wider(names_from = asset, values_from = sample) %>%
-            arrange(sample_id) %>%
+            select(-"weight") %>%
+            tidyr::pivot_wider(names_from = .data$asset,
+                               values_from = .data$sample) %>%
+            arrange(.data$sample_id) %>%
             # retrieve the portfolio value as well as the conditioning vars if
             # the conditional approach is taken
-            select(portfolio_value, all_of(cond_vars)) %>%
+            select("portfolio_value", all_of(cond_vars)) %>%
             data.table::as.data.table()
 
           # overall risk measures (all samples used)

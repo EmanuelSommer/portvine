@@ -62,7 +62,7 @@ test_that("r2conddvine", {
     colnames(rcondvine_test_input)
   )
   expect_equal(
-    r2conddvine_res$sample_dt[[3]],
+    r2conddvine_res$sample_dt[[4]],
     rep(c(0.1, 0.8), each = 111)
   )
   expect_equal(
@@ -139,7 +139,7 @@ test_that("rcondvinecop functionality", {
     colnames(rcondvine_test_input)
   )
   expect_equal(
-    rcondvinecop_res$sample_dt[[3]],
+    rcondvinecop_res$sample_dt[[4]],
     rep(c(0.01, 0.1), each = 100)
   )
   expect_equal(

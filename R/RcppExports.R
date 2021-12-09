@@ -5,11 +5,7 @@ cond_dvine1_cpp <- function(n_samples, cond_alpha, vinecop_r) {
     .Call(`_portvine_cond_dvine1_cpp`, n_samples, cond_alpha, vinecop_r)
 }
 
-bicop_hfunc2_cpp <- function(u, bicop_r) {
-    .Call(`_portvine_bicop_hfunc2_cpp`, u, bicop_r)
-}
-
-bicop_hinv2_cpp <- function(u, bicop_r) {
-    .Call(`_portvine_bicop_hinv2_cpp`, u, bicop_r)
+cond_dvine2_cpp <- function(n_samples, cond_alpha, vinecop_r) {
+    .Call(`_portvine_cond_dvine2_cpp`, n_samples, cond_alpha, vinecop_r)
 }
 

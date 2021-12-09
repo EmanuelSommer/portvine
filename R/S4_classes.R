@@ -410,6 +410,8 @@ setMethod("risk_estimates",
   signature = c("portvine_roll"),
   function(roll, risk_measures = NULL, alpha = NULL,
            df = TRUE, exceeded = FALSE) {
+    # evade CMD check note:
+    . <- NULL
     # check whether the risk_measures and alpha levels were fitted for this roll
     checkmate::assert_subset(risk_measures, roll@risk_measures, empty.ok = TRUE)
     if (is.null(risk_measures)) risk_measures <- roll@risk_measures
@@ -421,9 +423,9 @@ setMethod("risk_estimates",
 
     roll@risk_estimates %>%
       dtplyr::lazy_dt() %>%
-      filter(risk_measure %in% risk_measures,
-             alpha %in% (!!alpha)) %>%
-      {if (exceeded) mutate(., exceeded = realized < risk_est) else .} %>%
+      filter(.data$risk_measure %in% risk_measures,
+             .data$alpha %in% (!!alpha)) %>%
+      {if (exceeded) mutate(., exceeded = .data$realized < .data$risk_est) else .} %>%
       {if (df) as.data.frame(.) else data.table::as.data.table(.)}
   }
 )
@@ -444,6 +446,8 @@ setMethod("risk_estimates",
   function(roll, risk_measures = NULL, alpha = NULL,
            df = TRUE, exceeded = FALSE, cond = TRUE,
            cond_alpha = NULL) {
+    # evade CMD check note:
+    . <- NULL
     # check whether the risk_measures and alpha levels were fitted for this roll
     checkmate::assert_subset(risk_measures, roll@risk_measures, empty.ok = TRUE)
     if (is.null(risk_measures)) risk_measures <- roll@risk_measures
@@ -458,10 +462,10 @@ setMethod("risk_estimates",
 
      {if (cond) roll@cond_risk_estimates else roll@risk_estimates} %>%
       dtplyr::lazy_dt() %>%
-      filter(risk_measure %in% risk_measures,
-             alpha %in% (!!alpha)) %>%
-      {if (cond) filter(., cond_alpha %in% (!!cond_alpha)) else .} %>%
-      {if (exceeded) mutate(., exceeded = realized < risk_est) else .} %>%
+      filter(.data$risk_measure %in% risk_measures,
+             .data$alpha %in% (!!alpha)) %>%
+      {if (cond) filter(., .data$cond_alpha %in% (!!cond_alpha)) else .} %>%
+      {if (exceeded) mutate(., exceeded = .data$realized < .data$risk_est) else .} %>%
       {if (df) as.data.frame(.) else data.table::as.data.table(.)}
   }
 )

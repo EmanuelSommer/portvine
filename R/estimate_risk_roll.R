@@ -74,7 +74,7 @@
 #'
 #' @author Emanuel Sommer
 #'
-#' @importFrom dtplyr lazy_dt
+#' @importFrom rlang .data
 #' @importFrom tidyr pivot_longer pivot_wider
 #' @import dplyr
 #' @rawNamespace import(data.table, except = c(first,last,between))
@@ -169,9 +169,9 @@ estimate_risk_roll <- function(
   # Preparations for the overall algorithm -------------------------------
 
   # add id column and get into long format
-  data <- lazy_dt(data) %>%
+  data <- dtplyr::lazy_dt(data) %>%
     mutate(row_num = seq.int(nrow(data))) %>%
-    pivot_longer(-row_num, names_to = "asset", values_to = "returns") %>%
+    pivot_longer(-"row_num", names_to = "asset", values_to = "returns") %>%
     data.table::as.data.table()
   # prep the weights
   if (is.null(weights)) {
@@ -230,11 +230,12 @@ estimate_risk_roll <- function(
   # risk measures (if conditional do it also for the conditional estimates)
   realized_portfolio_returns <- data %>%
     dtplyr::lazy_dt() %>%
-    group_by(asset) %>%
-    mutate(weight = weights[asset]) %>%
+    group_by(.data$asset) %>%
+    mutate(weight = weights[.data$asset]) %>%
     ungroup() %>%
-    group_by(row_num) %>%
-    summarise(realized = sum(weight * returns), .groups = "drop") %>%
+    group_by(.data$row_num) %>%
+    summarise(realized = sum(.data$weight * .data$returns),
+              .groups = "drop") %>%
     data.table::as.data.table()
   risk_estimates <- dep_risk_result[["overall_risk_estimates"]] %>%
     dtplyr::lazy_dt() %>%

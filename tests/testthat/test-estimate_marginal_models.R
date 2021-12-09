@@ -1,4 +1,4 @@
-marg_input_sample_returns_small <- lazy_dt(sample_returns_small) %>%
+marg_input_sample_returns_small <- dtplyr::lazy_dt(sample_returns_small) %>%
   mutate(row_num = seq.int(nrow(sample_returns_small))) %>%
   pivot_longer(-row_num, names_to = "asset", values_to = "returns") %>%
   data.table::as.data.table()
