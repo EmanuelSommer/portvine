@@ -503,7 +503,9 @@ setMethod("fitted_vines",
 #'  objects
 #'
 #' The marginal models are ARMA-GARCH models which were fitted in a rolling
-#' window fashion using [`rugarch::ugarchroll`].
+#' window fashion using [`rugarch::ugarchroll`]. For the residual analysis of
+#' the models encompassed in such a [`rugarch::ugarchroll`] class object one
+#' can have a look at the utility function [`roll_residuals()`].
 #'
 #' @param roll Object of class `portvine_roll` or a child class
 #' @param ... Additional parameters for child class methods
@@ -512,7 +514,7 @@ setMethod("fitted_vines",
 #' [`rugarch::ugarchroll`] class object that encompasses the marginal model fit.
 #' @export
 #'
-#' @seealso [`portvine_roll-class`]
+#' @seealso [`portvine_roll-class`], [`roll_residuals()`]
 setGeneric(
   "fitted_marginals",
   function(roll, ...) {
