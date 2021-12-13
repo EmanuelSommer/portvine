@@ -13,7 +13,7 @@ Eigen::MatrixXd
     auto vine_struct_ = vinecop_cpp.get_rvine_structure();
     auto copula_dimension = vine_struct_.get_dim();
 
-    // // vector<long long unsigned int>
+    // type vector<long long unsigned int>
     // auto order = vine_struct_.get_order();
     // auto inverse_order = tools_stl::invert_permutation(order);
 
