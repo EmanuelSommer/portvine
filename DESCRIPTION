@@ -1,10 +1,10 @@
 Package: portvine
-Title: TBD short desc
+Title: Portfolio level (un)conditional risk measure estimation for backtesting using vine copula and ARMA-GARCH models
 Version: 0.0.0.9000
 Authors@R: 
     person('Emanuel', 'Sommer', email = 'emanuel_sommer@gmx.de',
     role = c('cre', 'aut'))
-Description: TBD What the package does (one paragraph).
+Description: Portfolio level risk estimates (like the Value at Risk or the Expected Shortfall) are estimated by modeling each asset univariately by an ARMA-GARCH model and then their dependence via a vine copula model in a rolling window fashion. One can even use conditioning variables/time series to stresstest the risk estimates.
 License: MIT + file LICENSE
 Encoding: UTF-8
 NeedsCompilation: yes
