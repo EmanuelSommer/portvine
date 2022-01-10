@@ -22,108 +22,46 @@ test_combined_residuals_dt <- data.table::rbindlist(
          function(asset) asset$residuals_dt)
 )
 
-estimate_dependence_and_risk(
-  test_combined_residuals_dt,
-  1000,
-  750, 50,
-  100, 25,
-  unique(test_combined_residuals_dt$asset),
-  "parametric", "rvine",
-  c(0.1, 0.2),
-  c("ES_median", "VaR"),
-  c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
-  NULL,
-  1000,
-  0.05,
-  100,
-  FALSE
-)
-
 test_that("unconditional case", {
   # rvine
+  edr_rvine <- estimate_dependence_and_risk(
+    test_combined_residuals_dt,
+    1000,
+    750, 50,
+    100, 25,
+    unique(test_combined_residuals_dt$asset),
+    "parametric", "rvine",
+    c(0.1, 0.2),
+    c("ES_median", "VaR"),
+    matrix(rep(c(2,3,5), 10), byrow = TRUE, ncol = 3,
+           dimnames = list(NULL, c("GOOG", "AAPL", "AMZN" ))),
+    NULL,
+    1000,
+    0.05,
+    100,
+    FALSE
+  )
   expect_true(
     is.null(
-      estimate_dependence_and_risk(
-        test_combined_residuals_dt,
-        1000,
-        750, 50,
-        100, 25,
-        unique(test_combined_residuals_dt$asset),
-        "parametric", "rvine",
-        c(0.1, 0.2),
-        c("ES_median", "VaR"),
-        c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
-        NULL,
-        1000,
-        0.05,
-        100,
-        FALSE
-      )[["cond_risk_estimates"]]
+      edr_rvine[["cond_risk_estimates"]]
     )
   )
   expect_s3_class(
-    estimate_dependence_and_risk(
-      test_combined_residuals_dt,
-      1000,
-      750, 50,
-      100, 25,
-      unique(test_combined_residuals_dt$asset),
-      "parametric", "rvine",
-      c(0.1, 0.2),
-      c("ES_median", "VaR"),
-      c("GOOG" = 2, "AAPL" = 30, "AMZN" = 5),
-      NULL,
-      1000,
-      0.05,
-      100,
-      FALSE
-    )[["overall_risk_estimates"]],
+    edr_rvine[["overall_risk_estimates"]],
     "data.table"
   )
   expect_equal(
-    colnames(estimate_dependence_and_risk(
-      test_combined_residuals_dt,
-      1000,
-      750, 50,
-      100, 25,
-      unique(test_combined_residuals_dt$asset),
-      "parametric", "rvine",
-      c(0.1, 0.2),
-      c("ES_median", "VaR"),
-      c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
-      NULL,
-      1000,
-      0.05,
-      100,
-      FALSE
-    )[["overall_risk_estimates"]]),
+    colnames(edr_rvine[["overall_risk_estimates"]]),
     c("risk_measure", "risk_est", "alpha", "row_num", "vine_window")
   )
   expect_true(
     checkmate::test_list(
-      estimate_dependence_and_risk(
-        test_combined_residuals_dt,
-        1000,
-        750, 50,
-        100, 25,
-        unique(test_combined_residuals_dt$asset),
-        "parametric", "rvine",
-        c(0.1, 0.2),
-        c("ES_median", "VaR"),
-        c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
-        NULL,
-        1000,
-        0.05,
-        100,
-        FALSE
-      )[["fitted_vines"]],
+      edr_rvine[["fitted_vines"]],
       types = "vinecop"
     )
   )
   # dvine
-  expect_true(
-    is.null(
-      estimate_dependence_and_risk(
+  edr_dvine <- estimate_dependence_and_risk(
         test_combined_residuals_dt,
         1000,
         750, 50,
@@ -132,114 +70,61 @@ test_that("unconditional case", {
         "parametric", "dvine",
         c(0.1, 0.2),
         c("ES_median", "VaR"),
-        c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
+        matrix(rep(c(2,3,5), 10), byrow = TRUE, ncol = 3,
+               dimnames = list(NULL, c("GOOG", "AAPL", "AMZN" ))),
         NULL,
         1000,
         0.05,
         100,
         FALSE
-      )[["cond_risk_estimates"]]
+      )
+
+  expect_true(
+    is.null(
+      edr_dvine[["cond_risk_estimates"]]
     )
   )
   expect_s3_class(
-    estimate_dependence_and_risk(
-      test_combined_residuals_dt,
-      1000,
-      750, 50,
-      100, 25,
-      unique(test_combined_residuals_dt$asset),
-      "parametric", "dvine",
-      c(0.1, 0.2),
-      c("ES_median", "VaR"),
-      c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
-      NULL,
-      1000,
-      0.05,
-      100,
-      FALSE
-    )[["overall_risk_estimates"]],
+    edr_dvine[["overall_risk_estimates"]],
     "data.table"
   )
   expect_equal(
-    colnames(estimate_dependence_and_risk(
-      test_combined_residuals_dt,
-      1000,
-      750, 50,
-      100, 25,
-      unique(test_combined_residuals_dt$asset),
-      "parametric", "dvine",
-      c(0.1, 0.2),
-      c("ES_median", "VaR"),
-      c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
-      NULL,
-      1000,
-      0.05,
-      100,
-      FALSE
-    )[["overall_risk_estimates"]]),
+    colnames(edr_dvine[["overall_risk_estimates"]]),
     c("risk_measure", "risk_est", "alpha", "row_num", "vine_window")
   )
   expect_true(
     checkmate::test_list(
-      estimate_dependence_and_risk(
-        test_combined_residuals_dt,
-        1000,
-        750, 50,
-        100, 25,
-        unique(test_combined_residuals_dt$asset),
-        "parametric", "dvine",
-        c(0.1, 0.2),
-        c("ES_median", "VaR"),
-        c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
-        NULL,
-        1000,
-        0.05,
-        100,
-        FALSE
-      )[["fitted_vines"]],
+      edr_dvine[["fitted_vines"]],
       types = "vinecop"
     )
   )
-  # different family_set
+  # different family_set, alphas and risk measure
+  edr_dvine2 <- estimate_dependence_and_risk(
+    test_combined_residuals_dt,
+    1000,
+    750, 50,
+    100, 25,
+    unique(test_combined_residuals_dt$asset),
+    c("clayton", "gumbel", "frank"), "dvine",
+    c(0.1),
+    c("ES_mc"),
+    matrix(rep(c(2,3,5), 10), byrow = TRUE, ncol = 3,
+           dimnames = list(NULL, c("GOOG", "AAPL", "AMZN" ))),
+    NULL,
+    1000,
+    0.05,
+    100,
+    FALSE
+  )
   expect_true(
     checkmate::test_list(
-      estimate_dependence_and_risk(
-        test_combined_residuals_dt,
-        1000,
-        750, 50,
-        100, 25,
-        unique(test_combined_residuals_dt$asset),
-        c("clayton", "gumbel", "frank"), "dvine",
-        c(0.1, 0.2),
-        c("ES_median", "VaR"),
-        c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
-        NULL,
-        1000,
-        0.05,
-        100,
-        FALSE
-      )[["fitted_vines"]],
+      edr_dvine2[["fitted_vines"]],
       types = "vinecop"
     )
   )
   # other alphas and risk measure
   expect_equal(
-    colnames(estimate_dependence_and_risk(
-      test_combined_residuals_dt,
-      1000,
-      750, 50,
-      100, 25,
-      unique(test_combined_residuals_dt$asset),
-      "parametric", "rvine",
-      0.01,
-      "ES_mc",
-      c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
-      NULL,
-      1000,
-      0.05,
-      100,
-      FALSE
-    )[["overall_risk_estimates"]]),
+    colnames(edr_dvine2[["overall_risk_estimates"]]),
     c("risk_measure", "risk_est", "alpha", "row_num", "vine_window")
   )
 })
@@ -254,7 +139,8 @@ test_that("conditional case", {
     family_set = "parametric", vine_type = "dvine",
     alpha = c(0.1, 0.2),
     risk_measures = c("ES_median", "VaR"),
-    weights = c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
+    weights = matrix(rep(c(2,3,5), 10), byrow = TRUE, ncol = 3,
+                     dimnames = list(NULL, c("GOOG", "AAPL", "AMZN" ))),
     cond_vars = "AAPL",
     n_samples = 10,
     cond_alpha = c(0.05, 0.5),
@@ -299,7 +185,8 @@ test_that("conditional case", {
     family_set = "parametric", vine_type = "dvine",
     alpha = c(0.1, 0.2),
     risk_measures = c("ES_mean", "VaR"),
-    weights = c("GOOG" = 2, "AAPL" = 3, "AMZN" = 5),
+    weights = matrix(rep(c(2,3,5), 10), byrow = TRUE, ncol = 3,
+                     dimnames = list(NULL, c("GOOG", "AAPL", "AMZN" ))),
     cond_vars = c("AAPL", "GOOG"),
     n_samples = 10,
     cond_alpha = c(0.05, 0.5),

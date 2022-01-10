@@ -75,6 +75,34 @@ test_that("input checks", {
   expect_error(
     estimate_risk_roll(
       sample_returns_small,
+      weights = matrix(rep(1, 6), ncol = 3,
+                       dimnames = list(NULL,
+                                       c("GOOG", "AMZN", "AAPL"))),
+      marginal_settings = valid_marg_settings,
+      vine_settings = valid_vine_settings,
+      alpha = c(0.01, 0.05),
+      risk_measures = c("VaR", "ES_mean"),
+      n_samples = 1000,
+      trace = FALSE
+    )
+  )
+  expect_error(
+    estimate_risk_roll(
+      sample_returns_small,
+      weights = matrix(rep(1, 3 * 4), ncol = 3,
+                       dimnames = list(NULL,
+                                       c("GOOG", "Copula", "AAPL"))),
+      marginal_settings = valid_marg_settings,
+      vine_settings = valid_vine_settings,
+      alpha = c(0.01, 0.05),
+      risk_measures = c("VaR", "ES_mean"),
+      n_samples = 1000,
+      trace = FALSE
+    )
+  )
+  expect_error(
+    estimate_risk_roll(
+      sample_returns_small,
       weights = c("GOOG" = "1", "AMZN" = "0", "AAPL" = "1"),
       marginal_settings = valid_marg_settings,
       vine_settings = valid_vine_settings,
@@ -290,7 +318,8 @@ test_that("basic functionality (unconditionally)", {
   )
   expect_equal(
     t1_risk_roll@weights,
-    c('AAPL' = 1, 'GOOG' = 1, 'AMZN' = 1)
+    matrix(rep(1, 12), ncol = 3,
+           dimnames = list(NULL, c('AAPL', 'GOOG', 'AMZN')))
   )
   expect_false(
     t1_risk_roll@cond_estimation
@@ -315,7 +344,7 @@ test_that("basic functionality (unconditionally)", {
     vine_type = "dvine"
   )
   expect_message(
-    t2_risk_roll <- estimate_risk_roll(
+    {t2_risk_roll <- estimate_risk_roll(
       sample_returns_small,
       weights = c("GOOG" = 1,"AAPL" =  2, "AMZN" = 19),
       marginal_settings = t2_marg_settings,
@@ -325,7 +354,7 @@ test_that("basic functionality (unconditionally)", {
       n_samples = 1000,
       n_mc_samples = 1000,
       trace = FALSE
-    ), regexp = "^The last window of interest is shorter*"
+    )}, regexp = "^The last window of interest is shorter*"
   )
   expect_s4_class(t2_risk_roll, "portvine_roll")
   expect_true(
@@ -409,9 +438,10 @@ test_that("basic functionality (conditionally)", {
     vine_type = "dvine"
   )
   expect_message(
-    t2_risk_roll <- estimate_risk_roll(
+    {t2_risk_roll <- estimate_risk_roll(
       sample_returns_small,
-      weights = NULL,
+      weights = matrix(c(10, 0, 0, 1, 0, 0), ncol = 3, byrow = TRUE,
+                       dimnames = list(NULL, c('AAPL', 'GOOG', 'AMZN'))),
       marginal_settings = t2_marg_settings,
       vine_settings = t2_vine_settings,
       alpha = 0.01,
@@ -421,7 +451,7 @@ test_that("basic functionality (conditionally)", {
       cond_vars = c("GOOG", "AMZN"),
       cond_alpha = 0.1,
       trace = FALSE
-    ), regexp = "^The last window of interest is shorter*"
+    )}, regexp = "^The last window of interest is shorter*"
   )
   expect_s4_class(t2_risk_roll, "cond_portvine_roll")
   expect_true(

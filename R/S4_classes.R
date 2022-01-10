@@ -215,7 +215,9 @@ setMethod("show", c("vine_settings"), function(object) {
 #'  measures.
 #' @slot alpha numeric vector in (0,1) displaying the confidence levels used
 #' when estimating the risk measures.
-#' @slot weights the numeric positive weights of the assets.
+#' @slot weights the numeric positive weights of the assets. (Matrix with each
+#' row corresponding to one vine window) The weights of conditional variables
+#' are always 0.
 #' @slot cond_estimation logical value indicating whether the conditional
 #'  estimation approach for the risk measures was used.
 #' @slot n_samples positive numeric count displaying how many return samples
@@ -237,7 +239,7 @@ setClass("portvine_roll",
            vine_settings = "vine_settings",
            risk_measures = "character",
            alpha = "numeric",
-           weights = "numeric",
+           weights = "matrix",
            cond_estimation = "logical",
            n_samples = "numeric",
            time_taken = "numeric"

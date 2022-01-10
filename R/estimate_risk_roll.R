@@ -37,7 +37,10 @@
 #'  Moreover missing values must be imputed beforehand.
 #' @param weights Corresponding named non-negative weights of the assets
 #'  (conditioning variables must have weight 0). Default `NULL` gives equal
-#'  weight to each non conditional asset.
+#'  weight to each non conditional asset. Alternatively one can use a matrix
+#'  with as many rows as vine windows for changing weights. The matrix must have
+#'  column names corresponding to the assets and conditional assets have to have
+#'  weight 0.
 #' @param marginal_settings [`marginal_settings`] S4 object containing the
 #'  needed information for the ARMA-GARCH i.e. marginal models fitting. Note
 #'  that the `marginal_settings` and `vine_settings` objects have to match as
@@ -109,15 +112,7 @@ estimate_risk_roll <- function(
                               null.ok = TRUE)
   checkmate::assert_subset(cond_vars, all_asset_names)
   conditional_logical <- ifelse(is.null(cond_vars), FALSE, TRUE)
-  # weights argument
-  n_all_assets <- length(all_asset_names)
-  checkmate::assert_numeric(weights, lower = 0, any.missing = FALSE,
-                            len = n_all_assets, names = "unique",
-                            null.ok = TRUE)
-  checkmate::assert_subset(names(weights), all_asset_names)
-  if (any(weights[cond_vars] != 0 & conditional_logical)) {
-    stop("The weights of the conditioning variables must be 0.")
-  }
+
   # alpha argument
   checkmate::assert_numeric(alpha, lower = 0, upper = 1, any.missing = FALSE,
                             min.len = 1)
@@ -162,6 +157,49 @@ estimate_risk_roll <- function(
       ") than the specified window width of",
       n_marg_refit))
   }
+  # weights argument
+  n_all_assets <- length(all_asset_names)
+  if (!is.matrix(weights) & !is.null(weights)) {
+    try({
+      # try to coerce vector to matrix that replicates the vector in each row
+      # for a number of the vine windows
+      weights <- matrix(
+        rep(weights, ceiling((n_all_obs - n_marg_train) / n_vine_refit)),
+        byrow = TRUE,
+        ncol = length(weights),
+        dimnames = list(NULL, names(weights))
+      )
+    }, silent = TRUE)
+    if ("try-error" %in% class(weights)) {
+      stop("The <weights> argument is not specified correctly.
+           Should be named numeric vector or matrix.")
+    }
+  }
+  checkmate::assert_matrix(
+    weights, mode = "numeric", any.missing = FALSE,
+    nrows = ceiling((n_all_obs - n_marg_train) / n_vine_refit),
+    ncols = n_all_assets, col.names = "unique", null.ok = TRUE
+  )
+  checkmate::assert_subset(colnames(weights), all_asset_names)
+  if (any(weights[, cond_vars] != 0) & conditional_logical) {
+    stop("The weights of the conditioning variables must be 0.")
+  }
+  if (any(weights < 0)) {
+    stop("Negative weights are not supported")
+  }
+  # prep the weights
+  if (is.null(weights)) {
+    # if not specified all assets get equal weight
+    weights <- matrix(
+      rep(1, n_all_assets * ceiling((n_all_obs - n_marg_train) / n_vine_refit)),
+      ncol = n_all_assets
+    )
+    colnames(weights) <- all_asset_names
+    # conditioning variables get weight 0
+    if (conditional_logical) {
+      weights[, cond_vars] <- 0
+    }
+  }
   # trace argument
   checkmate::assert_flag(trace)
 
@@ -173,16 +211,7 @@ estimate_risk_roll <- function(
     mutate(row_num = seq.int(nrow(data))) %>%
     pivot_longer(-"row_num", names_to = "asset", values_to = "returns") %>%
     data.table::as.data.table()
-  # prep the weights
-  if (is.null(weights)) {
-    # if not specified all assets get equal weight
-    weights <- rep(1, n_all_assets)
-    names(weights) <- all_asset_names
-    # conditioning variables get weight 0
-    if (conditional_logical) {
-      weights[cond_vars] <- 0
-    }
-  }
+
   # prep the marginal specifications for each asset
   marginal_specs_list <- sapply(all_asset_names, function(asset) {
     if (asset %in% names(marginal_settings@individual_spec)) {
@@ -230,8 +259,13 @@ estimate_risk_roll <- function(
   # risk measures (if conditional do it also for the conditional estimates)
   realized_portfolio_returns <- data %>%
     dtplyr::lazy_dt() %>%
+    filter(.data$row_num > n_marg_train) %>%
     group_by(.data$asset) %>%
-    mutate(weight = weights[.data$asset]) %>%
+    mutate(auxiliary_rowid = seq(n())) %>%
+    ungroup() %>%
+    mutate(vine_window = ceiling(.data$auxiliary_rowid / n_vine_refit)) %>%
+    group_by(.data$asset, .data$vine_window) %>%
+    mutate(weight = weights[.data$vine_window, .data$asset]) %>%
     ungroup() %>%
     group_by(.data$row_num) %>%
     summarise(realized = sum(.data$weight * .data$returns),

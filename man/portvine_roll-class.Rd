@@ -62,7 +62,9 @@ measures.}
 \item{\code{alpha}}{numeric vector in (0,1) displaying the confidence levels used
 when estimating the risk measures.}
 
-\item{\code{weights}}{the numeric positive weights of the assets.}
+\item{\code{weights}}{the numeric positive weights of the assets. (Matrix with each
+row corresponding to one vine window) The weights of conditional variables
+are always 0.}
 
 \item{\code{cond_estimation}}{logical value indicating whether the conditional
 estimation approach for the risk measures was used.}

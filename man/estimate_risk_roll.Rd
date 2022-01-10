@@ -25,7 +25,10 @@ Moreover missing values must be imputed beforehand.}
 
 \item{weights}{Corresponding named non-negative weights of the assets
 (conditioning variables must have weight 0). Default \code{NULL} gives equal
-weight to each non conditional asset.}
+weight to each non conditional asset. Alternatively one can use a matrix
+with as many rows as vine windows for changing weights. The matrix must have
+column names corresponding to the assets and conditional assets have to have
+weight 0.}
 
 \item{marginal_settings}{\code{\link{marginal_settings}} S4 object containing the
 needed information for the ARMA-GARCH i.e. marginal models fitting. Note

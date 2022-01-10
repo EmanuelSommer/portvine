@@ -31,8 +31,8 @@
 #' risk measures should be calculated
 #' @param risk_measures a character vector with valid choices for risk
 #'  measures to compute
-#' @param weights corresponding named non-negative weights of the assets
-#'  (conditioning variables must have weight 0).
+#' @param weights matrix with colnames: asset names, rows one for each vine
+#' window with weights, 0 for conditional variables.
 #' @param cond_vars colnames of the variables to sample conditionally from
 #' @param n_samples number of samples to compute for the risk measure estimates
 #' @param cond_alpha a numeric vector specifying the corresponding quantiles
@@ -187,7 +187,7 @@ estimate_dependence_and_risk <- function(
                 )
             ) %>%
             # add the corresponding weight
-            mutate(weight = weights[.data$asset]) %>%
+            mutate(weight = weights[vine_window, .data$asset]) %>%
             ungroup() %>%
             group_by(.data$sample_id) %>%
             # get the portfolio value by a weighted sum
