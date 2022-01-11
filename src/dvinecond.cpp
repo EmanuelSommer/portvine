@@ -3,9 +3,9 @@
 using namespace vinecopulib;
 
 void iterate_aux_matrix(int start_column,
-                                   int copula_dimension,
-                                   Vinecop vinecop,
-                                   Eigen::MatrixXd& auxiliary) {
+                        int copula_dimension,
+                        Vinecop vinecop,
+                        Eigen::MatrixXd& auxiliary) {
   Eigen::MatrixXd hinv_input(1, 2);
   Eigen::MatrixXd hfunc_input(1, 2);
   for (size_t column = start_column; column < copula_dimension; ++column) {
@@ -29,7 +29,7 @@ void iterate_aux_matrix(int start_column,
 Eigen::MatrixXd
   cond_dvine1_cpp(
     const int n_samples,
-    const double cond_alpha,
+    const double cond_u,
     const Rcpp::List& vinecop_r)
   {
     auto vinecop_cpp = vinecop_wrap(vinecop_r);
@@ -47,7 +47,7 @@ Eigen::MatrixXd
       // create the uniform samples
       Rcpp::NumericVector uniform_samples = Rcpp::runif(copula_dimension - 1);
       // set the diagonal
-      auxiliary(0, 0) = cond_alpha;
+      auxiliary(0, 0) = cond_u;
       for(int i = 1; i < auxiliary.rows(); ++i) {
         auxiliary(i, i) = uniform_samples[i - 1];
       }
@@ -68,7 +68,9 @@ Eigen::MatrixXd
 Eigen::MatrixXd
   cond_dvine2_cpp(
     const int n_samples,
-    const double cond_alpha,
+    const double cond_u1,
+    double cond_u2,
+    const bool quantile,
     const Rcpp::List& vinecop_r)
   {
     auto vinecop_cpp = vinecop_wrap(vinecop_r);
@@ -83,11 +85,13 @@ Eigen::MatrixXd
 
     // calculate the second conditional value and a needed h function value
     Eigen::MatrixXd second_cond_input(1, 2);
-    second_cond_input(0, 0) = cond_alpha;
-    second_cond_input(0, 1) = cond_alpha;
+    second_cond_input(0, 0) = cond_u2;
+    second_cond_input(0, 1) = cond_u1;
     auto indices_edge_copula = vinecop_cpp.get_pair_copula(0, 0);
-    double second_cond_alpha = indices_edge_copula.hinv2(second_cond_input)(0, 0);
-    second_cond_input(0, 0) = second_cond_alpha;
+    if (quantile) {
+      cond_u2 = indices_edge_copula.hinv2(second_cond_input)(0, 0);
+      second_cond_input(0, 0) = cond_u2;
+    }
     double cond_hfunc_value = indices_edge_copula.hfunc2(second_cond_input)(0, 0);
 
     // first loop over n_samples (just repeat n_samples times)
@@ -95,8 +99,8 @@ Eigen::MatrixXd
       // create the uniform samples
       Rcpp::NumericVector uniform_samples = Rcpp::runif(copula_dimension - 2);
       // set the fixed conditioning values
-      auxiliary(0, 0) = second_cond_alpha;
-      auxiliary(0, 1) = cond_alpha;
+      auxiliary(0, 0) = cond_u2;
+      auxiliary(0, 1) = cond_u1;
       auxiliary(1, 1) = cond_hfunc_value;
       // set the random samples on the diagonal
       for(int i = 2; i < auxiliary.rows(); ++i) {

@@ -29,7 +29,8 @@
 #'  `residuals_dt` a datatable containing the standardized residuals `resid`,
 #'  copula scale residuals `copula_scale_resid`, for the corresponding marginal
 #'  window `marg_window_num`, row number `row_num`, asset `asset` and the most
-#'  important marginal model information `shape`, `skew` and `marg_dist`.
+#'  important marginal model information `shape`, `skew`, and `marg_dist`.
+#'  Moreover `mu` and `sigma`  which are the mean and volatility forecasts
 #'
 #' @import dplyr
 #' @importFrom stats resid

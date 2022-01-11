@@ -133,7 +133,8 @@ estimate_dependence_and_risk <- function(
         presel = FALSE,
       )
       # simulate, transform back to original scale, get full portfolio value
-      # and estimate the risk measures
+      # and estimate the risk measures (iterate over each time unit in the vine
+      # window)
       list_risk_est <- lapply(
         seq(n_marg_train + n_vine_refit * (vine_window - 1) + 1,
             min(n_all_obs,

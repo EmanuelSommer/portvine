@@ -27,7 +27,7 @@ r1conddvine <- function(n_samples, cond_alpha, fitted_vine){
     # memory consumption down :)
     cond_dvine1_cpp(
       n_samples = n_samples,
-      cond_alpha = cond_alpha_level,
+      cond_u = cond_alpha_level,
       vinecop_r = fitted_vine
     ) %>%
       data.table::as.data.table()
@@ -72,7 +72,9 @@ r2conddvine <- function(n_samples, cond_alpha, fitted_vine) {
     # memory consumption down :)
     cond_dvine2_cpp(
       n_samples = n_samples,
-      cond_alpha = cond_alpha_level,
+      cond_u1 = cond_alpha_level,
+      cond_u2 = cond_alpha_level,
+      quantile = TRUE,
       vinecop_r = fitted_vine
     ) %>%
       data.table::as.data.table()
