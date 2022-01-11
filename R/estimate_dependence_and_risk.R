@@ -155,7 +155,7 @@ estimate_dependence_and_risk <- function(
               fitted_vine = fitted_vine,
               vine_type = vine_type
             )
-            cond_alpha_vec <- rcondvinecop_res$cond_alpha_vec
+            cond_alpha_vec <- rcondvinecop_res$cond_u_vec
             sim_dt <- rcondvinecop_res$sample_dt
           }
           # transform the simulated data on the copula scale to the original
