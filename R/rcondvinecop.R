@@ -148,8 +148,9 @@ rcondvinecop <- function(
 ) {
   checkmate::assert_class(fitted_vine, "vinecop")
   checkmate::assert_numeric(cond_pre_resid, len = length(cond_vars),
-                            lower = 0, upper = 1, any.missing = FALSE)
-  checkmate::check_subset(names(cond_pre_resid), cond_vars, empty.ok = FALSE)
+                            lower = 0, upper = 1, any.missing = FALSE,
+                            names = "unique")
+  checkmate::assert_subset(names(cond_pre_resid), cond_vars, empty.ok = FALSE)
   if (vine_type == "dvine") {
     if (length(cond_vars) == 1) {
       r1conddvine(

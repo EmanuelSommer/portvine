@@ -397,7 +397,7 @@ test_that("basic functionality (conditionally)", {
     risk_measures = c("VaR", "ES_mean"),
     n_samples = 50,
     cond_vars = "GOOG",
-    cond_alpha = c(0.05, 0.5),
+    cond_u = c(0.05, 0.5),
     trace = TRUE
   )
   expect_s4_class(t1_risk_roll, "cond_portvine_roll")
@@ -412,7 +412,7 @@ test_that("basic functionality (conditionally)", {
   expect_true(
     checkmate::test_data_table(t1_risk_roll@cond_risk_estimates,
                                any.missing = FALSE, ncols = 8,
-                               nrows = 4 * 200 * 2)
+                               nrows = 4 * 200 * 3)
   )
   expect_true(
     t1_risk_roll@cond_estimation
@@ -449,7 +449,7 @@ test_that("basic functionality (conditionally)", {
       n_samples = 10,
       n_mc_samples = 100,
       cond_vars = c("GOOG", "AMZN"),
-      cond_alpha = 0.1,
+      cond_u = 0.1,
       trace = FALSE
     )}, regexp = "^The last window of interest is shorter*"
   )
@@ -466,7 +466,7 @@ test_that("basic functionality (conditionally)", {
   expect_true(
     checkmate::test_data_table(t2_risk_roll@cond_risk_estimates,
                                any.missing = FALSE, ncols = 9,
-                               nrows = 3 * 200 * 1)
+                               nrows = 3 * 200 * 2)
   )
   expect_true(
     t2_risk_roll@cond_estimation
@@ -504,7 +504,7 @@ test_that("parallel functionality", {
     n_samples = 100,
     n_mc_samples = 100,
     cond_vars = c("GOOG", "AMZN"),
-    cond_alpha = c(0.1, 0.5),
+    cond_u = c(0.1, 0.5),
     trace = FALSE
   )
   future::plan("sequential")
@@ -522,6 +522,6 @@ test_that("parallel functionality", {
   expect_true(
     checkmate::test_data_table(multi_risk_roll@cond_risk_estimates,
                                any.missing = FALSE, ncols = 9,
-                               nrows = 3 * 200 * 2)
+                               nrows = 3 * 200 * 3)
   )
 })

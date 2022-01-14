@@ -59,9 +59,11 @@
 #'  measure estimation.
 #' @param cond_vars Names of the variables to sample conditionally from
 #' (currently \eqn{\le 2} variables).
-#' @param cond_alpha Numeric vector specifying the corresponding quantiles
+#' @param cond_u Numeric vector specifying the corresponding quantiles
 #'  in (0,1) of the conditional variable(s) conditioned on which the conditional
-#'  risk measures should be calculated.
+#'  risk measures should be calculated. Additionally always the conditioning
+#'  values corresponding to the residual of one time unit prior are used as
+#'  conditional variables.
 #' @param n_mc_samples Positive count of samples for the Monte Carlo integration
 #' if the risk measure `ES_mc` is used. (See [`est_es()`])
 #' @param trace If set to TRUE the algorithm will print basic information while
@@ -92,7 +94,7 @@ estimate_risk_roll <- function(
   risk_measures = c("VaR", "ES_mean"),
   n_samples = 1000,
   cond_vars = NULL,
-  cond_alpha = 0.05,
+  cond_u = 0.05,
   n_mc_samples = 1000,
   trace = FALSE
 ) {
@@ -119,9 +121,9 @@ estimate_risk_roll <- function(
   # risk_measures argument
   checkmate::assert_subset(risk_measures, c("VaR", "ES_mean",
                                             "ES_median", "ES_mc"))
-  # n_samples, cond_alpha
+  # n_samples, cond_u
   checkmate::assert_integerish(n_samples, lower = 1)
-  checkmate::assert_numeric(cond_alpha, lower = 0, upper = 1,
+  checkmate::assert_numeric(cond_u, lower = 0, upper = 1,
                             any.missing = FALSE, min.len = 1)
   # marginal_settings and vine_settings
   checkmate::assert_class(marginal_settings, "marginal_settings")
@@ -250,7 +252,7 @@ estimate_risk_roll <- function(
     weights = weights,
     cond_vars = cond_vars,
     n_samples = n_samples,
-    cond_alpha = cond_alpha,
+    cond_u = cond_u,
     n_mc_samples = n_mc_samples,
     trace = trace
   )
@@ -319,7 +321,7 @@ estimate_risk_roll <- function(
                  time_taken = time_taken_minutes,
                  cond_risk_estimates = cond_risk_estimates,
                  cond_vars = cond_vars,
-                 cond_alpha = cond_alpha
+                 cond_u = cond_u
     )
   }
 }

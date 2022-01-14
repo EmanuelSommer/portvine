@@ -35,7 +35,7 @@
 #' window with weights, 0 for conditional variables.
 #' @param cond_vars colnames of the variables to sample conditionally from
 #' @param n_samples number of samples to compute for the risk measure estimates
-#' @param cond_alpha a numeric vector specifying the corresponding quantiles
+#' @param cond_u a numeric vector specifying the corresponding quantiles
 #'  in (0,1) of the conditional variable(s) conditioned on which the conditional
 #'  risk measures should be calculated.
 #' @param n_mc_samples number of samples for the Monte Carlo integration
@@ -51,7 +51,7 @@
 #'   in the conditional case are used)
 #'   - `cond_risk_estimates` a data.table with the same format like the overall
 #'   one but with the additional column(s) containing the conditional values and
-#'   the column `cond_alpha` that indicates the used conditional quantile level.
+#'   the column `cond_u` that indicates the used conditional quantile level.
 #'   NULL if the unconditional approach is taken.
 #'
 #' @import dplyr
@@ -71,7 +71,7 @@ estimate_dependence_and_risk <- function(
   weights,
   cond_vars,
   n_samples,
-  cond_alpha,
+  cond_u,
   n_mc_samples,
   trace
 ) {
@@ -141,21 +141,32 @@ estimate_dependence_and_risk <- function(
                 n_marg_train + n_vine_refit * vine_window)),
         function(row_num_window) {
           # simulate from the fitted vine
-          # get a data.table with n_samples rows or n_samples*length(cond_alpha)
+          # get a data.table with n_samples rows or n_samples*length(cond_u)
           # rows, each column is one of the assets
           if (length(cond_vars) == 0) {
             sim_dt <- data.table::as.data.table(
               rvinecopulib::rvinecop(n_samples, fitted_vine)
             )
           } else {
+            # named vector containing the copula scale residuals of the prior
+            # time unit for all conditioning variables
+            cond_pre_resid <- sapply(cond_vars, function(cond_asset) {
+              combined_residuals_dt$copula_scale_resid[
+                combined_residuals_dt$asset == cond_asset &
+                  combined_residuals_dt$row_num == row_num_window - 1 &
+                  combined_residuals_dt$marg_window_num == ceiling(
+                    n_vine_refit * vine_window / n_marg_refit)
+              ]
+            })
             rcondvinecop_res <- rcondvinecop(
               n_samples = n_samples,
-              cond_alpha = cond_alpha,
+              cond_u = cond_u,
+              cond_pre_resid = cond_pre_resid,
               cond_vars = cond_vars,
               fitted_vine = fitted_vine,
               vine_type = vine_type
             )
-            cond_alpha_vec <- rcondvinecop_res$cond_u_vec
+            cond_u_vec <- rcondvinecop_res$cond_u_vec
             sim_dt <- rcondvinecop_res$sample_dt
           }
           # transform the simulated data on the copula scale to the original
@@ -217,14 +228,15 @@ estimate_dependence_and_risk <- function(
             cond_risk_estimates <- NULL
           } else if (length(cond_vars) == 1) {
             cond_name <- colnames(sim_dt[, -1])
-            sim_dt <- cbind(sim_dt, cond_alpha_vec)
+            sim_dt <- cbind(sim_dt, cond_u_vec)
             # estimate the risk for each conditional quantile
-            cond_risk_estimates <- lapply(cond_alpha, function(cond_level) {
-              cond_val <- sim_dt[[2]][sim_dt[["cond_alpha_vec"]] ==
+            cond_risk_estimates <- lapply(c(cond_u, "prior_resid"),
+                                          function(cond_level) {
+              cond_val <- sim_dt[[2]][sim_dt[["cond_u_vec"]] ==
                                         cond_level][1]
               est_risk_measures(
                 risk_measures = risk_measures,
-                sample = sim_dt$portfolio_value[sim_dt[["cond_alpha_vec"]] ==
+                sample = sim_dt$portfolio_value[sim_dt[["cond_u_vec"]] ==
                                                     cond_level],
                 alpha = alpha,
                 n_mc_samples = n_mc_samples,
@@ -233,22 +245,23 @@ estimate_dependence_and_risk <- function(
                 dtplyr::lazy_dt() %>%
                 mutate(
                   !! cond_name := cond_val,
-                  "cond_alpha" = cond_level
+                  "cond_u" = cond_level
                 ) %>%
                 data.table::as.data.table()
             }) %>% data.table::rbindlist()
           } else if (length(cond_vars) == 2) {
             cond_names <- colnames(sim_dt[, -1])
-            sim_dt <- cbind(sim_dt, cond_alpha_vec)
+            sim_dt <- cbind(sim_dt, cond_u_vec)
             # estimate the risk for each conditional quantile
-            cond_risk_estimates <- lapply(cond_alpha, function(cond_level) {
-              cond_val1 <- sim_dt[[2]][sim_dt[["cond_alpha_vec"]] ==
+            cond_risk_estimates <- lapply(c(cond_u, "prior_resid"),
+                                          function(cond_level) {
+              cond_val1 <- sim_dt[[2]][sim_dt[["cond_u_vec"]] ==
                                          cond_level][1]
-              cond_val2 <- sim_dt[[3]][sim_dt[["cond_alpha_vec"]] ==
+              cond_val2 <- sim_dt[[3]][sim_dt[["cond_u_vec"]] ==
                                          cond_level][1]
               est_risk_measures(
                 risk_measures = risk_measures,
-                sample = sim_dt$portfolio_value[sim_dt[["cond_alpha_vec"]] ==
+                sample = sim_dt$portfolio_value[sim_dt[["cond_u_vec"]] ==
                                                     cond_level],
                 alpha = alpha,
                 n_mc_samples = n_mc_samples,
@@ -258,7 +271,7 @@ estimate_dependence_and_risk <- function(
                 mutate(
                   !! cond_names[1] := cond_val1,
                   !! cond_names[2] := cond_val2,
-                  "cond_alpha" = cond_level
+                  "cond_u" = cond_level
                 ) %>%
                 data.table::as.data.table()
             }) %>% data.table::rbindlist()

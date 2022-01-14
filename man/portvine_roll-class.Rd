@@ -77,13 +77,14 @@ took.}
 
 \item{\code{cond_risk_estimates}}{!C! data.table with the same columns as the
 \code{risk_estimate} slot has + the additional conditional columns with the
-respective conditioning value and the column \code{cond_alpha} that indicates
-the used conditional quantile level.}
+respective conditioning value and the column character \code{cond_u} that
+indicates the used conditional quantile level or the conditional value
+corresponding to the residual one time unit prior with "prior_resid".}
 
 \item{\code{cond_vars}}{!C! character vector with the names of the variables that were
 used to sample conditionally from.}
 
-\item{\code{cond_alpha}}{!C! a numeric vector specifying the corresponding quantiles
+\item{\code{cond_u}}{!C! a numeric vector specifying the corresponding quantiles
 in (0,1) of the conditional variable(s) conditioned on which the conditional
 risk measures were calculated.}
 }}

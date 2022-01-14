@@ -30,7 +30,7 @@ risk_estimates(
   df = TRUE,
   exceeded = FALSE,
   cond = TRUE,
-  cond_alpha = NULL
+  cond_u = NULL
 )
 }
 \arguments{
@@ -57,11 +57,12 @@ portfolio value exceeded the estimated risk.}
 \item{cond}{If set to TRUE returns the conditional risk estimates and
 otherwise returns the overall risk estimates.}
 
-\item{cond_alpha}{Numeric vector specifying the corresponding quantiles
+\item{cond_u}{Numeric or character vector specifying the corresponding
+quantiles
 in (0,1) of the conditional variable(s) conditioned on which the conditional
-risk measures were calculated to filter for. Note
-that they must be fitted in the \code{roll} argument. The default will return all
-fitted risk measures.}
+risk measures were calculated to filter for and/or the class "prior_resid".
+Note that they must be fitted in the \code{roll} argument.
+The default will return all fitted risk measures.}
 }
 \value{
 (Un-)filtered \code{data.frame} or \code{data.table} (see \code{df} argument) with

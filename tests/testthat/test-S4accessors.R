@@ -166,7 +166,7 @@ test_that("risk_estimates() basic functionality & input checks", {
     n_samples = 10,
     n_mc_samples = 100,
     cond_vars = c("GOOG", "AMZN"),
-    cond_alpha = c(0.1, 0.5, 0.9),
+    cond_u = c(0.1, 0.5, 0.9),
     trace = FALSE
   )
   expect_true(
@@ -176,7 +176,7 @@ test_that("risk_estimates() basic functionality & input checks", {
         risk_measures = NULL,
         alpha = NULL,
         df = FALSE
-      ), any.missing = FALSE, nrows = 6 * 100 * 3
+      ), any.missing = FALSE, nrows = 6 * 100 * 4
     )
   )
   expect_true(
@@ -186,7 +186,7 @@ test_that("risk_estimates() basic functionality & input checks", {
         risk_measures = NULL,
         alpha = NULL,
         df = TRUE
-      ), any.missing = FALSE, nrows = 6 * 100 * 3
+      ), any.missing = FALSE, nrows = 6 * 100 * 4
     )
   )
   expect_equal(
@@ -218,8 +218,8 @@ test_that("risk_estimates() basic functionality & input checks", {
       roll = t2_risk_roll,
       risk_measures = NULL,
       alpha = NULL
-    )[["cond_alpha"]])),
-    sort(c(0.1, 0.5, 0.9))
+    )[["cond_u"]])),
+    sort(c(0.1, 0.5, 0.9, "prior_resid"))
   )
   expect_true(
     checkmate::test_data_frame(
@@ -227,7 +227,7 @@ test_that("risk_estimates() basic functionality & input checks", {
         roll = t2_risk_roll,
         risk_measures = c("ES_median", "ES_mean"),
         alpha = 0.05
-      ), any.missing = FALSE, nrows = 2 * 100 * 3
+      ), any.missing = FALSE, nrows = 2 * 100 * 4
     )
   )
   expect_true(
@@ -236,7 +236,7 @@ test_that("risk_estimates() basic functionality & input checks", {
         roll = t2_risk_roll,
         risk_measures = c("ES_median", "ES_mean"),
         alpha = 0.05,
-        cond_alpha = c(0.5, 0.9),
+        cond_u = c(0.5, 0.9),
         df = FALSE
       ), any.missing = FALSE, nrows = 2 * 100 * 2
     )
@@ -247,10 +247,22 @@ test_that("risk_estimates() basic functionality & input checks", {
         roll = t2_risk_roll,
         risk_measures = NULL,
         alpha = NULL,
-        cond_alpha = NULL,
+        cond_u = NULL,
         cond = FALSE,
         df = FALSE
       ), any.missing = FALSE, nrows = 6 * 100 * 1
+    )
+  )
+  expect_true(
+    checkmate::test_data_table(
+      risk_estimates(
+        roll = t2_risk_roll,
+        risk_measures = NULL,
+        alpha = NULL,
+        cond_u =  c("prior_resid", 0.1),
+        cond = TRUE,
+        df = FALSE
+      ), any.missing = FALSE, nrows = 6 * 100 * 2
     )
   )
 })
@@ -275,7 +287,7 @@ test_that("fitted_vines() & fitted_marginals() basic functionality", {
     risk_measures = c("VaR"),
     n_samples = 10,
     cond_vars = "AAPL",
-    cond_alpha = 0.5,
+    cond_u = 0.5,
     trace = FALSE
   )
   expect_true(

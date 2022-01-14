@@ -143,7 +143,7 @@ test_that("conditional case", {
                      dimnames = list(NULL, c("GOOG", "AAPL", "AMZN" ))),
     cond_vars = "AAPL",
     n_samples = 10,
-    cond_alpha = c(0.05, 0.5),
+    cond_u = c(0.05, 0.5),
     n_mc_samples = 100,
     trace = FALSE
   )
@@ -168,7 +168,7 @@ test_that("conditional case", {
   expect_equal(
     colnames(dep_risk_test_result_cond1$cond_risk_estimates),
     c("risk_measure", "risk_est", "alpha", "row_num", "AAPL",
-      "cond_alpha", "vine_window")
+      "cond_u", "vine_window")
   )
   expect_true(
     checkmate::test_list(
@@ -189,7 +189,7 @@ test_that("conditional case", {
                      dimnames = list(NULL, c("GOOG", "AAPL", "AMZN" ))),
     cond_vars = c("AAPL", "GOOG"),
     n_samples = 10,
-    cond_alpha = c(0.05, 0.5),
+    cond_u = c(0.05, 0.5),
     n_mc_samples = 100,
     trace = FALSE
   )
@@ -215,7 +215,7 @@ test_that("conditional case", {
     checkmate::test_subset(
       colnames(dep_risk_test_result_cond2$cond_risk_estimates),
       c("risk_measure", "risk_est", "alpha", "row_num", "AAPL", "GOOG",
-      "cond_alpha", "vine_window")
+      "cond_u", "vine_window")
     )
   )
   expect_true(

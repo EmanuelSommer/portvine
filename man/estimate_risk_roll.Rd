@@ -13,7 +13,7 @@ estimate_risk_roll(
   risk_measures = c("VaR", "ES_mean"),
   n_samples = 1000,
   cond_vars = NULL,
-  cond_alpha = 0.05,
+  cond_u = 0.05,
   n_mc_samples = 1000,
   trace = FALSE
 )
@@ -54,9 +54,11 @@ measure estimation.}
 \item{cond_vars}{Names of the variables to sample conditionally from
 (currently \eqn{\le 2} variables).}
 
-\item{cond_alpha}{Numeric vector specifying the corresponding quantiles
+\item{cond_u}{Numeric vector specifying the corresponding quantiles
 in (0,1) of the conditional variable(s) conditioned on which the conditional
-risk measures should be calculated.}
+risk measures should be calculated. Additionally always the conditioning
+values corresponding to the residual of one time unit prior are used as
+conditional variables.}
 
 \item{n_mc_samples}{Positive count of samples for the Monte Carlo integration
 if the risk measure \code{ES_mc} is used. (See \code{\link[=est_es]{est_es()}})}

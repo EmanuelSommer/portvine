@@ -268,11 +268,12 @@ setClass("portvine_roll",
 
 #' @slot cond_risk_estimates !C! data.table with the same columns as the
 #'  `risk_estimate` slot has + the additional conditional columns with the
-#'  respective conditioning value and the column `cond_alpha` that indicates
-#'   the used conditional quantile level.
+#'  respective conditioning value and the column character `cond_u` that
+#'  indicates the used conditional quantile level or the conditional value
+#'  corresponding to the residual one time unit prior with "prior_resid".
 #' @slot cond_vars !C! character vector with the names of the variables that were
 #' used to sample conditionally from.
-#' @slot cond_alpha !C! a numeric vector specifying the corresponding quantiles
+#' @slot cond_u !C! a numeric vector specifying the corresponding quantiles
 #'  in (0,1) of the conditional variable(s) conditioned on which the conditional
 #'  risk measures were calculated.
 #'
@@ -284,7 +285,7 @@ setClass("cond_portvine_roll",
          slots = list(
            cond_risk_estimates = "data.table",
            cond_vars = "character",
-           cond_alpha = "numeric"
+           cond_u = "numeric"
          ),
          validity = function(object) {
            error_mess <- character(0)
@@ -366,7 +367,7 @@ setMethod("summary", c("cond_portvine_roll"), function(object) {
   cat("Conditional variable(s):", object@cond_vars, "\n")
   cat("Number of conditional estimated risk measures:",
       nrow(object@cond_risk_estimates), "\n")
-  cat("Conditioning quantiles:", object@cond_alpha, "\n")
+  cat("Conditioning quantiles:", object@cond_u, "\n")
   methods::callNextMethod()
   invisible(NULL)
 })
@@ -435,11 +436,12 @@ setMethod("risk_estimates",
 #'
 #' @param cond If set to TRUE returns the conditional risk estimates and
 #' otherwise returns the overall risk estimates.
-#' @param cond_alpha Numeric vector specifying the corresponding quantiles
+#' @param cond_u Numeric or character vector specifying the corresponding
+#' quantiles
 #'  in (0,1) of the conditional variable(s) conditioned on which the conditional
-#'  risk measures were calculated to filter for. Note
-#' that they must be fitted in the `roll` argument. The default will return all
-#' fitted risk measures.
+#'  risk measures were calculated to filter for and/or the class "prior_resid".
+#'  Note that they must be fitted in the `roll` argument.
+#'  The default will return all fitted risk measures.
 #'
 #'
 #' @rdname risk_estimates
@@ -447,7 +449,7 @@ setMethod("risk_estimates",
   signature = c("cond_portvine_roll"),
   function(roll, risk_measures = NULL, alpha = NULL,
            df = TRUE, exceeded = FALSE, cond = TRUE,
-           cond_alpha = NULL) {
+           cond_u = NULL) {
     # evade CMD check note:
     . <- NULL
     # check whether the risk_measures and alpha levels were fitted for this roll
@@ -455,8 +457,12 @@ setMethod("risk_estimates",
     if (is.null(risk_measures)) risk_measures <- roll@risk_measures
     checkmate::assert_subset(alpha, roll@alpha, empty.ok = TRUE)
     if (is.null(alpha)) alpha <- roll@alpha
-    checkmate::assert_subset(cond_alpha, roll@cond_alpha, empty.ok = TRUE)
-    if (is.null(cond_alpha)) cond_alpha <- roll@cond_alpha
+    checkmate::assert_subset(as.character(cond_u),
+                             unique(roll@cond_risk_estimates[["cond_u"]]),
+                             empty.ok = TRUE)
+    if (is.null(cond_u)) {
+      cond_u <- unique(roll@cond_risk_estimates[["cond_u"]])
+    }
     # check the flags
     checkmate::assert_flag(df)
     checkmate::assert_flag(exceeded)
@@ -466,7 +472,7 @@ setMethod("risk_estimates",
       dtplyr::lazy_dt() %>%
       filter(.data$risk_measure %in% risk_measures,
              .data$alpha %in% (!!alpha)) %>%
-      {if (cond) filter(., .data$cond_alpha %in% (!!cond_alpha)) else .} %>%
+      {if (cond) filter(., .data$cond_u %in% (!!cond_u)) else .} %>%
       {if (exceeded) mutate(., exceeded = .data$realized < .data$risk_est) else .} %>%
       {if (df) as.data.frame(.) else data.table::as.data.table(.)}
   }
