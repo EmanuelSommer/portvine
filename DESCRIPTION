@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: 
     person('Emanuel', 'Sommer', email = 'emanuel_sommer@gmx.de',
     role = c('cre', 'aut'))
-Description: Portfolio level risk estimates (like the Value at Risk or the Expected Shortfall) are estimated by modeling each asset univariately by an ARMA-GARCH model and then their dependence via a vine copula model in a rolling window fashion. One can even use conditioning variables/time series to stresstest the risk estimates.
+Description: Portfolio level risk estimates (like the Value at Risk or the Expected Shortfall) are estimated by modeling each asset univariately by an ARMA-GARCH model and then their dependence via a vine copula model in a rolling window fashion. One can even condition on variables/time series at certain quantile levels to stresstest the risk estimates.
 License: MIT + file LICENSE
 Encoding: UTF-8
 NeedsCompilation: yes
