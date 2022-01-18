@@ -23,7 +23,7 @@
 #'  entries "prior_resid" for the samples that use `cond_pre_resid`
 #'
 #' @noRd
-r1conddvine <- function(n_samples, cond_u, cond_pre_resid, fitted_vine){
+r1conddvine <- function(n_samples, cond_u, cond_pre_resid, fitted_vine) {
   asset_names <- fitted_vine$names
   n_assets <- length(asset_names)
   # for each cond_alpha level get the n_samples samples
@@ -40,12 +40,15 @@ r1conddvine <- function(n_samples, cond_u, cond_pre_resid, fitted_vine){
 
   # reorder the columns in the original order
   reorder_indices <- sapply(seq(asset_names), function(ind) {
-    which(fitted_vine$structure$order == ind)}, simplify = TRUE)
+    which(fitted_vine$structure$order == ind)
+  }, simplify = TRUE)
   data.table::setcolorder(sample_dt, reorder_indices)
   colnames(sample_dt) <- asset_names
 
-  list(sample_dt = sample_dt,
-       cond_u_vec = rep(c(cond_u, "prior_resid"), each = n_samples))
+  list(
+    sample_dt = sample_dt,
+    cond_u_vec = rep(c(cond_u, "prior_resid"), each = n_samples)
+  )
 }
 
 
@@ -106,12 +109,15 @@ r2conddvine <- function(n_samples, cond_u, cond_pre_resid, fitted_vine) {
 
   # reorder the columns in the original order
   reorder_indices <- sapply(seq(asset_names), function(ind) {
-    which(fitted_vine$structure$order == ind)}, simplify = TRUE)
+    which(fitted_vine$structure$order == ind)
+  }, simplify = TRUE)
   data.table::setcolorder(sample_dt, reorder_indices)
   colnames(sample_dt) <- asset_names
 
-  list(sample_dt = sample_dt,
-       cond_u_vec = rep(c(cond_u, "prior_resid"), each = n_samples))
+  list(
+    sample_dt = sample_dt,
+    cond_u_vec = rep(c(cond_u, "prior_resid"), each = n_samples)
+  )
 }
 
 #' Sample conditionally from a vine copula
@@ -140,16 +146,16 @@ r2conddvine <- function(n_samples, cond_u, cond_pre_resid, fitted_vine) {
 #'  entries "prior_resid" for the samples that use `cond_pre_resid`
 #'
 #' @noRd
-rcondvinecop <- function(
-  n_samples, cond_u,
-  cond_pre_resid,
-  cond_vars,
-  fitted_vine, vine_type
-) {
+rcondvinecop <- function(n_samples, cond_u,
+                         cond_pre_resid,
+                         cond_vars,
+                         fitted_vine, vine_type) {
   checkmate::assert_class(fitted_vine, "vinecop")
-  checkmate::assert_numeric(cond_pre_resid, len = length(cond_vars),
-                            lower = 0, upper = 1, any.missing = FALSE,
-                            names = "unique")
+  checkmate::assert_numeric(cond_pre_resid,
+    len = length(cond_vars),
+    lower = 0, upper = 1, any.missing = FALSE,
+    names = "unique"
+  )
   checkmate::assert_subset(names(cond_pre_resid), cond_vars, empty.ok = FALSE)
   if (vine_type == "dvine") {
     if (length(cond_vars) == 1) {
@@ -159,7 +165,7 @@ rcondvinecop <- function(
         cond_pre_resid = cond_pre_resid,
         fitted_vine = fitted_vine
       )
-    } else if ( length(cond_vars) == 2) {
+    } else if (length(cond_vars) == 2) {
       r2conddvine(
         n_samples = n_samples,
         cond_u = cond_u,

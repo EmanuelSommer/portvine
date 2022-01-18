@@ -65,7 +65,8 @@ test_that("risk_estimates() basic functionality & input checks", {
         risk_measures = NULL,
         alpha = NULL,
         df = FALSE
-      ), any.missing = FALSE, nrows = 6 * 200
+      ),
+      any.missing = FALSE, nrows = 6 * 200
     )
   )
   expect_true(
@@ -74,7 +75,8 @@ test_that("risk_estimates() basic functionality & input checks", {
         roll = t1_risk_roll,
         risk_measures = NULL,
         alpha = NULL
-      ), any.missing = FALSE, nrows = 6 * 200
+      ),
+      any.missing = FALSE, nrows = 6 * 200
     )
   )
   expect_equal(
@@ -92,8 +94,10 @@ test_that("risk_estimates() basic functionality & input checks", {
       alpha = NULL,
       exceeded = TRUE
     )),
-    c("risk_measure", "risk_est", "alpha", "row_num", "vine_window", "realized",
-      "exceeded")
+    c(
+      "risk_measure", "risk_est", "alpha", "row_num", "vine_window", "realized",
+      "exceeded"
+    )
   )
   expect_equal(
     colnames(risk_estimates(
@@ -176,7 +180,8 @@ test_that("risk_estimates() basic functionality & input checks", {
         risk_measures = NULL,
         alpha = NULL,
         df = FALSE
-      ), any.missing = FALSE, nrows = 6 * 100 * 4
+      ),
+      any.missing = FALSE, nrows = 6 * 100 * 4
     )
   )
   expect_true(
@@ -186,7 +191,8 @@ test_that("risk_estimates() basic functionality & input checks", {
         risk_measures = NULL,
         alpha = NULL,
         df = TRUE
-      ), any.missing = FALSE, nrows = 6 * 100 * 4
+      ),
+      any.missing = FALSE, nrows = 6 * 100 * 4
     )
   )
   expect_equal(
@@ -227,7 +233,8 @@ test_that("risk_estimates() basic functionality & input checks", {
         roll = t2_risk_roll,
         risk_measures = c("ES_median", "ES_mean"),
         alpha = 0.05
-      ), any.missing = FALSE, nrows = 2 * 100 * 4
+      ),
+      any.missing = FALSE, nrows = 2 * 100 * 4
     )
   )
   expect_true(
@@ -238,7 +245,8 @@ test_that("risk_estimates() basic functionality & input checks", {
         alpha = 0.05,
         cond_u = c(0.5, 0.9),
         df = FALSE
-      ), any.missing = FALSE, nrows = 2 * 100 * 2
+      ),
+      any.missing = FALSE, nrows = 2 * 100 * 2
     )
   )
   expect_true(
@@ -250,7 +258,8 @@ test_that("risk_estimates() basic functionality & input checks", {
         cond_u = NULL,
         cond = FALSE,
         df = FALSE
-      ), any.missing = FALSE, nrows = 6 * 100 * 1
+      ),
+      any.missing = FALSE, nrows = 6 * 100 * 1
     )
   )
   expect_true(
@@ -259,10 +268,11 @@ test_that("risk_estimates() basic functionality & input checks", {
         roll = t2_risk_roll,
         risk_measures = NULL,
         alpha = NULL,
-        cond_u =  c("prior_resid", 0.1),
+        cond_u = c("prior_resid", 0.1),
         cond = TRUE,
         df = FALSE
-      ), any.missing = FALSE, nrows = 6 * 100 * 2
+      ),
+      any.missing = FALSE, nrows = 6 * 100 * 2
     )
   )
 })

@@ -6,7 +6,8 @@
 #' The ARMA(`ar`,`ma`)-GARCH(`arch`,`garch`) is fitted  with the distribution
 #'  given by `dist` that specifies the conditional density used for the
 #'  innovations.
-#' It might also be a handy shortcut towards changing the default w.r.t. the main specification arguments.
+#' It might also be a handy shortcut towards changing the default w.r.t. the
+#' main specification arguments.
 #'
 #' @param ar positive integer for the autoregressive order
 #' @param ma positive integer for the moving average order
@@ -20,12 +21,11 @@
 #'
 #' @examples # the default is then just using
 #' default_garch_spec()
-default_garch_spec <- function(
-  ar = 1,
-  ma = 1,
-  arch = 1,
-  garch = 1,
-  dist = "sstd") {
+default_garch_spec <- function(ar = 1,
+                               ma = 1,
+                               arch = 1,
+                               garch = 1,
+                               dist = "sstd") {
   # basic input checks
   checkmate::assert_count(ar, positive = TRUE)
   checkmate::assert_count(ma, positive = TRUE)

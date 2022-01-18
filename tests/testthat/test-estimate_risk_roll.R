@@ -37,7 +37,7 @@ test_that("input checks", {
   )
   expect_error(
     estimate_risk_roll(
-      lm(c(1:10)~1),
+      lm(c(1:10) ~ 1),
       weights = NULL,
       marginal_settings = valid_marg_settings,
       vine_settings = valid_vine_settings,
@@ -75,9 +75,13 @@ test_that("input checks", {
   expect_error(
     estimate_risk_roll(
       sample_returns_small,
-      weights = matrix(rep(1, 6), ncol = 3,
-                       dimnames = list(NULL,
-                                       c("GOOG", "AMZN", "AAPL"))),
+      weights = matrix(rep(1, 6),
+        ncol = 3,
+        dimnames = list(
+          NULL,
+          c("GOOG", "AMZN", "AAPL")
+        )
+      ),
       marginal_settings = valid_marg_settings,
       vine_settings = valid_vine_settings,
       alpha = c(0.01, 0.05),
@@ -89,9 +93,13 @@ test_that("input checks", {
   expect_error(
     estimate_risk_roll(
       sample_returns_small,
-      weights = matrix(rep(1, 3 * 4), ncol = 3,
-                       dimnames = list(NULL,
-                                       c("GOOG", "Copula", "AAPL"))),
+      weights = matrix(rep(1, 3 * 4),
+        ncol = 3,
+        dimnames = list(
+          NULL,
+          c("GOOG", "Copula", "AAPL")
+        )
+      ),
       marginal_settings = valid_marg_settings,
       vine_settings = valid_vine_settings,
       alpha = c(0.01, 0.05),
@@ -306,7 +314,8 @@ test_that("basic functionality (unconditionally)", {
   expect_s4_class(t1_risk_roll, "portvine_roll")
   expect_true(
     checkmate::test_data_table(t1_risk_roll@risk_estimates,
-                               any.missing = FALSE)
+      any.missing = FALSE
+    )
   )
   expect_equal(
     colnames(t1_risk_roll@risk_estimates),
@@ -318,8 +327,10 @@ test_that("basic functionality (unconditionally)", {
   )
   expect_equal(
     t1_risk_roll@weights,
-    matrix(rep(1, 12), ncol = 3,
-           dimnames = list(NULL, c('AAPL', 'GOOG', 'AMZN')))
+    matrix(rep(1, 12),
+      ncol = 3,
+      dimnames = list(NULL, c("AAPL", "GOOG", "AMZN"))
+    )
   )
   expect_false(
     t1_risk_roll@cond_estimation
@@ -344,22 +355,26 @@ test_that("basic functionality (unconditionally)", {
     vine_type = "dvine"
   )
   expect_message(
-    {t2_risk_roll <- estimate_risk_roll(
-      sample_returns_small,
-      weights = c("GOOG" = 1,"AAPL" =  2, "AMZN" = 19),
-      marginal_settings = t2_marg_settings,
-      vine_settings = t2_vine_settings,
-      alpha = 0.01,
-      risk_measures = c("VaR", "ES_median", "ES_mc"),
-      n_samples = 1000,
-      n_mc_samples = 1000,
-      trace = FALSE
-    )}, regexp = "^The last window of interest is shorter*"
+    {
+      t2_risk_roll <- estimate_risk_roll(
+        sample_returns_small,
+        weights = c("GOOG" = 1, "AAPL" = 2, "AMZN" = 19),
+        marginal_settings = t2_marg_settings,
+        vine_settings = t2_vine_settings,
+        alpha = 0.01,
+        risk_measures = c("VaR", "ES_median", "ES_mc"),
+        n_samples = 1000,
+        n_mc_samples = 1000,
+        trace = FALSE
+      )
+    },
+    regexp = "^The last window of interest is shorter*"
   )
   expect_s4_class(t2_risk_roll, "portvine_roll")
   expect_true(
     checkmate::test_data_table(t2_risk_roll@risk_estimates,
-                               any.missing = FALSE)
+      any.missing = FALSE
+    )
   )
   expect_equal(
     dim(t2_risk_roll@risk_estimates),
@@ -406,13 +421,15 @@ test_that("basic functionality (conditionally)", {
   )
   expect_true(
     checkmate::test_data_table(t1_risk_roll@risk_estimates,
-                               any.missing = FALSE,
-                               ncols = 6, nrows = 4 * 200)
+      any.missing = FALSE,
+      ncols = 6, nrows = 4 * 200
+    )
   )
   expect_true(
     checkmate::test_data_table(t1_risk_roll@cond_risk_estimates,
-                               any.missing = FALSE, ncols = 8,
-                               nrows = 4 * 200 * 3)
+      any.missing = FALSE, ncols = 8,
+      nrows = 4 * 200 * 3
+    )
   )
   expect_true(
     t1_risk_roll@cond_estimation
@@ -438,20 +455,25 @@ test_that("basic functionality (conditionally)", {
     vine_type = "dvine"
   )
   expect_message(
-    {t2_risk_roll <- estimate_risk_roll(
-      sample_returns_small,
-      weights = matrix(c(10, 0, 0, 1, 0, 0), ncol = 3, byrow = TRUE,
-                       dimnames = list(NULL, c('AAPL', 'GOOG', 'AMZN'))),
-      marginal_settings = t2_marg_settings,
-      vine_settings = t2_vine_settings,
-      alpha = 0.01,
-      risk_measures = c("VaR", "ES_median", "ES_mc"),
-      n_samples = 10,
-      n_mc_samples = 100,
-      cond_vars = c("GOOG", "AMZN"),
-      cond_u = 0.1,
-      trace = FALSE
-    )}, regexp = "^The last window of interest is shorter*"
+    {
+      t2_risk_roll <- estimate_risk_roll(
+        sample_returns_small,
+        weights = matrix(c(10, 0, 0, 1, 0, 0),
+          ncol = 3, byrow = TRUE,
+          dimnames = list(NULL, c("AAPL", "GOOG", "AMZN"))
+        ),
+        marginal_settings = t2_marg_settings,
+        vine_settings = t2_vine_settings,
+        alpha = 0.01,
+        risk_measures = c("VaR", "ES_median", "ES_mc"),
+        n_samples = 10,
+        n_mc_samples = 100,
+        cond_vars = c("GOOG", "AMZN"),
+        cond_u = 0.1,
+        trace = FALSE
+      )
+    },
+    regexp = "^The last window of interest is shorter*"
   )
   expect_s4_class(t2_risk_roll, "cond_portvine_roll")
   expect_true(
@@ -460,13 +482,15 @@ test_that("basic functionality (conditionally)", {
   )
   expect_true(
     checkmate::test_data_table(t2_risk_roll@risk_estimates,
-                               any.missing = FALSE,
-                               ncols = 6, nrows = 3 * 200)
+      any.missing = FALSE,
+      ncols = 6, nrows = 3 * 200
+    )
   )
   expect_true(
     checkmate::test_data_table(t2_risk_roll@cond_risk_estimates,
-                               any.missing = FALSE, ncols = 9,
-                               nrows = 3 * 200 * 2)
+      any.missing = FALSE, ncols = 9,
+      nrows = 3 * 200 * 2
+    )
   )
   expect_true(
     t2_risk_roll@cond_estimation
@@ -516,12 +540,14 @@ test_that("parallel functionality", {
   )
   expect_true(
     checkmate::test_data_table(multi_risk_roll@risk_estimates,
-                               any.missing = FALSE,
-                               ncols = 6, nrows = 3 * 200)
+      any.missing = FALSE,
+      ncols = 6, nrows = 3 * 200
+    )
   )
   expect_true(
     checkmate::test_data_table(multi_risk_roll@cond_risk_estimates,
-                               any.missing = FALSE, ncols = 9,
-                               nrows = 3 * 200 * 3)
+      any.missing = FALSE, ncols = 9,
+      nrows = 3 * 200 * 3
+    )
   )
 })

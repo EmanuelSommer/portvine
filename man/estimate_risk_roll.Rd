@@ -46,7 +46,8 @@ which the risk measures should be calculated.}
 \item{risk_measures}{Character vector with valid choices for risk
 measures to compute. Currently available are the Value at Risk \code{VaR} which
 is implemented in \code{\link[=est_var]{est_var()}} and 3 estimation methods of the Expected
-Shortfall \code{ES_mean}, \code{ES_median} and \code{ES_mc} all implemented in \code{\link[=est_es]{est_es()}}.}
+Shortfall \code{ES_mean}, \code{ES_median} and \code{ES_mc} all implemented in \code{\link[=est_es]{est_es()}}
+.}
 
 \item{n_samples}{Positive count of samples to be used at the base of the risk
 measure estimation.}
@@ -72,12 +73,13 @@ in the conditional case its child class \code{cond_portvine_roll}. For details
 see \code{\linkS4class{portvine_roll}}.
 }
 \description{
-TBD! Shortly discuss the overall algorithm but reference a hands on get started
+TBD! Shortly discuss the overall algorithm but reference a hands on get
+started
 vignette / theoretical vignette and the paper/ thesis
 }
 \details{
-TBD! Address all dependencies of the vine and marginal settings parameters like
-n_all_obs - n_marg_train > n_marg_refit. i.e. there must be at least 2
+TBD! Address all dependencies of the vine and marginal settings parameters
+like n_all_obs - n_marg_train > n_marg_refit. i.e. there must be at least 2
 marginal and thus also 2 vine windows. Maybe in a table (markdown) give short
 notice about availble risk_measures
 }
@@ -107,7 +109,7 @@ models are computed in parallel for each rolling vine window.
 }
 
 \examples{
-#TBD
+# TBD
 }
 \seealso{
 \code{\linkS4class{portvine_roll}}, \code{\link{marginal_settings}}, \code{\link{vine_settings}},

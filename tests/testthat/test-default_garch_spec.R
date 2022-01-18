@@ -9,7 +9,8 @@ test_that("input checks", {
 test_that("basic functionality", {
   expect_s4_class(default_garch_spec(), "uGARCHspec")
   basic_garch_spec <- default_garch_spec(
-    dist = "norm", ma = 2, arch = 2)
+    dist = "norm", ma = 2, arch = 2
+  )
   expect_s4_class(basic_garch_spec, "uGARCHspec")
   expect_equal(basic_garch_spec@model$modeldesc$distribution, "norm")
 })

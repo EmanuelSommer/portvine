@@ -33,27 +33,38 @@
 #'
 #' @examples marginal_settings(100, 10)
 setClass("marginal_settings",
-  slots = list(train_size = "numeric",
-               refit_size = "numeric",
-               individual_spec = "list",
-               default_spec = "uGARCHspec"),
-  prototype = list(train_size = NA_real_,
-                   refit_size = NA_real_,
-                   individual_spec = list(),
-                   default_spec = default_garch_spec()),
+  slots = list(
+    train_size = "numeric",
+    refit_size = "numeric",
+    individual_spec = "list",
+    default_spec = "uGARCHspec"
+  ),
+  prototype = list(
+    train_size = NA_real_,
+    refit_size = NA_real_,
+    individual_spec = list(),
+    default_spec = default_garch_spec()
+  ),
   validity = function(object) {
     error_mess <- character(0)
     train_seq_refit <- object@train_size <= object@refit_size
     train_refit_nocount <- !(checkmate::test_count(object@train_size,
-                                                   positive = TRUE) &
-                               checkmate::test_count(object@refit_size,
-                                                     positive = TRUE))
+      positive = TRUE
+    ) &
+      checkmate::test_count(object@refit_size,
+        positive = TRUE
+      ))
     list_no_specs <- !checkmate::test_list(object@individual_spec,
-                                           types = "uGARCHspec",
-                                           names = "unique")
+      types = "uGARCHspec",
+      names = "unique"
+    )
     if (train_seq_refit) error_mess <- "It must hold: train_size > refit_size."
-    if (train_refit_nocount) error_mess <- c(error_mess, "train_size and refit_size must be positve integers.")
-    if (list_no_specs) error_mess <- c(error_mess, "There are missspecified or unnamed entries in the individual_spec list.")
+    if (train_refit_nocount) error_mess <- c(error_mess, "train_size and
+                                             refit_size must be positve
+                                             integers.")
+    if (list_no_specs) error_mess <- c(error_mess, "There are missspecified
+                                       or unnamed entries in the individual_spec
+                                       list.")
     if (length(error_mess)) error_mess else TRUE
   }
 )
@@ -68,15 +79,15 @@ setClass("marginal_settings",
 #' @export
 #' @describeIn marginal_settings Class constructor taking the arguments
 #'  specified in the slots below
-marginal_settings <- function(
-  train_size, refit_size,
-  individual_spec = list(), default_spec = default_garch_spec()
-) {
+marginal_settings <- function(train_size, refit_size,
+                              individual_spec = list(),
+                              default_spec = default_garch_spec()) {
   methods::new("marginal_settings",
-               train_size = train_size,
-               refit_size = refit_size,
-               individual_spec = individual_spec,
-               default_spec = default_spec)
+    train_size = train_size,
+    refit_size = refit_size,
+    individual_spec = individual_spec,
+    default_spec = default_spec
+  )
 }
 
 
@@ -128,28 +139,38 @@ setMethod("show", c("marginal_settings"), function(object) {
 #'
 #' @examples vine_settings(100, 25)
 setClass("vine_settings",
-         slots = list(train_size = "numeric",
-                      refit_size = "numeric",
-                      family_set = "character",
-                      vine_type = "character"),
-         prototype = list(train_size = NA_real_,
-                          refit_size = NA_real_,
-                          family_set = "parametric",
-                          vine_type = "rvine"),
-         validity = function(object) {
-           error_mess <- character(0)
-           train_seq_refit <- object@train_size <= object@refit_size
-           train_refit_nocount <- !(checkmate::test_count(object@train_size,
-                                                          positive = TRUE) &
-                                      checkmate::test_count(object@refit_size,
-                                                            positive = TRUE))
-           invalid_type <- !checkmate::test_choice(
-             object@vine_type, choices = c("rvine", "dvine"))
-           if (train_seq_refit) error_mess <- "It must hold: train_size > refit_size."
-           if (train_refit_nocount) error_mess <- c(error_mess, "train_size and refit_size must be positve integers.")
-           if (invalid_type) error_mess <- c(error_mess, "vine_type is invalid.")
-           if (length(error_mess)) error_mess else TRUE
-         }
+  slots = list(
+    train_size = "numeric",
+    refit_size = "numeric",
+    family_set = "character",
+    vine_type = "character"
+  ),
+  prototype = list(
+    train_size = NA_real_,
+    refit_size = NA_real_,
+    family_set = "parametric",
+    vine_type = "rvine"
+  ),
+  validity = function(object) {
+    error_mess <- character(0)
+    train_seq_refit <- object@train_size <= object@refit_size
+    train_refit_nocount <- !(checkmate::test_count(object@train_size,
+      positive = TRUE
+    ) &
+      checkmate::test_count(object@refit_size,
+        positive = TRUE
+      ))
+    invalid_type <- !checkmate::test_choice(
+      object@vine_type,
+      choices = c("rvine", "dvine")
+    )
+    if (train_seq_refit) error_mess <- "It must hold: train_size > refit_size."
+    if (train_refit_nocount) error_mess <- c(error_mess, "train_size and
+                                             refit_size must be positve
+                                             integers.")
+    if (invalid_type) error_mess <- c(error_mess, "vine_type is invalid.")
+    if (length(error_mess)) error_mess else TRUE
+  }
 )
 
 #' Constructor
@@ -161,15 +182,14 @@ setClass("vine_settings",
 #' @export
 #' @describeIn vine_settings Class constructor taking the arguments
 #'  specified in the slots below
-vine_settings <- function(
-  train_size, refit_size,
-  family_set = "all", vine_type = "rvine"
-) {
+vine_settings <- function(train_size, refit_size,
+                          family_set = "all", vine_type = "rvine") {
   methods::new("vine_settings",
-               train_size = train_size,
-               refit_size = refit_size,
-               family_set = family_set,
-               vine_type = vine_type)
+    train_size = train_size,
+    refit_size = refit_size,
+    family_set = family_set,
+    vine_type = vine_type
+  )
 }
 
 
@@ -222,8 +242,8 @@ setMethod("show", c("vine_settings"), function(object) {
 #'  estimation approach for the risk measures was used.
 #' @slot n_samples positive numeric count displaying how many return samples
 #' were used for the risk measure estimation.
-#' @slot time_taken numeric value displaying how many minutes the whole estimation process
-#' took.
+#' @slot time_taken numeric value displaying how many minutes the whole
+#'  estimation process took.
 #'
 #' @seealso [`estimate_risk_roll()`], [`risk_estimates()`], [`fitted_vines()`],
 #' [`fitted_marginals()`]
@@ -231,39 +251,45 @@ setMethod("show", c("vine_settings"), function(object) {
 #' @return object of class `portvine_roll`
 #'
 setClass("portvine_roll",
-         slots = list(
-           risk_estimates = "data.table",
-           fitted_marginals = "list", # uGARCHroll entries S4
-           fitted_vines = "list", # vinecop objects
-           marginal_settings = "marginal_settings",
-           vine_settings = "vine_settings",
-           risk_measures = "character",
-           alpha = "numeric",
-           weights = "matrix",
-           cond_estimation = "logical",
-           n_samples = "numeric",
-           time_taken = "numeric"
-         ),
-         validity = function(object) {
-           error_mess <- character(0)
-           col_risk_est <- !checkmate::test_subset(
-             colnames(object@risk_estimates), c("risk_measure", "risk_est",
-                                                "alpha", "row_num",
-                                                "vine_window", "realized")
-           )
-           marg_mod_entries <- !checkmate::test_list(
-             object@fitted_marginals, types = "uGARCHroll", any.missing = FALSE,
-             names = "unique"
-           )
-           fit_vines_entries <- !checkmate::test_list(
-             object@fitted_vines, types = "vinecop", any.missing = FALSE
-           )
+  slots = list(
+    risk_estimates = "data.table",
+    fitted_marginals = "list", # uGARCHroll entries S4
+    fitted_vines = "list", # vinecop objects
+    marginal_settings = "marginal_settings",
+    vine_settings = "vine_settings",
+    risk_measures = "character",
+    alpha = "numeric",
+    weights = "matrix",
+    cond_estimation = "logical",
+    n_samples = "numeric",
+    time_taken = "numeric"
+  ),
+  validity = function(object) {
+    error_mess <- character(0)
+    col_risk_est <- !checkmate::test_subset(
+      colnames(object@risk_estimates), c(
+        "risk_measure", "risk_est",
+        "alpha", "row_num",
+        "vine_window", "realized"
+      )
+    )
+    marg_mod_entries <- !checkmate::test_list(
+      object@fitted_marginals,
+      types = "uGARCHroll", any.missing = FALSE,
+      names = "unique"
+    )
+    fit_vines_entries <- !checkmate::test_list(
+      object@fitted_vines,
+      types = "vinecop", any.missing = FALSE
+    )
 
-           if (col_risk_est) error_mess <- "risk_estimates is missspecified."
-           if (marg_mod_entries) error_mess <- c(error_mess, "fitted_marginals has invalid entries/ is not named.")
-           if (fit_vines_entries) error_mess <- c(error_mess, "fitted_vines has invalid entries.")
-           if (length(error_mess)) error_mess else TRUE
-         }
+    if (col_risk_est) error_mess <- "risk_estimates is missspecified."
+    if (marg_mod_entries) error_mess <- c(error_mess, "fitted_marginals has
+                                          invalid entries/ is not named.")
+    if (fit_vines_entries) error_mess <- c(error_mess, "fitted_vines has invalid
+                                           entries.")
+    if (length(error_mess)) error_mess else TRUE
+  }
 )
 
 #' @slot cond_risk_estimates !C! data.table with the same columns as the
@@ -271,8 +297,8 @@ setClass("portvine_roll",
 #'  respective conditioning value and the column character `cond_u` that
 #'  indicates the used conditional quantile level or the conditional value
 #'  corresponding to the residual one time unit prior with "prior_resid".
-#' @slot cond_vars !C! character vector with the names of the variables that were
-#' used to sample conditionally from.
+#' @slot cond_vars !C! character vector with the names of the variables that
+#' were used to sample conditionally from.
 #' @slot cond_u !C! a numeric vector specifying the corresponding quantiles
 #'  in (0,1) of the conditional variable(s) conditioned on which the conditional
 #'  risk measures were calculated.
@@ -281,23 +307,24 @@ setClass("portvine_roll",
 #'
 #' @rdname portvine_roll-class
 setClass("cond_portvine_roll",
-         contains = "portvine_roll",
-         slots = list(
-           cond_risk_estimates = "data.table",
-           cond_vars = "character",
-           cond_u = "numeric"
-         ),
-         validity = function(object) {
-           error_mess <- character(0)
-           col_crisk_est <- !checkmate::test_subset(
-             c("risk_measure", "risk_est", "alpha", "row_num", "vine_window",
-               "realized"),
-             colnames(object@cond_risk_estimates)
-
-           )
-           if (col_crisk_est) error_mess <- "cond_risk_estimates is missspecified."
-           if (length(error_mess)) error_mess else TRUE
-         }
+  contains = "portvine_roll",
+  slots = list(
+    cond_risk_estimates = "data.table",
+    cond_vars = "character",
+    cond_u = "numeric"
+  ),
+  validity = function(object) {
+    error_mess <- character(0)
+    col_crisk_est <- !checkmate::test_subset(
+      c(
+        "risk_measure", "risk_est", "alpha", "row_num", "vine_window",
+        "realized"
+      ),
+      colnames(object@cond_risk_estimates)
+    )
+    if (col_crisk_est) error_mess <- "cond_risk_estimates is missspecified."
+    if (length(error_mess)) error_mess else TRUE
+  }
 )
 
 ### print methods ---------------------------------------------------------
@@ -308,13 +335,17 @@ setClass("cond_portvine_roll",
 #' @rdname portvine_roll-class
 setMethod("show", c("portvine_roll"), function(object) {
   if (!object@cond_estimation) cat("An object of class <portvine_roll>\n")
-  cat("Number of ARMA-GARCH/ marginal windows:",
-      object@fitted_marginals[[1]]@model$n.refits, "\n")
+  cat(
+    "Number of ARMA-GARCH/ marginal windows:",
+    object@fitted_marginals[[1]]@model$n.refits, "\n"
+  )
   cat("Number of vine windows:", length(object@fitted_vines), "\n")
   cat("Risk measures estimated:", object@risk_measures, "\n")
   cat("Alpha levels used:", object@alpha, "\n")
-  cat("\nTime taken:", round(object@time_taken, 4), "minutes",
-      "\n")
+  cat(
+    "\nTime taken:", round(object@time_taken, 4), "minutes",
+    "\n"
+  )
 })
 
 #' @export
@@ -335,8 +366,10 @@ setMethod("show", c("cond_portvine_roll"), function(object) {
 setMethod("summary", c("portvine_roll"), function(object) {
   if (!object@cond_estimation) cat("An object of class <portvine_roll>\n")
   cat("\n--- Marginal models ---\n")
-  cat("Number of ARMA-GARCH/ marginal windows:",
-      object@fitted_marginals[[1]]@model$n.refits, "\n")
+  cat(
+    "Number of ARMA-GARCH/ marginal windows:",
+    object@fitted_marginals[[1]]@model$n.refits, "\n"
+  )
   cat("Train size: ", object@marginal_settings@train_size, "\n")
   cat("Refit size: ", object@marginal_settings@refit_size, "\n")
 
@@ -353,8 +386,10 @@ setMethod("summary", c("portvine_roll"), function(object) {
   cat("Number of estimated risk measures:", nrow(object@risk_estimates), "\n")
   cat("Number of samples for each risk estimation:", object@n_samples, "\n")
 
-  cat("\nTime taken:", round(object@time_taken, 4), "minutes.",
-      "\n")
+  cat(
+    "\nTime taken:", round(object@time_taken, 4), "minutes.",
+    "\n"
+  )
   invisible(NULL)
 })
 
@@ -365,8 +400,10 @@ setMethod("summary", c("cond_portvine_roll"), function(object) {
 
   cat("\n--- Conditional settings ---\n")
   cat("Conditional variable(s):", object@cond_vars, "\n")
-  cat("Number of conditional estimated risk measures:",
-      nrow(object@cond_risk_estimates), "\n")
+  cat(
+    "Number of conditional estimated risk measures:",
+    nrow(object@cond_risk_estimates), "\n"
+  )
   cat("Conditioning quantiles:", object@cond_u, "\n")
   methods::callNextMethod()
   invisible(NULL)
@@ -426,10 +463,17 @@ setMethod("risk_estimates",
 
     roll@risk_estimates %>%
       dtplyr::lazy_dt() %>%
-      filter(.data$risk_measure %in% risk_measures,
-             .data$alpha %in% (!!alpha)) %>%
-      {if (exceeded) mutate(., exceeded = .data$realized < .data$risk_est) else .} %>%
-      {if (df) as.data.frame(.) else data.table::as.data.table(.)}
+      filter(
+        .data$risk_measure %in% risk_measures,
+        .data$alpha %in% (!!alpha)
+      ) %>%
+      {
+        if (exceeded) {mutate(., exceeded = .data$realized < .data$risk_est)}
+        else {.}
+      } %>%
+      {
+        if (df) as.data.frame(.) else data.table::as.data.table(.)
+      }
   }
 )
 
@@ -458,8 +502,9 @@ setMethod("risk_estimates",
     checkmate::assert_subset(alpha, roll@alpha, empty.ok = TRUE)
     if (is.null(alpha)) alpha <- roll@alpha
     checkmate::assert_subset(as.character(cond_u),
-                             unique(roll@cond_risk_estimates[["cond_u"]]),
-                             empty.ok = TRUE)
+      unique(roll@cond_risk_estimates[["cond_u"]]),
+      empty.ok = TRUE
+    )
     if (is.null(cond_u)) {
       cond_u <- unique(roll@cond_risk_estimates[["cond_u"]])
     }
@@ -468,13 +513,24 @@ setMethod("risk_estimates",
     checkmate::assert_flag(exceeded)
     checkmate::assert_flag(cond)
 
-     {if (cond) roll@cond_risk_estimates else roll@risk_estimates} %>%
+    {
+      if (cond) roll@cond_risk_estimates else roll@risk_estimates
+    } %>%
       dtplyr::lazy_dt() %>%
-      filter(.data$risk_measure %in% risk_measures,
-             .data$alpha %in% (!!alpha)) %>%
-      {if (cond) filter(., .data$cond_u %in% (!!cond_u)) else .} %>%
-      {if (exceeded) mutate(., exceeded = .data$realized < .data$risk_est) else .} %>%
-      {if (df) as.data.frame(.) else data.table::as.data.table(.)}
+      filter(
+        .data$risk_measure %in% risk_measures,
+        .data$alpha %in% (!!alpha)
+      ) %>%
+      {
+        if (cond) filter(., .data$cond_u %in% (!!cond_u)) else .
+      } %>%
+      {
+        if (exceeded) {mutate(., exceeded = .data$realized < .data$risk_est)}
+        else {.}
+      } %>%
+      {
+        if (df) as.data.frame(.) else data.table::as.data.table(.)
+      }
   }
 )
 
@@ -501,10 +557,10 @@ setGeneric(
 
 #' @rdname fitted_vines
 setMethod("fitted_vines",
-          signature = c("portvine_roll"),
-          function(roll) {
-            roll@fitted_vines
-          }
+  signature = c("portvine_roll"),
+  function(roll) {
+    roll@fitted_vines
+  }
 )
 
 #' Accessor method for the fitted marginal models of `(cond_)portvine_roll`
@@ -532,8 +588,8 @@ setGeneric(
 
 #' @rdname fitted_marginals
 setMethod("fitted_marginals",
-          signature = c("portvine_roll"),
-          function(roll) {
-            roll@fitted_marginals
-          }
+  signature = c("portvine_roll"),
+  function(roll) {
+    roll@fitted_marginals
+  }
 )

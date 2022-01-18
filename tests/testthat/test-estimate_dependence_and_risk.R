@@ -18,8 +18,10 @@ test_basic_marginal_models_est_forvines <- estimate_marginal_models(
 )
 
 test_combined_residuals_dt <- data.table::rbindlist(
-  lapply(test_basic_marginal_models_est_forvines,
-         function(asset) asset$residuals_dt)
+  lapply(
+    test_basic_marginal_models_est_forvines,
+    function(asset) asset$residuals_dt
+  )
 )
 
 test_that("unconditional case", {
@@ -33,8 +35,10 @@ test_that("unconditional case", {
     "parametric", "rvine",
     c(0.1, 0.2),
     c("ES_median", "VaR"),
-    matrix(rep(c(2,3,5), 10), byrow = TRUE, ncol = 3,
-           dimnames = list(NULL, c("GOOG", "AAPL", "AMZN" ))),
+    matrix(rep(c(2, 3, 5), 10),
+      byrow = TRUE, ncol = 3,
+      dimnames = list(NULL, c("GOOG", "AAPL", "AMZN"))
+    ),
     NULL,
     1000,
     0.05,
@@ -62,22 +66,24 @@ test_that("unconditional case", {
   )
   # dvine
   edr_dvine <- estimate_dependence_and_risk(
-        test_combined_residuals_dt,
-        1000,
-        750, 50,
-        100, 25,
-        unique(test_combined_residuals_dt$asset),
-        "parametric", "dvine",
-        c(0.1, 0.2),
-        c("ES_median", "VaR"),
-        matrix(rep(c(2,3,5), 10), byrow = TRUE, ncol = 3,
-               dimnames = list(NULL, c("GOOG", "AAPL", "AMZN" ))),
-        NULL,
-        1000,
-        0.05,
-        100,
-        FALSE
-      )
+    test_combined_residuals_dt,
+    1000,
+    750, 50,
+    100, 25,
+    unique(test_combined_residuals_dt$asset),
+    "parametric", "dvine",
+    c(0.1, 0.2),
+    c("ES_median", "VaR"),
+    matrix(rep(c(2, 3, 5), 10),
+      byrow = TRUE, ncol = 3,
+      dimnames = list(NULL, c("GOOG", "AAPL", "AMZN"))
+    ),
+    NULL,
+    1000,
+    0.05,
+    100,
+    FALSE
+  )
 
   expect_true(
     is.null(
@@ -108,8 +114,10 @@ test_that("unconditional case", {
     c("clayton", "gumbel", "frank"), "dvine",
     c(0.1),
     c("ES_mc"),
-    matrix(rep(c(2,3,5), 10), byrow = TRUE, ncol = 3,
-           dimnames = list(NULL, c("GOOG", "AAPL", "AMZN" ))),
+    matrix(rep(c(2, 3, 5), 10),
+      byrow = TRUE, ncol = 3,
+      dimnames = list(NULL, c("GOOG", "AAPL", "AMZN"))
+    ),
     NULL,
     1000,
     0.05,
@@ -139,8 +147,10 @@ test_that("conditional case", {
     family_set = "parametric", vine_type = "dvine",
     alpha = c(0.1, 0.2),
     risk_measures = c("ES_median", "VaR"),
-    weights = matrix(rep(c(2,3,5), 10), byrow = TRUE, ncol = 3,
-                     dimnames = list(NULL, c("GOOG", "AAPL", "AMZN" ))),
+    weights = matrix(rep(c(2, 3, 5), 10),
+      byrow = TRUE, ncol = 3,
+      dimnames = list(NULL, c("GOOG", "AAPL", "AMZN"))
+    ),
     cond_vars = "AAPL",
     n_samples = 10,
     cond_u = c(0.05, 0.5),
@@ -167,8 +177,10 @@ test_that("conditional case", {
   )
   expect_equal(
     colnames(dep_risk_test_result_cond1$cond_risk_estimates),
-    c("risk_measure", "risk_est", "alpha", "row_num", "AAPL",
-      "cond_u", "vine_window")
+    c(
+      "risk_measure", "risk_est", "alpha", "row_num", "AAPL",
+      "cond_u", "vine_window"
+    )
   )
   expect_true(
     checkmate::test_list(
@@ -185,8 +197,10 @@ test_that("conditional case", {
     family_set = "parametric", vine_type = "dvine",
     alpha = c(0.1, 0.2),
     risk_measures = c("ES_mean", "VaR"),
-    weights = matrix(rep(c(2,3,5), 10), byrow = TRUE, ncol = 3,
-                     dimnames = list(NULL, c("GOOG", "AAPL", "AMZN" ))),
+    weights = matrix(rep(c(2, 3, 5), 10),
+      byrow = TRUE, ncol = 3,
+      dimnames = list(NULL, c("GOOG", "AAPL", "AMZN"))
+    ),
     cond_vars = c("AAPL", "GOOG"),
     n_samples = 10,
     cond_u = c(0.05, 0.5),
@@ -214,8 +228,10 @@ test_that("conditional case", {
   expect_true(
     checkmate::test_subset(
       colnames(dep_risk_test_result_cond2$cond_risk_estimates),
-      c("risk_measure", "risk_est", "alpha", "row_num", "AAPL", "GOOG",
-      "cond_u", "vine_window")
+      c(
+        "risk_measure", "risk_est", "alpha", "row_num", "AAPL", "GOOG",
+        "cond_u", "vine_window"
+      )
     )
   )
   expect_true(
@@ -225,4 +241,3 @@ test_that("conditional case", {
     )
   )
 })
-

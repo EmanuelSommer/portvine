@@ -59,47 +59,55 @@
 #' @include greedy_tau_ordering.R rcondvinecop.R risk_measures.R
 #'
 #' @noRd
-estimate_dependence_and_risk <- function(
-  combined_residuals_dt,
-  n_all_obs,
-  n_marg_train, n_marg_refit,
-  n_vine_train, n_vine_refit,
-  all_asset_names,
-  family_set, vine_type,
-  alpha,
-  risk_measures,
-  weights,
-  cond_vars,
-  n_samples,
-  cond_u,
-  n_mc_samples,
-  trace
-) {
+estimate_dependence_and_risk <- function(combined_residuals_dt,
+                                         n_all_obs,
+                                         n_marg_train, n_marg_refit,
+                                         n_vine_train, n_vine_refit,
+                                         all_asset_names,
+                                         family_set, vine_type,
+                                         alpha,
+                                         risk_measures,
+                                         weights,
+                                         cond_vars,
+                                         n_samples,
+                                         cond_u,
+                                         n_mc_samples,
+                                         trace) {
   # very basic input checks as the function is internal
-  checkmate::assert_data_table(combined_residuals_dt, all.missing = FALSE,
-                               ncols = 10, col.names = "unique")
+  checkmate::assert_data_table(combined_residuals_dt,
+    all.missing = FALSE,
+    ncols = 10, col.names = "unique"
+  )
   checkmate::assert_subset(colnames(combined_residuals_dt),
-                           c("resid", "shape", "skew", "mu", "sigma", "row_num",
-                             "marg_window_num", "asset", "marg_dist",
-                             "copula_scale_resid"),
-                           empty.ok = FALSE)
+    c(
+      "resid", "shape", "skew", "mu", "sigma", "row_num",
+      "marg_window_num", "asset", "marg_dist",
+      "copula_scale_resid"
+    ),
+    empty.ok = FALSE
+  )
   checkmate::assert_subset(all_asset_names, unique(combined_residuals_dt$asset),
-                           empty.ok = FALSE)
+    empty.ok = FALSE
+  )
 
   if (trace) cat("\nFit vine copula models and estimate risk.\nVine windows:\n")
   window_results_list <- future.apply::future_lapply(
     seq(ceiling((n_all_obs - n_marg_train) / n_vine_refit)),
     function(vine_window) {
-      if (trace) cat("(", vine_window, "/",
-                     ceiling((n_all_obs - n_marg_train) / n_vine_refit),
-                     ") ", sep = "")
+      if (trace) {
+        cat("(", vine_window, "/",
+          ceiling((n_all_obs - n_marg_train) / n_vine_refit),
+          ") ",
+          sep = ""
+        )
+      }
       # filter the corresponding estimated copula data from the respective
       # marginal model
       window_residuals_dt <- combined_residuals_dt %>%
         dtplyr::lazy_dt() %>%
         filter(
           .data$marg_window_num == ceiling(n_vine_refit * vine_window /
-                                             n_marg_refit),
+            n_marg_refit),
           .data$row_num >= 1 + n_marg_train - n_vine_train +
             n_vine_refit * (vine_window - 1),
           .data$row_num <= n_marg_train + n_vine_refit * (vine_window - 1)
@@ -111,8 +119,10 @@ estimate_dependence_and_risk <- function(
       vine_train_data <- window_residuals_dt %>%
         dtplyr::lazy_dt() %>%
         select("asset", "copula_scale_resid", "row_num") %>%
-        tidyr::pivot_wider(names_from = .data$asset,
-                           values_from = .data$copula_scale_resid) %>%
+        tidyr::pivot_wider(
+          names_from = .data$asset,
+          values_from = .data$copula_scale_resid
+        ) %>%
         select(-"row_num") %>%
         as.data.frame()
 
@@ -136,9 +146,13 @@ estimate_dependence_and_risk <- function(
       # and estimate the risk measures (iterate over each time unit in the vine
       # window)
       list_risk_est <- lapply(
-        seq(n_marg_train + n_vine_refit * (vine_window - 1) + 1,
-            min(n_all_obs,
-                n_marg_train + n_vine_refit * vine_window)),
+        seq(
+          n_marg_train + n_vine_refit * (vine_window - 1) + 1,
+          min(
+            n_all_obs,
+            n_marg_train + n_vine_refit * vine_window
+          )
+        ),
         function(row_num_window) {
           # simulate from the fitted vine
           # get a data.table with n_samples rows or n_samples*length(cond_u)
@@ -155,7 +169,8 @@ estimate_dependence_and_risk <- function(
                 combined_residuals_dt$asset == cond_asset &
                   combined_residuals_dt$row_num == row_num_window - 1 &
                   combined_residuals_dt$marg_window_num == ceiling(
-                    n_vine_refit * vine_window / n_marg_refit)
+                    n_vine_refit * vine_window / n_marg_refit
+                  )
               ]
             })
             rcondvinecop_res <- rcondvinecop(
@@ -176,27 +191,30 @@ estimate_dependence_and_risk <- function(
             dtplyr::lazy_dt() %>%
             filter(
               .data$marg_window_num == ceiling(n_vine_refit * vine_window /
-                                           n_marg_refit),
-              .data$row_num == row_num_window) %>%
+                n_marg_refit),
+              .data$row_num == row_num_window
+            ) %>%
             as.data.frame()
           sim_dt <- sim_dt %>%
             dtplyr::lazy_dt() %>%
             mutate(sample_id = seq(nrow(sim_dt))) %>%
-            tidyr::pivot_longer(-"sample_id", names_to = "asset",
-                         values_to = "sample") %>%
+            tidyr::pivot_longer(-"sample_id",
+              names_to = "asset",
+              values_to = "sample"
+            ) %>%
             group_by(.data$asset) %>%
             # here transform from copula to original scale
             mutate(
               sample = trans_vals[["mu"]][trans_vals[["asset"]] ==
-                                            .data$asset] +
+                .data$asset] +
                 trans_vals[["sigma"]][trans_vals[["asset"]] == .data$asset] *
-                rugarch::qdist(
-                  distribution = trans_vals[["marg_dist"]][trans_vals[["asset"]]
-                                                           == .data$asset],
-                  p = sample,
-                  skew = trans_vals[["skew"]][trans_vals[["asset"]] ==
-                                                .data$asset]
-                )
+                  rugarch::qdist(
+                    distribution = trans_vals[["marg_dist"]][
+                      trans_vals[["asset"]] == .data$asset],
+                    p = sample,
+                    skew = trans_vals[["skew"]][trans_vals[["asset"]] ==
+                      .data$asset]
+                  )
             ) %>%
             # add the corresponding weight
             mutate(weight = weights[vine_window, .data$asset]) %>%
@@ -206,8 +224,10 @@ estimate_dependence_and_risk <- function(
             mutate(portfolio_value = sum(.data$sample * .data$weight)) %>%
             ungroup() %>%
             select(-"weight") %>%
-            tidyr::pivot_wider(names_from = .data$asset,
-                               values_from = .data$sample) %>%
+            tidyr::pivot_wider(
+              names_from = .data$asset,
+              values_from = .data$sample
+            ) %>%
             arrange(.data$sample_id) %>%
             # retrieve the portfolio value as well as the conditioning vars if
             # the conditional approach is taken
@@ -230,55 +250,62 @@ estimate_dependence_and_risk <- function(
             cond_name <- colnames(sim_dt[, -1])
             sim_dt <- cbind(sim_dt, cond_u_vec)
             # estimate the risk for each conditional quantile
-            cond_risk_estimates <- lapply(c(cond_u, "prior_resid"),
-                                          function(cond_level) {
-              cond_val <- sim_dt[[2]][sim_dt[["cond_u_vec"]] ==
-                                        cond_level][1]
-              est_risk_measures(
-                risk_measures = risk_measures,
-                sample = sim_dt$portfolio_value[sim_dt[["cond_u_vec"]] ==
-                                                    cond_level],
-                alpha = alpha,
-                n_mc_samples = n_mc_samples,
-                row_num = row_num_window
-              ) %>%
-                dtplyr::lazy_dt() %>%
-                mutate(
-                  !! cond_name := cond_val,
-                  "cond_u" = cond_level
+            cond_risk_estimates <- lapply(
+              c(cond_u, "prior_resid"),
+              function(cond_level) {
+                cond_val <- sim_dt[[2]][sim_dt[["cond_u_vec"]] ==
+                  cond_level][1]
+                est_risk_measures(
+                  risk_measures = risk_measures,
+                  sample = sim_dt$portfolio_value[sim_dt[["cond_u_vec"]] ==
+                    cond_level],
+                  alpha = alpha,
+                  n_mc_samples = n_mc_samples,
+                  row_num = row_num_window
                 ) %>%
-                data.table::as.data.table()
-            }) %>% data.table::rbindlist()
+                  dtplyr::lazy_dt() %>%
+                  mutate(
+                    !!cond_name := cond_val,
+                    "cond_u" = cond_level
+                  ) %>%
+                  data.table::as.data.table()
+              }
+            ) %>% data.table::rbindlist()
           } else if (length(cond_vars) == 2) {
             cond_names <- colnames(sim_dt[, -1])
             sim_dt <- cbind(sim_dt, cond_u_vec)
             # estimate the risk for each conditional quantile
-            cond_risk_estimates <- lapply(c(cond_u, "prior_resid"),
-                                          function(cond_level) {
-              cond_val1 <- sim_dt[[2]][sim_dt[["cond_u_vec"]] ==
-                                         cond_level][1]
-              cond_val2 <- sim_dt[[3]][sim_dt[["cond_u_vec"]] ==
-                                         cond_level][1]
-              est_risk_measures(
-                risk_measures = risk_measures,
-                sample = sim_dt$portfolio_value[sim_dt[["cond_u_vec"]] ==
-                                                    cond_level],
-                alpha = alpha,
-                n_mc_samples = n_mc_samples,
-                row_num = row_num_window
-              ) %>%
-                dtplyr::lazy_dt() %>%
-                mutate(
-                  !! cond_names[1] := cond_val1,
-                  !! cond_names[2] := cond_val2,
-                  "cond_u" = cond_level
+            cond_risk_estimates <- lapply(
+              c(cond_u, "prior_resid"),
+              function(cond_level) {
+                cond_val1 <- sim_dt[[2]][sim_dt[["cond_u_vec"]] ==
+                  cond_level][1]
+                cond_val2 <- sim_dt[[3]][sim_dt[["cond_u_vec"]] ==
+                  cond_level][1]
+                est_risk_measures(
+                  risk_measures = risk_measures,
+                  sample = sim_dt$portfolio_value[sim_dt[["cond_u_vec"]] ==
+                    cond_level],
+                  alpha = alpha,
+                  n_mc_samples = n_mc_samples,
+                  row_num = row_num_window
                 ) %>%
-                data.table::as.data.table()
-            }) %>% data.table::rbindlist()
+                  dtplyr::lazy_dt() %>%
+                  mutate(
+                    !!cond_names[1] := cond_val1,
+                    !!cond_names[2] := cond_val2,
+                    "cond_u" = cond_level
+                  ) %>%
+                  data.table::as.data.table()
+              }
+            ) %>% data.table::rbindlist()
           }
-          list(overall_risk_estimates = overall_risk_estimates,
-               cond_risk_estimates = cond_risk_estimates)
-      })
+          list(
+            overall_risk_estimates = overall_risk_estimates,
+            cond_risk_estimates = cond_risk_estimates
+          )
+        }
+      )
       # collect the observation level results in two data.tables
       overall_risk_estimates <- lapply(list_risk_est, function(row_num_entry) {
         row_num_entry[["overall_risk_estimates"]]
@@ -291,10 +318,14 @@ estimate_dependence_and_risk <- function(
           row_num_entry[["cond_risk_estimates"]]
         }) %>% data.table::rbindlist()
       }
-      list(overall_risk_estimates = overall_risk_estimates,
-           cond_risk_estimates = cond_risk_estimates,
-           fitted_vine = fitted_vine, vine_window = vine_window)
-  }, future.seed = TRUE)
+      list(
+        overall_risk_estimates = overall_risk_estimates,
+        cond_risk_estimates = cond_risk_estimates,
+        fitted_vine = fitted_vine, vine_window = vine_window
+      )
+    },
+    future.seed = TRUE
+  )
   # collect the windowwise results again in two data.tables
   overall_risk_estimates <- lapply(
     window_results_list,
@@ -303,7 +334,8 @@ estimate_dependence_and_risk <- function(
         vine_window_entry[["overall_risk_estimates"]],
         "vine_window" = vine_window_entry[["vine_window"]]
       )
-  }) %>% data.table::rbindlist()
+    }
+  ) %>% data.table::rbindlist()
 
   if (length(cond_vars) == 0) {
     cond_risk_estimates <- NULL
@@ -315,7 +347,8 @@ estimate_dependence_and_risk <- function(
           vine_window_entry[["cond_risk_estimates"]],
           "vine_window" = vine_window_entry[["vine_window"]]
         )
-      }) %>% data.table::rbindlist()
+      }
+    ) %>% data.table::rbindlist()
   }
   # extract also the fitted vines in one list
   fitted_vines <- lapply(window_results_list, function(vine_window_entry) {
@@ -323,8 +356,9 @@ estimate_dependence_and_risk <- function(
   })
 
   if (trace) cat("\n")
-  list(fitted_vines = fitted_vines,
-       overall_risk_estimates = overall_risk_estimates,
-       cond_risk_estimates = cond_risk_estimates)
+  list(
+    fitted_vines = fitted_vines,
+    overall_risk_estimates = overall_risk_estimates,
+    cond_risk_estimates = cond_risk_estimates
+  )
 }
-

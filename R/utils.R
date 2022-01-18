@@ -1,6 +1,7 @@
 #' Extract fitted residuals from a uGARCHroll object
 #'
-#' The [`rugarch::ugarchroll`] class object encompasses fitting information about a number of
+#' The [`rugarch::ugarchroll`] class object encompasses fitting information
+#' about a number of
 #' models fitted in a rolling window fashion. This utility function gives an
 #' easy interface to extract the fitted residuals from one of these models.
 #' This can be especially helpful for assessing the model quality with a
@@ -15,8 +16,10 @@
 roll_residuals <- function(ugarchroll, roll_num = 1) {
   checkmate::assert_class(ugarchroll, classes = "uGARCHroll")
   total_roll_num <- ugarchroll@model$n.refits
-  checkmate::assert_integerish(roll_num, lower = 0, upper = total_roll_num,
-                               len = 1)
+  checkmate::assert_integerish(roll_num,
+    lower = 0, upper = total_roll_num,
+    len = 1
+  )
 
   train_end_index <- ugarchroll@model$n.start
   refit_size <- ugarchroll@model$refit.every
@@ -28,10 +31,14 @@ roll_residuals <- function(ugarchroll, roll_num = 1) {
   )
   filtered_model <- rugarch::ugarchfilter(
     spec = spec,
-    data = ugarchroll@model$data[seq(1 + refit_size * (roll_num - 1),
-                                     min(refit_size * (roll_num - 1) +
-                                           train_end_index,
-                                         length(ugarchroll@model$data)))]
+    data = ugarchroll@model$data[seq(
+      1 + refit_size * (roll_num - 1),
+      min(
+        refit_size * (roll_num - 1) +
+          train_end_index,
+        length(ugarchroll@model$data)
+      )
+    )]
   )
   as.numeric(rugarch::residuals(filtered_model, standardize = TRUE))
 }

@@ -27,7 +27,8 @@ the marginal models.
 The ARMA(\code{ar},\code{ma})-GARCH(\code{arch},\code{garch}) is fitted  with the distribution
 given by \code{dist} that specifies the conditional density used for the
 innovations.
-It might also be a handy shortcut towards changing the default w.r.t. the main specification arguments.
+It might also be a handy shortcut towards changing the default w.r.t. the
+main specification arguments.
 }
 \examples{
 # the default is then just using

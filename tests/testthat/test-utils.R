@@ -19,12 +19,16 @@ test_basic_marginal_models_est <- estimate_marginal_models(
 test_that("roll_residuals", {
   # input checks
   expect_error(
-    roll_residuals(test_basic_marginal_models_est$AAPL$roll_model_fit,
-                   3)
+    roll_residuals(
+      test_basic_marginal_models_est$AAPL$roll_model_fit,
+      3
+    )
   )
   expect_error(
-    roll_residuals(test_basic_marginal_models_est$AAPL$residuals_dt,
-                   2)
+    roll_residuals(
+      test_basic_marginal_models_est$AAPL$residuals_dt,
+      2
+    )
   )
   # basic functionality
   expect_true(

@@ -35,7 +35,9 @@ test_that("test input checks", {
     greedy_tau_ordering(vine_train_data = mtcars[, 3:4], "wt")
   )
   expect_error(
-    greedy_tau_ordering(vine_train_data = mtcars[, 3:8],
-                        c("wt", "drat", "disp"))
+    greedy_tau_ordering(
+      vine_train_data = mtcars[, 3:8],
+      c("wt", "drat", "disp")
+    )
   )
 })

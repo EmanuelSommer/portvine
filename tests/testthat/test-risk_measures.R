@@ -19,16 +19,19 @@ test_that("expected shortfall", {
 })
 
 test_that("multi risk measures utility", {
-  basic_est_risk_measures <- est_risk_measures(c("ES_mean", "VaR"),
-                                               0:100, c(0.1, 0.2), 100, 999)
+  basic_est_risk_measures <- est_risk_measures(
+    c("ES_mean", "VaR"),
+    0:100, c(0.1, 0.2), 100, 999
+  )
   expect_equal(basic_est_risk_measures$row_num, rep(999, 4))
   expect_equal(basic_est_risk_measures$alpha, rep(c(0.1, 0.2), 2))
   expect_equal(basic_est_risk_measures$risk_est, c(5, 10, 10, 20))
   expect_equal(basic_est_risk_measures$risk_measure, rep(c("ES_mean", "VaR"),
-                                                         each = 2))
-  expect_equal(dim(est_risk_measures(c("ES_mean", "VaR", "ES_median", "ES_mc"),
-                                     0:100, c(1:4)/10, 100, 999)), c(16, 4))
+    each = 2
+  ))
+  expect_equal(dim(est_risk_measures(
+    c("ES_mean", "VaR", "ES_median", "ES_mc"),
+    0:100, c(1:4) / 10, 100, 999
+  )), c(16, 4))
   expect_s3_class(basic_est_risk_measures, "data.table")
 })
-
-

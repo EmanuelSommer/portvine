@@ -16,7 +16,8 @@ residuals from.}
 Numeric vector of the fitted residuals.
 }
 \description{
-The \code{\link[rugarch:ugarchroll-methods]{rugarch::ugarchroll}} class object encompasses fitting information about a number of
+The \code{\link[rugarch:ugarchroll-methods]{rugarch::ugarchroll}} class object encompasses fitting information
+about a number of
 models fitted in a rolling window fashion. This utility function gives an
 easy interface to extract the fitted residuals from one of these models.
 This can be especially helpful for assessing the model quality with a

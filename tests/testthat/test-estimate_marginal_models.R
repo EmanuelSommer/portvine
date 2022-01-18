@@ -18,8 +18,10 @@ test_basic_marginal_models_est <- estimate_marginal_models(
 
 test_that("basic output types", {
   for (i in seq(3)) {
-    expect_s4_class(test_basic_marginal_models_est[[i]]$roll_model_fit,
-                    "uGARCHroll")
+    expect_s4_class(
+      test_basic_marginal_models_est[[i]]$roll_model_fit,
+      "uGARCHroll"
+    )
     expect_true(
       checkmate::test_data_table(
         test_basic_marginal_models_est[[i]]$residuals_dt,
@@ -35,7 +37,8 @@ test_that("basic checks on the datatable output", {
       sort(unique(
         test_basic_marginal_models_est[[i]]$residuals_dt$marg_window_num
       )),
-      1:5)
+      1:5
+    )
     expect_true(
       all(
         test_basic_marginal_models_est[[i]]$residuals_dt$copula_scale_resid <= 1
@@ -98,4 +101,3 @@ test_that("input checks work", {
     )
   )
 })
-

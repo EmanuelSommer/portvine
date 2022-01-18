@@ -21,8 +21,10 @@
 #' @examples est_var(0:100, c(0.1, 0.2, 0.3))
 est_var <- function(sample, alpha) {
   checkmate::assert_numeric(sample, any.missing = FALSE, null.ok = FALSE)
-  checkmate::assert_numeric(alpha, any.missing = FALSE, null.ok = FALSE,
-                            lower = 0, upper = 1)
+  checkmate::assert_numeric(alpha,
+    any.missing = FALSE, null.ok = FALSE,
+    lower = 0, upper = 1
+  )
   stats::quantile(x = sample, probs = alpha, names = FALSE)
 }
 
@@ -54,14 +56,15 @@ est_var <- function(sample, alpha) {
 #' @seealso [`est_var()`]
 #'
 #' @examples est_es(0:100, c(0.1, 0.2, 0.3))
-est_es <- function(
-  sample, alpha,
-  method = c("mean", "median", "mc"),
-  mc_samples = 100) {
+est_es <- function(sample, alpha,
+                   method = c("mean", "median", "mc"),
+                   mc_samples = 100) {
   method <- match.arg(method)
   checkmate::assert_numeric(sample, any.missing = FALSE, null.ok = FALSE)
-  checkmate::assert_numeric(alpha, any.missing = FALSE, null.ok = FALSE,
-                            lower = 0, upper = 1)
+  checkmate::assert_numeric(alpha,
+    any.missing = FALSE, null.ok = FALSE,
+    lower = 0, upper = 1
+  )
   checkmate::assert_count(mc_samples, positive = TRUE)
 
   if (method %in% c("mean", "median")) {
@@ -107,12 +110,15 @@ est_risk_measures <- function(risk_measures, sample, alpha,
       } else if (risk_measure %in% c("ES_mean", "ES_median", "ES_mc")) {
         data.table::data.table(
           risk_measure = risk_measure,
-          risk_est = est_es(sample, alpha = alpha,
-                            method = substring(risk_measure, 4),
-                            mc_samples = n_mc_samples),
+          risk_est = est_es(sample,
+            alpha = alpha,
+            method = substring(risk_measure, 4),
+            mc_samples = n_mc_samples
+          ),
           alpha = alpha,
           row_num = row_num
         )
       }
-    }) %>% data.table::rbindlist()
+    }
+  ) %>% data.table::rbindlist()
 }

@@ -72,8 +72,8 @@ estimation approach for the risk measures was used.}
 \item{\code{n_samples}}{positive numeric count displaying how many return samples
 were used for the risk measure estimation.}
 
-\item{\code{time_taken}}{numeric value displaying how many minutes the whole estimation process
-took.}
+\item{\code{time_taken}}{numeric value displaying how many minutes the whole
+estimation process took.}
 
 \item{\code{cond_risk_estimates}}{!C! data.table with the same columns as the
 \code{risk_estimate} slot has + the additional conditional columns with the
@@ -81,8 +81,8 @@ respective conditioning value and the column character \code{cond_u} that
 indicates the used conditional quantile level or the conditional value
 corresponding to the residual one time unit prior with "prior_resid".}
 
-\item{\code{cond_vars}}{!C! character vector with the names of the variables that were
-used to sample conditionally from.}
+\item{\code{cond_vars}}{!C! character vector with the names of the variables that
+were used to sample conditionally from.}
 
 \item{\code{cond_u}}{!C! a numeric vector specifying the corresponding quantiles
 in (0,1) of the conditional variable(s) conditioned on which the conditional

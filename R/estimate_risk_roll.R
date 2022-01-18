@@ -2,11 +2,12 @@
 
 #' (Un-)conditional rolling risk estimation using vine copulas
 #'
-#' TBD! Shortly discuss the overall algorithm but reference a hands on get started
+#' TBD! Shortly discuss the overall algorithm but reference a hands on get
+#'  started
 #' vignette / theoretical vignette and the paper/ thesis
 #'
-#' TBD! Address all dependencies of the vine and marginal settings parameters like
-#' n_all_obs - n_marg_train > n_marg_refit. i.e. there must be at least 2
+#' TBD! Address all dependencies of the vine and marginal settings parameters
+#' like n_all_obs - n_marg_train > n_marg_refit. i.e. there must be at least 2
 #' marginal and thus also 2 vine windows. Maybe in a table (markdown) give short
 #' notice about availble risk_measures
 #'
@@ -54,7 +55,8 @@
 #' @param risk_measures Character vector with valid choices for risk
 #'  measures to compute. Currently available are the Value at Risk `VaR` which
 #'  is implemented in [`est_var()`] and 3 estimation methods of the Expected
-#'  Shortfall `ES_mean`, `ES_median` and `ES_mc` all implemented in [`est_es()`].
+#'  Shortfall `ES_mean`, `ES_median` and `ES_mc` all implemented in [`est_es()`]
+#'  .
 #' @param n_samples Positive count of samples to be used at the base of the risk
 #'  measure estimation.
 #' @param cond_vars Names of the variables to sample conditionally from
@@ -84,20 +86,18 @@
 #' @import dplyr
 #' @rawNamespace import(data.table, except = c(first,last,between))
 #'
-#' @examples #TBD
-estimate_risk_roll <- function(
-  data,
-  weights = NULL,
-  marginal_settings,
-  vine_settings,
-  alpha = 0.05,
-  risk_measures = c("VaR", "ES_mean"),
-  n_samples = 1000,
-  cond_vars = NULL,
-  cond_u = 0.05,
-  n_mc_samples = 1000,
-  trace = FALSE
-) {
+#' @examples # TBD
+estimate_risk_roll <- function(data,
+                               weights = NULL,
+                               marginal_settings,
+                               vine_settings,
+                               alpha = 0.05,
+                               risk_measures = c("VaR", "ES_mean"),
+                               n_samples = 1000,
+                               cond_vars = NULL,
+                               cond_u = 0.05,
+                               n_mc_samples = 1000,
+                               trace = FALSE) {
   # Return also the total run time at the end
   start_time <- Sys.time()
   # Input checks ----------------------------------------------------------
@@ -106,25 +106,35 @@ estimate_risk_roll <- function(
   if ("try-error" %in% class(data)) {
     stop("The <data> argument is not coercible to a data.table.")
   }
-  checkmate::assert_data_table(data, any.missing = FALSE, min.cols = 3,
-                               types = "numeric", col.names = "unique")
+  checkmate::assert_data_table(data,
+    any.missing = FALSE, min.cols = 3,
+    types = "numeric", col.names = "unique"
+  )
   # cond_vars argument
   all_asset_names <- colnames(data)
-  checkmate::assert_character(cond_vars, any.missing = FALSE, max.len = 2,
-                              null.ok = TRUE)
+  checkmate::assert_character(cond_vars,
+    any.missing = FALSE, max.len = 2,
+    null.ok = TRUE
+  )
   checkmate::assert_subset(cond_vars, all_asset_names)
   conditional_logical <- ifelse(is.null(cond_vars), FALSE, TRUE)
 
   # alpha argument
-  checkmate::assert_numeric(alpha, lower = 0, upper = 1, any.missing = FALSE,
-                            min.len = 1)
+  checkmate::assert_numeric(alpha,
+    lower = 0, upper = 1, any.missing = FALSE,
+    min.len = 1
+  )
   # risk_measures argument
-  checkmate::assert_subset(risk_measures, c("VaR", "ES_mean",
-                                            "ES_median", "ES_mc"))
+  checkmate::assert_subset(risk_measures, c(
+    "VaR", "ES_mean",
+    "ES_median", "ES_mc"
+  ))
   # n_samples, cond_u
   checkmate::assert_integerish(n_samples, lower = 1)
-  checkmate::assert_numeric(cond_u, lower = 0, upper = 1,
-                            any.missing = FALSE, min.len = 1)
+  checkmate::assert_numeric(cond_u,
+    lower = 0, upper = 1,
+    any.missing = FALSE, min.len = 1
+  )
   # marginal_settings and vine_settings
   checkmate::assert_class(marginal_settings, "marginal_settings")
   checkmate::assert_class(vine_settings, "vine_settings")
@@ -134,22 +144,24 @@ estimate_risk_roll <- function(
   n_vine_train <- vine_settings@train_size
   n_vine_refit <- vine_settings@refit_size
   vine_family_set <- vine_settings@family_set
-  if (conditional_logical  & any(vine_family_set %in% c("all", "tll"))) {
+  if (conditional_logical & any(vine_family_set %in% c("all", "tll"))) {
     stop("Nonparametric vine copula classes are not supported for conditional
          sampling.")
   }
   vine_type <- vine_settings@vine_type
   # check whether the vine type is implemented for the conditional sampling
   if (conditional_logical & vine_type == "rvine") {
-    stop(paste("For vine type", vine_type, "the conditional sampling is not implemented yet."))
+    stop(paste("For vine type", vine_type, "the conditional sampling is not
+               implemented yet."))
   }
   # check whether the individual settings are a valid match
   if (n_marg_train >= n_all_obs |
-      n_marg_refit >= n_all_obs - n_marg_train |
-      n_vine_train > n_marg_train |
-      n_vine_refit > n_marg_refit |
-      n_marg_refit %% n_vine_refit != 0) {
-    stop("The train and refit sizes of the marginal and vine settings are not a valid combination.
+    n_marg_refit >= n_all_obs - n_marg_train |
+    n_vine_train > n_marg_train |
+    n_vine_refit > n_marg_refit |
+    n_marg_refit %% n_vine_refit != 0) {
+    stop("The train and refit sizes of the marginal and vine settings are
+         not a valid combination.
          Have a look at the help page for details.")
   }
   if ((n_all_obs - n_marg_train) %% n_marg_refit != 0) {
@@ -157,28 +169,33 @@ estimate_risk_roll <- function(
       "The last window of interest is shorter (width: ",
       (n_all_obs - n_marg_train) %% n_marg_refit,
       ") than the specified window width of",
-      n_marg_refit))
+      n_marg_refit
+    ))
   }
   # weights argument
   n_all_assets <- length(all_asset_names)
   if (!is.matrix(weights) & !is.null(weights)) {
-    try({
-      # try to coerce vector to matrix that replicates the vector in each row
-      # for a number of the vine windows
-      weights <- matrix(
-        rep(weights, ceiling((n_all_obs - n_marg_train) / n_vine_refit)),
-        byrow = TRUE,
-        ncol = length(weights),
-        dimnames = list(NULL, names(weights))
-      )
-    }, silent = TRUE)
+    try(
+      {
+        # try to coerce vector to matrix that replicates the vector in each row
+        # for a number of the vine windows
+        weights <- matrix(
+          rep(weights, ceiling((n_all_obs - n_marg_train) / n_vine_refit)),
+          byrow = TRUE,
+          ncol = length(weights),
+          dimnames = list(NULL, names(weights))
+        )
+      },
+      silent = TRUE
+    )
     if ("try-error" %in% class(weights)) {
       stop("The <weights> argument is not specified correctly.
            Should be named numeric vector or matrix.")
     }
   }
   checkmate::assert_matrix(
-    weights, mode = "numeric", any.missing = FALSE,
+    weights,
+    mode = "numeric", any.missing = FALSE,
     nrows = ceiling((n_all_obs - n_marg_train) / n_vine_refit),
     ncols = n_all_assets, col.names = "unique", null.ok = TRUE
   )
@@ -270,8 +287,10 @@ estimate_risk_roll <- function(
     mutate(weight = weights[.data$vine_window, .data$asset]) %>%
     ungroup() %>%
     group_by(.data$row_num) %>%
-    summarise(realized = sum(.data$weight * .data$returns),
-              .groups = "drop") %>%
+    summarise(
+      realized = sum(.data$weight * .data$returns),
+      .groups = "drop"
+    ) %>%
     data.table::as.data.table()
   risk_estimates <- dep_risk_result[["overall_risk_estimates"]] %>%
     dtplyr::lazy_dt() %>%
@@ -286,15 +305,18 @@ estimate_risk_roll <- function(
 
   end_time <- Sys.time()
   time_taken_minutes <- as.numeric(
-    difftime(end_time, start_time), units = "mins"
+    difftime(end_time, start_time),
+    units = "mins"
   )
 
   # return the correct output class
   if (!conditional_logical) {
     methods::new("portvine_roll",
       risk_estimates = risk_estimates,
-      fitted_marginals = lapply(marg_mod_result,
-                               function(asset) asset$roll_model_fit),
+      fitted_marginals = lapply(
+        marg_mod_result,
+        function(asset) asset$roll_model_fit
+      ),
       fitted_vines = dep_risk_result[["fitted_vines"]],
       marginal_settings = marginal_settings,
       vine_settings = vine_settings,
@@ -307,27 +329,23 @@ estimate_risk_roll <- function(
     )
   } else {
     methods::new("cond_portvine_roll",
-                 risk_estimates = risk_estimates,
-                 fitted_marginals = lapply(marg_mod_result,
-                                          function(asset) asset$roll_model_fit),
-                 fitted_vines = dep_risk_result[["fitted_vines"]],
-                 marginal_settings = marginal_settings,
-                 vine_settings = vine_settings,
-                 risk_measures = risk_measures,
-                 alpha = alpha,
-                 weights = weights,
-                 cond_estimation = conditional_logical,
-                 n_samples = n_samples,
-                 time_taken = time_taken_minutes,
-                 cond_risk_estimates = cond_risk_estimates,
-                 cond_vars = cond_vars,
-                 cond_u = cond_u
+      risk_estimates = risk_estimates,
+      fitted_marginals = lapply(
+        marg_mod_result,
+        function(asset) asset$roll_model_fit
+      ),
+      fitted_vines = dep_risk_result[["fitted_vines"]],
+      marginal_settings = marginal_settings,
+      vine_settings = vine_settings,
+      risk_measures = risk_measures,
+      alpha = alpha,
+      weights = weights,
+      cond_estimation = conditional_logical,
+      n_samples = n_samples,
+      time_taken = time_taken_minutes,
+      cond_risk_estimates = cond_risk_estimates,
+      cond_vars = cond_vars,
+      cond_u = cond_u
     )
   }
 }
-
-
-
-
-
-
