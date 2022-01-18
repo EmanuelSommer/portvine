@@ -4,6 +4,8 @@
 # portvine <a href='https://github.com/EmanuelSommer/portvine'><img src='man/figures/portvine_logo.png' align="right" height="160" /></a>
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/EmanuelSommer/portvine/workflows/R-CMD-check/badge.svg)](https://github.com/EmanuelSommer/portvine/actions)
 <!-- badges: end -->
 
 Portfolio level unconditional as well as conditional risk measure
