@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# portvine <a href='https://github.com/EmanuelSommer/portvine'><img src='man/figures/portvine_logo.png' align="right" height="139" /></a>
+# portvine <a href='https://github.com/EmanuelSommer/portvine'><img src='man/figures/portvine_logo.png' align="right" height="160" /></a>
 
 <!-- badges: start -->
 <!-- badges: end -->
