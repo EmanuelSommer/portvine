@@ -175,14 +175,15 @@ estimate_risk_roll <- function(data,
   # weights argument
   n_all_assets <- length(all_asset_names)
   if (!is.matrix(weights) & !is.null(weights)) {
-    try(
+    weights <- try(
       {
         # try to coerce vector to matrix that replicates the vector in each row
         # for a number of the vine windows
-        weights <- matrix(
+        matrix(
           rep(weights, ceiling((n_all_obs - n_marg_train) / n_vine_refit)),
           byrow = TRUE,
           ncol = length(weights),
+          nrow = ceiling((n_all_obs - n_marg_train) / n_vine_refit),
           dimnames = list(NULL, names(weights))
         )
       },
@@ -190,7 +191,7 @@ estimate_risk_roll <- function(data,
     )
     if ("try-error" %in% class(weights)) {
       stop("The <weights> argument is not specified correctly.
-           Should be named numeric vector or matrix.")
+           Should be a named numeric vector or matrix.")
     }
   }
   checkmate::assert_matrix(

@@ -63,7 +63,7 @@ test_that("input checks", {
   expect_error(
     estimate_risk_roll(
       sample_returns_small,
-      weights = list("abc", 1, 1:4, 1:3),
+      weights = base::acos,
       marginal_settings = valid_marg_settings,
       vine_settings = valid_vine_settings,
       alpha = c(0.01, 0.05),
@@ -419,7 +419,7 @@ test_that("basic functionality (conditionally)", {
   expect_error(
     estimate_risk_roll(
       sample_returns_small,
-      weights = c(1, 1, 1),
+      weights = c("GOOG" = 1, "AAPL" = 1, "AMZN" = 1),
       marginal_settings = t1_marg_settings,
       vine_settings = t1_vine_settings,
       alpha = c(0.01, 0.05),
@@ -442,7 +442,7 @@ test_that("basic functionality (conditionally)", {
     cond_u = c(0.05, 0.5),
     trace = TRUE
   )
-  expect_output(print(t1_risk_roll))
+  expect_output(print(t1_marg_settings))
   expect_s4_class(t1_risk_roll, "cond_portvine_roll")
   expect_true(
     "GOOG" %in% colnames(t1_risk_roll@cond_risk_estimates)
