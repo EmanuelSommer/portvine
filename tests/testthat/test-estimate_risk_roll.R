@@ -63,6 +63,18 @@ test_that("input checks", {
   expect_error(
     estimate_risk_roll(
       sample_returns_small,
+      weights = list("abc", 1, 1:4, 1:3),
+      marginal_settings = valid_marg_settings,
+      vine_settings = valid_vine_settings,
+      alpha = c(0.01, 0.05),
+      risk_measures = c("VaR", "ES_mean"),
+      n_samples = 1000,
+      trace = FALSE
+    )
+  )
+  expect_error(
+    estimate_risk_roll(
+      sample_returns_small,
       weights = c("GOOG" = 0, "AMZN" = 0, "AAPL" = -1),
       marginal_settings = valid_marg_settings,
       vine_settings = valid_vine_settings,
@@ -395,13 +407,28 @@ test_that("basic functionality (conditionally)", {
   # dvine 1 conditional variable
   t1_marg_settings <- marginal_settings(
     train_size = 800,
-    refit_size = 100
+    refit_size = 100,
+    individual_spec = list(GOOG = default_garch_spec(ar = 2))
   )
   t1_vine_settings <- vine_settings(
     train_size = 100,
     refit_size = 50,
     family_set = "parametric",
     vine_type = "dvine"
+  )
+  expect_error(
+    estimate_risk_roll(
+      sample_returns_small,
+      weights = c(1, 1, 1),
+      marginal_settings = t1_marg_settings,
+      vine_settings = t1_vine_settings,
+      alpha = c(0.01, 0.05),
+      risk_measures = c("VaR", "ES_mean"),
+      n_samples = 50,
+      cond_vars = "GOOG",
+      cond_u = c(0.05, 0.5),
+      trace = TRUE
+    )
   )
   t1_risk_roll <- estimate_risk_roll(
     sample_returns_small,
@@ -415,6 +442,7 @@ test_that("basic functionality (conditionally)", {
     cond_u = c(0.05, 0.5),
     trace = TRUE
   )
+  expect_output(print(t1_risk_roll))
   expect_s4_class(t1_risk_roll, "cond_portvine_roll")
   expect_true(
     "GOOG" %in% colnames(t1_risk_roll@cond_risk_estimates)
