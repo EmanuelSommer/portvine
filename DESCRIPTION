@@ -17,6 +17,7 @@ Imports:
     data.table,
     dplyr,
     dtplyr,
+    future,
     future.apply,
     methods,
     Rcpp (>= 0.12.12),
