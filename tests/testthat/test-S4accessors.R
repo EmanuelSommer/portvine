@@ -185,6 +185,18 @@ test_that("risk_estimates() basic functionality & input checks", {
     )
   )
   expect_true(
+    checkmate::test_data_table(
+      risk_estimates(
+        roll = t2_risk_roll,
+        risk_measures = NULL,
+        alpha = NULL,
+        df = FALSE,
+        exceeded = TRUE
+      ),
+      any.missing = FALSE, nrows = 6 * 100 * 4
+    )
+  )
+  expect_true(
     checkmate::test_data_frame(
       risk_estimates(
         roll = t2_risk_roll,
@@ -275,6 +287,15 @@ test_that("risk_estimates() basic functionality & input checks", {
       any.missing = FALSE, nrows = 6 * 100 * 2
     )
   )
+  # test print methods
+  expect_output(print(t1_risk_roll), "<portvine_roll>")
+  expect_output(print(t2_risk_roll), "<cond_portvine_roll>")
+  expect_output(summary(t1_risk_roll), "<portvine_roll>")
+  expect_output(summary(t1_risk_roll), "Train size")
+  expect_output(summary(t2_risk_roll), "<cond_portvine_roll>")
+
+  expect_output(print(t1_vine_settings), "<vine_settings>")
+  expect_output(print(t1_marg_settings), "<marginal_settings>")
 })
 
 test_that("fitted_vines() & fitted_marginals() basic functionality", {
