@@ -30,7 +30,8 @@ Suggests:
     rmarkdown,
     knitr,
     testthat (>= 3.0.0),
-    ggplot2
+    ggplot2,
+    covr
 Config/testthat/edition: 3
 Collate: 
     'RcppExports.R'

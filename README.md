@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/EmanuelSommer/portvine/workflows/R-CMD-check/badge.svg)](https://github.com/EmanuelSommer/portvine/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/EmanuelSommer/portvine/branch/master/graph/badge.svg)](https://app.codecov.io/gh/EmanuelSommer/portvine?branch=master)
 <!-- badges: end -->
 
 Portfolio level unconditional as well as conditional risk measure
