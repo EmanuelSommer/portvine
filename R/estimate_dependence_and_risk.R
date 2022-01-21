@@ -6,7 +6,9 @@
 #'
 #' The vine windows are parallelized using the future framework i.e. the risk
 #'  estimates and the corresponding vine copula models are computed in parallel
-#'   for each rolling vine window. Details can be found in the doc of the
+#'   for each rolling vine window. Moreover the parallelization can be nested
+#'   so one can also parallelize addtitionally the calculations in each time
+#'   unit of the vine window. Details can be found in the doc of the
 #'  `estimate_risk_roll` function.
 #'
 #' @param combined_residuals_dt data.table with all the combined data from the
@@ -145,7 +147,7 @@ estimate_dependence_and_risk <- function(combined_residuals_dt,
       # simulate, transform back to original scale, get full portfolio value
       # and estimate the risk measures (iterate over each time unit in the vine
       # window)
-      list_risk_est <- lapply(
+      list_risk_est <- future.apply::future_lapply(
         seq(
           n_marg_train + n_vine_refit * (vine_window - 1) + 1,
           min(
@@ -304,7 +306,8 @@ estimate_dependence_and_risk <- function(combined_residuals_dt,
             overall_risk_estimates = overall_risk_estimates,
             cond_risk_estimates = cond_risk_estimates
           )
-        }
+        },
+        future.seed = TRUE
       )
       # collect the observation level results in two data.tables
       overall_risk_estimates <- lapply(list_risk_est, function(row_num_entry) {
