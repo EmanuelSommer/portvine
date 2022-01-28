@@ -32,7 +32,7 @@ test_that("unconditional case", {
     750, 50,
     100, 25,
     unique(test_combined_residuals_dt$asset),
-    "parametric", "rvine",
+    "onepar", "rvine",
     c(0.1, 0.2),
     c("ES_median", "VaR"),
     matrix(rep(c(2, 3, 5), 10),
@@ -40,7 +40,7 @@ test_that("unconditional case", {
       dimnames = list(NULL, c("GOOG", "AAPL", "AMZN"))
     ),
     NULL,
-    1000,
+    10,
     0.05,
     100,
     FALSE
@@ -71,7 +71,7 @@ test_that("unconditional case", {
     750, 50,
     100, 25,
     unique(test_combined_residuals_dt$asset),
-    "parametric", "dvine",
+    "frank", "dvine",
     c(0.1, 0.2),
     c("ES_median", "VaR"),
     matrix(rep(c(2, 3, 5), 10),
@@ -79,7 +79,7 @@ test_that("unconditional case", {
       dimnames = list(NULL, c("GOOG", "AAPL", "AMZN"))
     ),
     NULL,
-    1000,
+    10,
     0.05,
     100,
     FALSE
@@ -104,6 +104,7 @@ test_that("unconditional case", {
       types = "vinecop"
     )
   )
+  skip_on_cran()
   # different family_set, alphas and risk measure
   edr_dvine2 <- estimate_dependence_and_risk(
     test_combined_residuals_dt,
@@ -119,7 +120,7 @@ test_that("unconditional case", {
       dimnames = list(NULL, c("GOOG", "AAPL", "AMZN"))
     ),
     NULL,
-    1000,
+    10,
     0.05,
     100,
     FALSE
@@ -144,7 +145,7 @@ test_that("conditional case", {
     n_all_obs = 1000, n_marg_train = 750,
     n_marg_refit = 50, n_vine_train = 100, n_vine_refit = 25,
     all_asset_names = unique(test_combined_residuals_dt$asset),
-    family_set = "parametric", vine_type = "dvine",
+    family_set = "onepar", vine_type = "dvine",
     alpha = c(0.1, 0.2),
     risk_measures = c("ES_median", "VaR"),
     weights = matrix(rep(c(2, 3, 5), 10),
@@ -194,7 +195,7 @@ test_that("conditional case", {
     n_all_obs = 1000, n_marg_train = 750,
     n_marg_refit = 50, n_vine_train = 100, n_vine_refit = 25,
     all_asset_names = unique(test_combined_residuals_dt$asset),
-    family_set = "parametric", vine_type = "dvine",
+    family_set = "onepar", vine_type = "dvine",
     alpha = c(0.1, 0.2),
     risk_measures = c("ES_mean", "VaR"),
     weights = matrix(rep(c(2, 3, 5), 10),

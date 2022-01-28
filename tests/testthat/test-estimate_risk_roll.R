@@ -299,6 +299,21 @@ test_that("input checks", {
       trace = FALSE
     )
   )
+  # cutoff_depth (just assert a positive count)
+  expect_error(
+    estimate_risk_roll(
+      sample_returns_small,
+      weights = NULL,
+      marginal_settings = valid_marg_settings,
+      vine_settings = valid_vine_settings,
+      alpha = c(0.01, 0.05),
+      risk_measures = c("VaR", "ES_mean"),
+      cond_vars = c("AAPL"),
+      n_samples = 1000,
+      trace = FALSE,
+      cutoff_depth = 0
+    )
+  )
 })
 
 test_that("basic functionality (unconditionally)", {
@@ -310,7 +325,7 @@ test_that("basic functionality (unconditionally)", {
   t1_vine_settings <- vine_settings(
     train_size = 100,
     refit_size = 50,
-    family_set = "onepar",
+    family_set = c("gaussian", "gumbel"),
     vine_type = "rvine"
   )
   t1_risk_roll <- estimate_risk_roll(
@@ -320,7 +335,7 @@ test_that("basic functionality (unconditionally)", {
     vine_settings = t1_vine_settings,
     alpha = c(0.01, 0.05),
     risk_measures = c("VaR", "ES_mean"),
-    n_samples = 1000,
+    n_samples = 10,
     trace = FALSE
   )
   expect_s4_class(t1_risk_roll, "portvine_roll")
@@ -363,7 +378,7 @@ test_that("basic functionality (unconditionally)", {
   t2_vine_settings <- vine_settings(
     train_size = 200,
     refit_size = 199,
-    family_set = "onepar",
+    family_set = c("clayton", "joe"),
     vine_type = "dvine"
   )
   expect_message(
@@ -375,7 +390,7 @@ test_that("basic functionality (unconditionally)", {
         vine_settings = t2_vine_settings,
         alpha = 0.01,
         risk_measures = c("VaR", "ES_median", "ES_mc"),
-        n_samples = 1000,
+        n_samples = 10,
         n_mc_samples = 1000,
         trace = FALSE
       )
@@ -437,7 +452,7 @@ test_that("basic functionality (conditionally)", {
     vine_settings = t1_vine_settings,
     alpha = c(0.01, 0.05),
     risk_measures = c("VaR", "ES_mean"),
-    n_samples = 50,
+    n_samples = 11,
     cond_vars = "GOOG",
     cond_u = c(0.05, 0.5),
     trace = TRUE
@@ -534,6 +549,7 @@ test_that("basic functionality (conditionally)", {
 })
 
 test_that("parallel functionality", {
+  skip_on_cran()
   future::plan("multisession", workers = 2)
   # dvine 2 conditional variables
   multi_marg_settings <- marginal_settings(
@@ -553,7 +569,7 @@ test_that("parallel functionality", {
     vine_settings = multi_vine_settings,
     alpha = 0.01,
     risk_measures = c("VaR", "ES_median", "ES_mc"),
-    n_samples = 100,
+    n_samples = 10,
     n_mc_samples = 100,
     cond_vars = c("GOOG", "AMZN"),
     cond_u = c(0.1, 0.5),

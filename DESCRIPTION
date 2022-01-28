@@ -24,7 +24,8 @@ Imports:
     rugarch,
     rvinecopulib,
     tidyr,
-    rlang
+    rlang,
+    ppcor
 Suggests: 
     rmarkdown,
     knitr,
@@ -37,9 +38,9 @@ Collate:
     'default_garch_spec.R'
     'S4_classes.R'
     'datadoc_and_rcpp.R'
+    'dvine_ordering.R'
     'risk_measures.R'
     'rcondvinecop.R'
-    'greedy_tau_ordering.R'
     'estimate_dependence_and_risk.R'
     'estimate_marginal_models.R'
     'estimate_risk_roll.R'

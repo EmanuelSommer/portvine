@@ -15,7 +15,8 @@ estimate_risk_roll(
   cond_vars = NULL,
   cond_u = 0.05,
   n_mc_samples = 1000,
-  trace = FALSE
+  trace = FALSE,
+  cutoff_depth = NULL
 )
 }
 \arguments{
@@ -66,6 +67,13 @@ if the risk measure \code{ES_mc} is used. (See \code{\link[=est_es]{est_es()}})}
 
 \item{trace}{If set to TRUE the algorithm will print basic information while
 running.}
+
+\item{cutoff_depth}{Positive count that specifies the depth up to which the
+edges of the to be constructed D-vine copula are considered in the algorithm
+that determines the ordering for the D-vine fitting using partial
+correlations. The default NULL
+considers all edges and seems in most use cases reasonable. This argument is
+only relevant if D-vines are used.}
 }
 \value{
 In the unconditional case an S4 object of class \code{portvine_roll} and
@@ -81,7 +89,7 @@ vignette / theoretical vignette and the paper/ thesis
 TBD! Address all dependencies of the vine and marginal settings parameters
 like n_all_obs - n_marg_train > n_marg_refit. i.e. there must be at least 2
 marginal and thus also 2 vine windows. Maybe in a table (markdown) give short
-notice about availble risk_measures
+notice about available risk_measures
 }
 \section{Parallel processing}{
 
@@ -98,14 +106,30 @@ with the respective argument before the function call. Common options are
 and uses all available cores to run the code in parallel local R sessions.
 To specify the number of workers use
 \code{future::plan("multisession", workers = 2)}. To go back to sequential
-processing and to shut down the clusters use \code{future::plan("sequential")}.
+processing and to shut down the parallel sessions use
+\code{future::plan("sequential")}.
 For more information have a look at \code{\link[future:plan]{future::plan()}}. The two following
-loops are processed in parallel if a parallel \code{\link[future:plan]{future::plan()}} is set:
+loops are processed in parallel by default if a parallel \code{\link[future:plan]{future::plan()}}
+is set:
 \itemize{
 \item The marginal model fitting i.e. all assets individually in parallel.
 \item The vine windows i.e. the risk estimates and the corresponding vine copula
 models are computed in parallel for each rolling vine window.
 }
+
+In addition the function allows for nested parallelization which has to
+be done with care. So in addition to the 2 loops above one can further
+run each computation for each time unit in the vine windows in parallel which
+might be especially interesting if the \code{n_samples} argument is large. Then
+the default parallelization has to be tweaked to not only parallelize the
+first level of parallelization which are the 2 loops above. This can be
+achieved e.g. via \code{future::plan(list(future::tweak(future::multisession, workers = 4), future::tweak(future::multisession, workers = 2)))}. This
+setting would run the 2 primary loops in 4 parallel R sessions and in
+addition each of the 4 primary parallel sessions would itself use 2 sessions
+within the nested parallel loop over the time units in the vine window. This
+results in a need for at least 2 times 4 so 8 threads on the hardware side.
+More details can be found in the extensive documentation of the
+\href{https://www.futureverse.org/}{\code{future}} framework.
 }
 
 \examples{

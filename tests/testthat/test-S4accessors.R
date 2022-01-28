@@ -2,13 +2,13 @@
 
 test_that("risk_estimates() basic functionality & input checks", {
   t1_marg_settings <- marginal_settings(
-    train_size = 800,
-    refit_size = 100
+    train_size = 900,
+    refit_size = 50
   )
   t1_vine_settings <- vine_settings(
-    train_size = 100,
-    refit_size = 50,
-    family_set = "onepar",
+    train_size = 50,
+    refit_size = 25,
+    family_set = c("clayton", "t"),
     vine_type = "rvine"
   )
   t1_risk_roll <- estimate_risk_roll(
@@ -18,7 +18,7 @@ test_that("risk_estimates() basic functionality & input checks", {
     vine_settings = t1_vine_settings,
     alpha = c(0.01, 0.05),
     risk_measures = c("VaR", "ES_mean", "ES_mc"),
-    n_samples = 1000,
+    n_samples = 10,
     trace = FALSE
   )
 
@@ -66,7 +66,7 @@ test_that("risk_estimates() basic functionality & input checks", {
         alpha = NULL,
         df = FALSE
       ),
-      any.missing = FALSE, nrows = 6 * 200
+      any.missing = FALSE, nrows = 6 * 100
     )
   )
   expect_true(
@@ -76,7 +76,7 @@ test_that("risk_estimates() basic functionality & input checks", {
         risk_measures = NULL,
         alpha = NULL
       ),
-      any.missing = FALSE, nrows = 6 * 200
+      any.missing = FALSE, nrows = 6 * 100
     )
   )
   expect_equal(

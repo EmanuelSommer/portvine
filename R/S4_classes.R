@@ -23,7 +23,7 @@
 #' assets by naming the list entry as the asset and providing a
 #' [`rugarch::ugarchspec`] object.
 #' @slot default_spec [`rugarch::ugarchspec`]
-#'  object specifing the default marginal model (used if the marginal model
+#'  object specifying the default marginal model (used if the marginal model
 #'   is not specified through `individual_spec`)
 #'
 #' @return Object of class `marginal_settings`

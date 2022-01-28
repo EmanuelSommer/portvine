@@ -61,7 +61,7 @@ assets by naming the list entry as the asset and providing a
 \code{\link[rugarch:ugarchspec-methods]{rugarch::ugarchspec}} object.}
 
 \item{\code{default_spec}}{\code{\link[rugarch:ugarchspec-methods]{rugarch::ugarchspec}}
-object specifing the default marginal model (used if the marginal model
+object specifying the default marginal model (used if the marginal model
 is not specified through \code{individual_spec})}
 }}
 

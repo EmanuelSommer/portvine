@@ -15,7 +15,7 @@ data.table with 3 columns and 1000 rows, columns \code{GOOG}, \code{AAPL},
 data(sample_returns_small)
 }
 \description{
-Data extracted from Yahoo Finance representing the daily og returns for
+Data extracted from Yahoo Finance representing the daily log returns for
 Google, Apple, and Amazon stocks between 2014-01-13 and 2018-01-01 which
 results in exactly 1000 observations.
 }

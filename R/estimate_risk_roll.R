@@ -9,7 +9,7 @@
 #' TBD! Address all dependencies of the vine and marginal settings parameters
 #' like n_all_obs - n_marg_train > n_marg_refit. i.e. there must be at least 2
 #' marginal and thus also 2 vine windows. Maybe in a table (markdown) give short
-#' notice about availble risk_measures
+#' notice about available risk_measures
 #'
 #' @section Parallel processing:
 #' This function uses the [`future`](https://www.futureverse.org/)
@@ -33,6 +33,7 @@
 #'  - The marginal model fitting i.e. all assets individually in parallel.
 #'  - The vine windows i.e. the risk estimates and the corresponding vine copula
 #'  models are computed in parallel for each rolling vine window.
+#'
 #' In addition the function allows for nested parallelization which has to
 #' be done with care. So in addition to the 2 loops above one can further
 #' run each computation for each time unit in the vine windows in parallel which
@@ -85,6 +86,12 @@
 #' if the risk measure `ES_mc` is used. (See [`est_es()`])
 #' @param trace If set to TRUE the algorithm will print basic information while
 #'  running.
+#' @param cutoff_depth Positive count that specifies the depth up to which the
+#' edges of the to be constructed D-vine copula are considered in the algorithm
+#' that determines the ordering for the D-vine fitting using partial
+#'  correlations. The default NULL
+#' considers all edges and seems in most use cases reasonable. This argument is
+#' only relevant if D-vines are used.
 #'
 #' @return In the unconditional case an S4 object of class `portvine_roll` and
 #' in the conditional case its child class `cond_portvine_roll`. For details
@@ -112,7 +119,8 @@ estimate_risk_roll <- function(data,
                                cond_vars = NULL,
                                cond_u = 0.05,
                                n_mc_samples = 1000,
-                               trace = FALSE) {
+                               trace = FALSE,
+                               cutoff_depth = NULL) {
   # Return also the total run time at the end
   start_time <- Sys.time()
   # Input checks ----------------------------------------------------------
@@ -237,6 +245,9 @@ estimate_risk_roll <- function(data,
   }
   # trace argument
   checkmate::assert_flag(trace)
+  # cutoff_depth argument
+  checkmate::assert_count(cutoff_depth, positive = TRUE, null.ok = TRUE)
+  if (is.null(cutoff_depth)) cutoff_depth <- Inf
 
 
   # Preparations for the overall algorithm -------------------------------
@@ -287,7 +298,8 @@ estimate_risk_roll <- function(data,
     n_samples = n_samples,
     cond_u = cond_u,
     n_mc_samples = n_mc_samples,
-    trace = trace
+    trace = trace,
+    cutoff_depth = cutoff_depth
   )
 
   # compute the realized portfolio returns and left join them to the estimated

@@ -44,6 +44,10 @@
 #' if the risk measure `ES_mc` is used. (See [`est_es()`])
 #' @param trace if set to TRUE the algorithm will print information while
 #'  running.
+#' @param cutoff_depth positive count that specifies the depth up to which the
+#' edges of the to be constructed D-vine copula are considered in the algorithm
+#' that determines the ordering using partial correlations. The default Inf
+#' considers all edges and seems in most use cases reasonable.
 #'
 #' @return list with 3 entries:
 #'   -  `fitted_vines` a list of all fitted vines one element for each vine
@@ -58,7 +62,7 @@
 #'
 #' @import dplyr
 #'
-#' @include greedy_tau_ordering.R rcondvinecop.R risk_measures.R
+#' @include dvine_ordering.R rcondvinecop.R risk_measures.R
 #'
 #' @noRd
 estimate_dependence_and_risk <- function(combined_residuals_dt,
@@ -74,7 +78,8 @@ estimate_dependence_and_risk <- function(combined_residuals_dt,
                                          n_samples,
                                          cond_u,
                                          n_mc_samples,
-                                         trace) {
+                                         trace,
+                                         cutoff_depth = Inf) {
   # very basic input checks as the function is internal
   checkmate::assert_data_table(combined_residuals_dt,
     all.missing = FALSE,
@@ -132,9 +137,10 @@ estimate_dependence_and_risk <- function(combined_residuals_dt,
         vine_struct <- NA
       } else if (vine_type == "dvine") {
         vine_struct <- rvinecopulib::dvine_structure(
-          order = greedy_tau_ordering(
+          order = dvine_ordering(
             vine_train_data,
-            cond_vars
+            cond_vars,
+            cutoff_depth = cutoff_depth
           )
         )
       }
