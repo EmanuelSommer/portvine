@@ -31,7 +31,14 @@
 #' @include default_garch_spec.R
 #' @seealso [`default_garch_spec()`], [`vine_settings`]
 #'
-#' @examples marginal_settings(100, 10)
+#' @examples # the most basic initialization
+#' marginal_settings(train_size = 100, refit_size = 10)
+#' # some individualism
+#' marginal_settings(
+#'   train_size = 100, refit_size = 10,
+#'   individual_spec = list("GOOG" = default_garch_spec(ar = 3)),
+#'   default_spec = default_garch_spec(dist = "norm")
+#' )
 setClass("marginal_settings",
   slots = list(
     train_size = "numeric",
@@ -137,7 +144,14 @@ setMethod("show", c("marginal_settings"), function(object) {
 #'
 #' @seealso [`marginal_settings`]
 #'
-#' @examples vine_settings(100, 25)
+#' @examples # the most basic initialization
+#' vine_settings(100, 25)
+#' # some individual note
+#' vine_settings(
+#'   train_size = 100, refit_size = 20,
+#'   family_set = c("gumbel", "joe"),
+#'   vine_type = "dvine"
+#' )
 setClass("vine_settings",
   slots = list(
     train_size = "numeric",
@@ -433,7 +447,7 @@ setMethod("summary", c("cond_portvine_roll"), function(object) {
 #' `risk_measure`, `risk_est`, `alpha`, `row_num`, `vine_window` and `realized`.
 #' `exceeded` column if the corresponding argument is set to `TRUE`.
 #' In the conditional case further columns are available (see:
-#'  [`portvine_roll-class`].
+#'  [`portvine_roll-class`]).
 #' @export
 #'
 #' @seealso [`portvine_roll-class`]
@@ -566,7 +580,8 @@ setMethod("fitted_vines",
 #' Accessor method for the fitted marginal models of `(cond_)portvine_roll`
 #'  objects
 #'
-#' The marginal models are ARMA-GARCH models which were fitted in a rolling
+#' Extract the marginal models that are ARMA-GARCH models which were fitted
+#'  in a rolling
 #' window fashion using [`rugarch::ugarchroll`]. For the residual analysis of
 #' the models encompassed in such a [`rugarch::ugarchroll`] class object one
 #' can have a look at the utility function [`roll_residuals()`].

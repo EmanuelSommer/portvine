@@ -57,7 +57,14 @@ fitted. Possible choices right now are \code{rvine} (regular vine) and \code{dvi
 }}
 
 \examples{
+# the most basic initialization
 vine_settings(100, 25)
+# some individual note
+vine_settings(
+  train_size = 100, refit_size = 20,
+  family_set = c("gumbel", "joe"),
+  vine_type = "dvine"
+)
 }
 \seealso{
 \code{\link{marginal_settings}}

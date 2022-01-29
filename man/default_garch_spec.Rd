@@ -23,14 +23,19 @@ object of class \code{\link[rugarch:ugarchspec-methods]{rugarch::ugarchspec}}
 }
 \description{
 This function is used as the default for the univariate model fitting i.e.
-the marginal models.
+the marginal models and can be used to easily specify a different
+individual marginal model specification or default in
+\code{\link[=marginal_settings]{marginal_settings()}}.
 The ARMA(\code{ar},\code{ma})-GARCH(\code{arch},\code{garch}) is fitted  with the distribution
 given by \code{dist} that specifies the conditional density used for the
 innovations.
-It might also be a handy shortcut towards changing the default w.r.t. the
-main specification arguments.
 }
 \examples{
 # the default is then just using
 default_garch_spec()
+# to specify a ARMA(2,2)-GARCH(1,1) model with normal residual distribution
+default_garch_spec(ar = 2, ma = 2, dist = "norm")
+}
+\seealso{
+\code{\link[=marginal_settings]{marginal_settings()}}
 }

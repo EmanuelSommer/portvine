@@ -20,7 +20,8 @@ Named list with an entry for each asset containing a
 \code{\link[rugarch:ugarchroll-methods]{rugarch::ugarchroll}} class object that encompasses the marginal model fit.
 }
 \description{
-The marginal models are ARMA-GARCH models which were fitted in a rolling
+Extract the marginal models that are ARMA-GARCH models which were fitted
+in a rolling
 window fashion using \code{\link[rugarch:ugarchroll-methods]{rugarch::ugarchroll}}. For the residual analysis of
 the models encompassed in such a \code{\link[rugarch:ugarchroll-methods]{rugarch::ugarchroll}} class object one
 can have a look at the utility function \code{\link[=roll_residuals]{roll_residuals()}}.

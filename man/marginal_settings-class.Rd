@@ -66,7 +66,14 @@ is not specified through \code{individual_spec})}
 }}
 
 \examples{
-marginal_settings(100, 10)
+# the most basic initialization
+marginal_settings(train_size = 100, refit_size = 10)
+# some individualism
+marginal_settings(
+  train_size = 100, refit_size = 10,
+  individual_spec = list("GOOG" = default_garch_spec(ar = 3)),
+  default_spec = default_garch_spec(dist = "norm")
+)
 }
 \seealso{
 \code{\link[=default_garch_spec]{default_garch_spec()}}, \code{\link{vine_settings}}

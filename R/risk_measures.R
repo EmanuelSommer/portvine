@@ -33,13 +33,13 @@ est_var <- function(sample, alpha) {
 #'
 #' The Expected Shortfall at level \eqn{\alpha} is defined as the expected value
 #' of the returns under the condition that the returns are smaller than the
-#' value at risk for the same \eqn{\alpha} level.
+#' Value at Risk for the same \eqn{\alpha} level. Note that an absolutely
+#' continuous distribution of the returns is assumed.
 #' The three estimation methods are:
 #'   - `mean` the mean of the samples that fall under the corresponding VaR.
 #'   - `median` the median of the samples that fall under the corresponding VaR.
 #'   - `mc` Calculation of the expected value using Monte Carlo integration over
-#'   the \eqn{\alpha} levels. The confidence level is assumed to be uniformly
-#'   distributed and `mc_samples` Monte Carlo samples are drawn.
+#'   the \eqn{\alpha} levels. One draws `mc_samples` Monte Carlo samples .
 #'
 #' @param sample Numeric vector representing the sample upon which the Expected
 #' Shortfall is calculated.

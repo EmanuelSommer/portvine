@@ -2,12 +2,12 @@
 #' Default specifications for ARMA-GARCH models
 #'
 #' This function is used as the default for the univariate model fitting i.e.
-#'  the marginal models.
+#'  the marginal models and can be used to easily specify a different
+#'  individual marginal model specification or default in
+#'  [`marginal_settings()`].
 #' The ARMA(`ar`,`ma`)-GARCH(`arch`,`garch`) is fitted  with the distribution
 #'  given by `dist` that specifies the conditional density used for the
 #'  innovations.
-#' It might also be a handy shortcut towards changing the default w.r.t. the
-#' main specification arguments.
 #'
 #' @param ar positive integer for the autoregressive order
 #' @param ma positive integer for the moving average order
@@ -19,8 +19,12 @@
 #' @return object of class [`rugarch::ugarchspec`]
 #' @export
 #'
+#' @seealso [`marginal_settings()`]
+#'
 #' @examples # the default is then just using
 #' default_garch_spec()
+#' # to specify a ARMA(2,2)-GARCH(1,1) model with normal residual distribution
+#' default_garch_spec(ar = 2, ma = 2, dist = "norm")
 default_garch_spec <- function(ar = 1,
                                ma = 1,
                                arch = 1,

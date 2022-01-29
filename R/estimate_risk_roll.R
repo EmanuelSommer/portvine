@@ -84,12 +84,12 @@
 #'  conditional variables.
 #' @param n_mc_samples Positive count of samples for the Monte Carlo integration
 #' if the risk measure `ES_mc` is used. (See [`est_es()`])
-#' @param trace If set to TRUE the algorithm will print basic information while
-#'  running.
+#' @param trace If set to TRUE the algorithm will print a little information
+#' while running.
 #' @param cutoff_depth Positive count that specifies the depth up to which the
 #' edges of the to be constructed D-vine copula are considered in the algorithm
 #' that determines the ordering for the D-vine fitting using partial
-#'  correlations. The default NULL
+#'  correlations. The default `NULL`
 #' considers all edges and seems in most use cases reasonable. This argument is
 #' only relevant if D-vines are used.
 #'
@@ -108,7 +108,65 @@
 #' @import dplyr
 #' @rawNamespace import(data.table, except = c(first,last,between))
 #'
-#' @examples # TBD
+#' @examples # For better illustrated examples have a look at the vignettes
+#' # and/or the package website.
+#' \dontrun{
+#' data("sample_returns_small")
+#' ex_marg_settings <- marginal_settings(
+#'   train_size = 800,
+#'   refit_size = 100
+#' )
+#' ex_vine_settings <- vine_settings(
+#'   train_size = 100,
+#'   refit_size = 50,
+#'   family_set = c("gaussian", "gumbel"),
+#'   vine_type = "dvine"
+#' )
+#' # unconditionally
+#' risk_roll <- estimate_risk_roll(
+#'   sample_returns_small,
+#'   weights = NULL,
+#'   marginal_settings = ex_marg_settings,
+#'   vine_settings = ex_vine_settings,
+#'   alpha = c(0.01, 0.05),
+#'   risk_measures = c("VaR", "ES_mean"),
+#'   n_samples = 1000,
+#'   trace = FALSE
+#' )
+#' # conditional on one asset
+#' risk_roll_cond <- estimate_risk_roll(
+#'   sample_returns_small,
+#'   weights = NULL,
+#'   marginal_settings = ex_marg_settings,
+#'   vine_settings = ex_vine_settings,
+#'   alpha = c(0.01, 0.05),
+#'   risk_measures = c("VaR", "ES_mean"),
+#'   n_samples = 1000,
+#'   cond_vars = "GOOG",
+#'   cond_u = c(0.05, 0.5),
+#'   trace = FALSE
+#' )
+#'
+#' # have a superficial look
+#' risk_roll_cond
+#' # a slightly more detailed look
+#' summary(risk_roll_cond)
+#'
+#' # actually use the results by extracting important fitted quantities
+#' fitted_vines(risk_roll_cond)
+#' fitted_marginals(risk_roll_cond)
+#'
+#' # and of course most importantly the risk measure estimates
+#' risk_estimates(
+#'   risk_roll, risk_measures = "ES_mean",
+#'   alpha = 0.05, exceeded = TRUE
+#' )
+#' risk_estimates(
+#'   risk_roll_cond, risk_measures = "ES_mean",
+#'   alpha = 0.05, exceeded = TRUE,
+#'   cond_u = c("prior_resid", 0.5)
+#' )
+#' }
 estimate_risk_roll <- function(data,
                                weights = NULL,
                                marginal_settings,
