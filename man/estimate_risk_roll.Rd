@@ -45,7 +45,7 @@ described further below.}
 which the risk measures should be calculated.}
 
 \item{risk_measures}{Character vector with valid choices for risk
-measures to compute. Currently available are the Value at Risk \code{VaR} which
+measures to estimate. Currently available are the Value at Risk \code{VaR} which
 is implemented in \code{\link[=est_var]{est_var()}} and 3 estimation methods of the Expected
 Shortfall \code{ES_mean}, \code{ES_median} and \code{ES_mc} all implemented in \code{\link[=est_es]{est_es()}}
 .}
@@ -60,7 +60,7 @@ measure estimation.}
 in (0,1) of the conditional variable(s) conditioned on which the conditional
 risk measures should be calculated. Additionally always the conditioning
 values corresponding to the residual of one time unit prior are used as
-conditional variables.}
+conditional variables (\code{cond_u} = 'prior_resid' in the risk measure output).}
 
 \item{n_mc_samples}{Positive count of samples for the Monte Carlo integration
 if the risk measure \code{ES_mc} is used. (See \code{\link[=est_es]{est_es()}})}
@@ -81,16 +81,55 @@ in the conditional case its child class \code{cond_portvine_roll}. For details
 see \code{\linkS4class{portvine_roll}}.
 }
 \description{
-TBD! Shortly discuss the overall algorithm but reference a hands on get
-started
-vignette / theoretical vignette and the paper/ thesis
+As this is the main workhorse function with a lot going on under the hood it
+is advised to have a look at the vignettes or even better the package website
+as they provide a detailed hands on and theoretical documentation of what
+this function is doing and how it is intended to be used. For a short
+summarized explanation have a look at the Details section below.
 }
 \details{
-TBD! Address all dependencies of the vine and marginal settings parameters
-like n_all_obs - n_marg_train > n_marg_refit. i.e. there must be at least 2
-marginal and thus also 2 vine windows. Maybe in a table (markdown) give short
-notice about available risk_measures
+Roughly speaking the function performs the following steps for the
+\strong{unconditional risk measure estimation}:
+\itemize{
+\item Fit for each asset marginal time series models i.e. ARMA-GARCH models in
+a rolling window fashion. The models as well as the rolling window size and
+training size are specified via the \code{marginal_settings} argument.
+\item Model the dependence between the assets with a vine copula model trained on
+the standardized residuals transformed to the copula scale via the
+probability integral transform. This is also performed in a rolling window
+fashion where one can use the same window size for the vine windows
+as used for the marginal ones or a smaller window size. This window size, the
+training size for the vine copula as well as the copula fitting arguments are
+specified via the \code{vine_settings} argument.
+\item Using the copula and the forecasted means and volatilities of the assets
+one simulates \code{n_samples} many forecasted portfolio level log returns for
+every time unit in every specified rolling window.
+\item Based on these samples one estimates portfolio level risk measures.
 }
+
+Additionally one can perform \strong{conditional risk measure estimation} with up
+to two conditional log return series like market indices. Using this approach
+does not change the marginal models part but for the copula a D-vine with a
+special ordering i.e. the index or the indices are fixed as the rightmost
+leafs is fitted. One then simulates conditional forecasted portfolio log
+returns which then
+results in conditional risk measure estimates that can be particularly
+interesting in stress testing like situations. One conditions on a
+pre-specified quantile level (\code{cond_u}) of the conditioning assets
+(\code{cond_vars}) and for comparison one also conditions on the behavior
+of the conditioning asset one time unit before.
+}
+\section{Matching marginal and vine settings}{
+
+First of all there must be at least 2 marginal windows. Thus \code{train_size} +
+\code{refit_size} slot in the \code{\link{marginal_settings}} class object must be smaller
+than the overall input data size. Moreover the \code{refit_size} of the marginal
+models must be dividable by the \code{refit_size} of the vine copula models e.g.
+possible combinations are 50 and 50, 50 and 25, 50 and 10. Furthermore the
+\code{train_size} of the vines must be smaller or equal to the \code{train_size} of
+the marginal models.
+}
+
 \section{Parallel processing}{
 
 This function uses the \href{https://www.futureverse.org/}{\code{future}}
