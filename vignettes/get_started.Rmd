@@ -16,44 +16,97 @@ knitr::opts_chunk$set(
 )
 ```
 
-```{r setup}
+In order to get up to speed with the `portvine` package you will find in this vignette:
+
+- **Exemplary workflows** for the unconditional and conditional risk measure estimation
+- **Opinionated visualization functions** not included in the package
+
+What you do not find here is a theoretical description of the algorithms. For this purpose there is the **Theoretical vignette** and actually it is probably most often the better idea to start off with the theoretical one.
+
+## Setup
+
+```{r setup, message=FALSE, warning=FALSE}
+#################### required #################### 
 library(portvine)
+#################### optional #################### 
+## the following packages are only necessary for the visualizations
+# for visualization:
+library(ggplot2)
+library(patchwork)
+theme_set(
+  theme_minimal() +
+  theme(plot.title = ggtext::element_markdown(size = 11),
+        plot.subtitle = ggtext::element_markdown(size = 9))
+)
+# some data wrangling for visualizations
+library(dplyr)
+library(tidyr)
+```
+
+The sampling within the estimation algorithms is reproducible with a fixed seed (this also holds for parallel processing).
+```{r}
+set.seed(2)
 ```
 
 
-## Basic examples for the unconditional case
+## The data set
 
-First load the small test data set that is contained with the package. It contains 1000 log returns of 3 stocks.
+With the package comes a small test data set containing 1000 daily log returns of 3 stocks (Apple ~ AAPL, Alphabet ~ GOOG and Amazon ~ AMZN).
 
 ```{r}
 data("sample_returns_small")
 head(sample_returns_small)
 dim(sample_returns_small)
 ```
-### Example 1
 
-Specify the marginal models
+So as one financial year is comprised of 250 days one has the data of 4 years. The aim is now to estimate portfolio level risk measures for the last year i.e. the interval $[751,1000]$. First one specifies the marginal assetwise time series models.
 
-Have a look at the default marginal model.
+### Specify marginal models
+
+One would like to refit the marginal models every two months which is in trading days 50 days. The training data size is already specified by the interval of interest i.e. here one uses the whole available past of the first marginal window which has the size 750.
+
+#### The unconditional case
+
+Here in the unconditional case one will not deviate from the default thus for all marginal models an ARMA(1,1)-GARCH(1,1) model is fitted. The default model can be assessed via the function `default_garch_spec()`.
 
 ```{r}
 default_garch_spec()
 ```
 
-
-For the first example do not adjust the default ARMA-GARCH model specification. So one just needs to specify the train and refit size in order to perform the rolling window estimation.
+The marginal model specifications are then collected in a `marginal_settings` object as shown below.
 
 ```{r}
-e1_marg_settings <- marginal_settings(
-  train_size = 800,
+uncond_marg_settings <- marginal_settings(
+  train_size = 750,
   refit_size = 50
 )
 ```
 
-Now specify the settings for the vine copula fitting. Here one can for example use only a subset of all the one-parametric bivariate copulas as the building blocks of the final fitted vine copulas.
+#### The conditional case
+
+For the conditional case one will use a more individual specification. One changes the default to an ARMA(1,2)-GARCH(1,1) model while sticking with the default for the Amazon stock.
 
 ```{r}
-e1_vine_settings <- vine_settings(
+cond_marg_settings <- marginal_settings(
+  train_size = 750,
+  refit_size = 50,
+  individual_spec = list("AMZN" = default_garch_spec()),
+  default_spec = default_garch_spec(ma = 2)
+)
+```
+
+The next step is to specify the settings for the vine fitting.
+
+### Specify vine copula models
+
+Here one would like to refit the vine copula models every month so every 25 days which is allowed by the package as 50 is dividable by 25. One would like to capture the dependence on a training set of 100 trading days for each rolling window.
+
+#### The unconditional case
+
+For the unconditional case one will use the default `vine_type` which is the R-vine. For the bivariate building blocks of the vine copula one will restrict oneself to the single parametric pair copulas. For other possible choices have a look at the help page of the function `rvinecopulib::bicop()`.
+
+```{r}
+uncond_vine_settings <- vine_settings(
   train_size = 100,
   refit_size = 25,
   family_set = "onepar", # valid bivariate building blocks
@@ -61,154 +114,389 @@ e1_vine_settings <- vine_settings(
 )
 ```
 
-Now one is ready to call the main function to estimate the risk measures in a rolling fashion using ARMA-GARCH and vine copula models.
+#### The conditional case 
+
+In the conditional case up to now only D-vine copulas are allowed. As copula families one will pick some arbitrary ones for this example. Note that "parametric" would be the most nonrestrictive valid option here.
 
 ```{r}
-e1_risk_roll <- estimate_risk_roll(
-  sample_returns_small,
-  weights = NULL, # default -> equal weights
-  marginal_settings = e1_marg_settings,
-  vine_settings = e1_vine_settings,
-  alpha = c(0.01, 0.05),
-  risk_measures = c("VaR", "ES_mean"),
-  n_samples = 1000,
-  trace = TRUE
-)
-```
-
-```{r}
-e1_risk_roll
-summary(e1_risk_roll)
-```
-
-
-Having these estimates one can start by visually exploring these estimates.
-
-```{r, message=FALSE, eval=FALSE}
-library(ggplot2)
-
-ggplot(e1_risk_roll@risk_estimates) +
-  geom_line(aes(x = row_num, y = realized)) +
-  geom_line(aes(x = row_num, y = risk_est,
-                col = factor(alpha),
-                linetype = factor(risk_measure))) +
-  labs(x = "",
-       y = "portfolio log returns",
-       linetype = "Risk measure",
-       col = bquote(paste(alpha, -level))
-       ) +
-  theme_classic()
-```
-
-
-### Example 2
-
-For the second example adjust the default ARMA-GARCH model and specify an individual model specification for one asset.
-
-```{r, eval=FALSE}
-e2_marg_settings <- marginal_settings(
-  train_size = 800,
-  refit_size = 60,
-  individual_spec = list("GOOG" = default_garch_spec(dist = "std")),
-  default_spec = default_garch_spec(ar = 2)
-)
-```
-
-Now again specify the settings for the vine copula fitting. Here one can specify to only use D vine copula models.
-
-```{r, eval=FALSE}
-e2_vine_settings <- vine_settings(
+cond_vine_settings <- vine_settings(
   train_size = 100,
-  refit_size = 20,
-  family_set = "onepar", # valid bivariate building blocks
+  refit_size = 25,
+  family_set = c("gumbel", "joe", "t"),
   vine_type = "dvine"
 )
 ```
 
-Estimate the risk measures in a rolling fashion using ARMA-GARCH and vine copula models.
+Now one is ready to perform the actual risk measure estimation.
 
-```{r, eval=FALSE}
-e2_risk_roll <- estimate_risk_roll(
-  sample_returns_small,
-  weights = NULL, # default -> equal weights
-  marginal_settings = e2_marg_settings,
-  vine_settings = e2_vine_settings,
-  alpha = c(0.01, 0.1),
-  risk_measures = c("VaR", "ES_median"),
-  n_samples = 1000,
-  trace = TRUE
-)
-```
+### Estimate the risk measures
 
-```{r, eval=FALSE}
-e2_risk_roll
-summary(e2_risk_roll)
-```
+The risk measures should be estimated at both popular confidence levels 1% and 2.5%. In terms of risk measures one would like to estimate the Value at Risk (VaR) and the expected shortfall (ES) with mean estimation based on here a rather small sample size of 1000.
 
-Having these estimates again one can start by visually exploring these estimates.
+#### The unconditional case
 
-```{r, eval=FALSE}
-ggplot(e2_risk_roll@risk_estimates) +
-  geom_line(aes(x = row_num, y = realized)) +
-  geom_line(aes(x = row_num, y = risk_est,
-                col = factor(alpha),
-                linetype = factor(risk_measure))) +
-  labs(x = "",
-       y = "portfolio log returns",
-       linetype = "Risk measure",
-       col = bquote(paste(alpha, -level))
-       ) +
-  theme_classic()
-```
+Here an equally weighted portfolio of the three stocks is assumed thus one can
+leave the default `NULL`value for the `weights` argument. The trace argument set to `TRUE` will trigger the printing of some basic information during training. This workhorse function of the package is very well suited for parallel and even nested parallel processing. For details have a look at the help page and consult the README for some performance measurements. Down below one can facilitate basic parallel processing by just using the commented code.
 
-```{r, eval=FALSE}
-library(dplyr)
-
-e2_risk_roll@risk_estimates %>%
-  dtplyr::lazy_dt() %>%
-  filter(risk_measure == "ES_median", alpha == 0.1) %>%
-  mutate(exceeded = if_else(risk_est > realized, "Yes", "No")) %>%
-  data.table::as.data.table() %>%
-  ggplot() +
-  geom_line(aes(x = row_num, y = realized), col = "lightgrey") +
-  geom_point(aes(x = row_num, y = realized, col = exceeded)) +
-  geom_line(aes(x = row_num, y = risk_est), col = "blue") +
-  scale_color_manual(values = c("lightgrey", "red")) +
-  labs(x = "",
-       y = "portfolio log returns",
-       col = "Exceeded",
-       subtitle = bquote(paste("Risk measure: ES (median estimation) with ",
-                               alpha, "-level 0.1"))
-       ) +
-  theme_classic()
-```
-Then one can also use conditional and unconditional backtesting procedures on the VaR.
-
-```{r, eval=FALSE}
-e2_var_01 <- e2_risk_roll@risk_estimates %>%
-  dtplyr::lazy_dt() %>%
-  filter(risk_measure == "VaR", alpha == 0.01) %>%
-  as.data.frame()
-
-rugarch::VaRTest(
-  alpha = 0.01,
-  actual = e2_var_01$realized,
-  VaR = e2_var_01$risk_est)
-```
-
-Package is written with extensive input checks that prevent the user from using the functions in an unintended way. An example for this is given below.
-
-```{r, error=TRUE, eval=FALSE}
-estimate_risk_roll(
-  sample_returns_small,
-  weights = NULL, # default -> equal weights
-  marginal_settings = e1_marg_settings,
-  vine_settings = e1_vine_settings,
-  alpha = c(0.01, 0.05),
+```{r}
+## specify parallel strategy
+# future::plan("multisession", workers = 4)
+uncond_risk_roll <- estimate_risk_roll(
+  data = sample_returns_small,
+  weights = NULL,
+  marginal_settings = uncond_marg_settings,
+  vine_settings = uncond_vine_settings,
+  alpha = c(0.01, 0.025),
   risk_measures = c("VaR", "ES_mean"),
   n_samples = 1000,
-  cond_vars = "AAPL",
   trace = TRUE
 )
+## return to default sequential settings (cut off any background processes)
+# future::plan("sequential")
 ```
+
+Having estimated the risk measures one can get a short and more detailed summary of the process by printing the object and calling the summary method.
+
+```{r}
+uncond_risk_roll
+```
+
+```{r}
+summary(uncond_risk_roll)
+```
+
+
+
+
+### The conditional case
+
+The package currently supports up to two conditioning assets. Here the single conditional case will be covered but the double conditional case is almost identical. One will choose the Amazon stock to be the conditioning asset (via the `cond_vars` argument). Furthermore one will give the Alphabet stock a greater weight and the weight of the conditioning asset must of course be zero. Note that the weights for example according to market capitalization can be even changing on the vine window granularity level. The `cond_u` argument then specifies the quantile level of the conditioning value. So a small quantile level will emulate the behavior of a very weak performance of the conditioning Amazon stock. Details on all arguments are given on the help page.
+
+```{r}
+cond_risk_roll <- estimate_risk_roll(
+  data = sample_returns_small,
+  weights = c("AAPL" = 1, "GOOG" = 2, "AMZN" = 0),
+  marginal_settings = cond_marg_settings,
+  vine_settings = cond_vine_settings,
+  alpha = c(0.01, 0.025),
+  risk_measures = c("VaR", "ES_mean"),
+  n_samples = 1000,
+  cond_vars = "AMZN",
+  cond_u = 0.1
+)
+```
+
+Having estimated the conditional risk measures one can again get a short and more detailed summary of the process by printing the object and calling the summary method.
+
+```{r}
+cond_risk_roll
+```
+
+```{r}
+summary(cond_risk_roll)
+```
+
+### Assess marginal model quality
+
+In order to extract the marginal models one can use the function `fitted_marginals()`. The result is a named list with a `rugarch::ugarchroll` object for each asset. These objects contain all fitted marginal time series models. 
+
+```{r}
+names(fitted_marginals(uncond_risk_roll))
+```
+
+For the extraction of the fitted residuals for a residual analysis the `portvine` package further provides the utility function `roll_residuals()`. In the following an opinionated visualization function useful for a visual residual analysis is given and used. It allows to visualize the raw standardized residuals, the empirical autocorrelation function of them and the results (p-values) of Ljung-Box tests for serial correlation at different lags. This is useful to assess the appropriateness of the mean equation of the ARMA-GARCH model. In order to assess the volatility equation one can have a look at the same visualization for the squared standardized residuals. As the function is highly opinionated it was not integrated in the `portvine` package.
+
+```{r}
+# An opinionated function for residual analysis. Note this function has no 
+# input checks and is not tested in any ways.
+# Output: named list with a composition of residual plots for each asset
+marg_resid_viz_list <- function(
+  roll, # portvine_roll or cond_portvine_roll object
+  asset_names = NULL, # filter for certain  assets
+  marg_window = 1, # specify a marginal window
+  squared = FALSE # if set to true the results for the squared stand. residuals
+  # are displayed
+  ) {
+  fitted_marginals <- fitted_marginals(roll)
+  if (is.null(asset_names)) asset_names <- fitted_vines(roll)[[1]]$names
+  sapply(
+    asset_names,
+    function(asset_name) {
+      # use again a utility function from the portvine package to extract the 
+      # fitted standardized residuals
+      model_resid <- roll_residuals(
+        fitted_marginals[[asset_name]], marg_window
+      )
+      if (squared) model_resid <- model_resid^2
+
+      simple_exploratory <- data.frame(resid = model_resid) %>%
+        mutate(id = seq(length(model_resid))) %>%
+        ggplot(aes(x = id, y = resid)) +
+        geom_line(size = 0.2) +
+        labs(x = "t", y = ifelse(squared, expression(z[t]^2),expression(z[t])),
+             title = asset_name) +
+        theme(axis.text.x = element_blank(),
+              axis.ticks.x = element_blank())
+
+      acf_plot <- data.frame(
+        acf = as.numeric(acf(model_resid, type = "cor", lag.max = 20,
+                             plot = FALSE)$acf),
+        lag = 0:20
+      ) %>%
+        filter(lag != 0 & lag <= 10) %>%
+        ggplot() +
+        geom_hline(yintercept = 0, col = "black", size = 0.3) +
+        geom_hline(yintercept = qnorm(c(0.025, 0.975)) /
+                     sqrt(length(model_resid)),
+                   linetype = "longdash", col = "#92B8DE", size = 0.5) +
+        geom_segment(aes(x = lag, xend = lag, y = 0, yend = acf)) +
+        geom_point(aes(x = lag, y = acf)) +
+        scale_x_continuous(breaks = seq(1, 10, 1)) +
+        ylim(-1, 1) +
+        labs(x = "h", y = "ACF(h)")
+
+      ljungplot <- data.frame(
+        pval = sapply(
+          1:10,
+          function(i) Box.test(model_resid, lag = i,
+                               type = "Lju")$p.value),
+        lag = 1:10) %>%
+        ggplot() +
+        geom_hline(yintercept = 0, col = "black", size = 0.3) +
+        geom_hline(yintercept = 0.05,
+                   linetype = "longdash", col = "#92B8DE", size = 0.5) +
+        geom_line(aes(x = lag, y = pval)) +
+        geom_point(aes(x = lag, y = pval)) +
+        scale_x_continuous(breaks = seq(1, 10, 1)) +
+        labs(x = "h", y = "p-value of Ljung-Box test at lag h")
+
+      (simple_exploratory / (ljungplot + acf_plot)) +
+        plot_layout(nrow = 2)
+    }, USE.NAMES = TRUE, simplify = FALSE)
+}
+```
+
+Apply the function to the result of the unconditional estimation and display the residual plots for Apple and Alphabet.
+
+```{r, results='hide'}
+uncond_residual_viz <- marg_resid_viz_list(uncond_risk_roll)
+uncond_residual_viz_squared <- marg_resid_viz_list(
+  uncond_risk_roll, squared = TRUE
+)
+```
+
+```{r}
+uncond_residual_viz$AAPL
+uncond_residual_viz_squared$GOOG
+```
+
+For a better overview of all assets, especially in higher dimensions, a heatmap with the p-values of the Ljung-Box tests can be useful. For this I will now showcase another opinionated utility function.
+
+```{r}
+# The function creates a heatmap of Ljung Box test p-values for a 
+# (cond-)portvine_roll object. Note this function again has no 
+# input checks and is not tested in any ways.
+# Output: The heatmap (ggplot2 object)
+ljung_heatmap <- function(roll, roll_num = 1, squared = FALSE) {
+  asset_names <- fitted_vines(roll)[[1]]$names
+  roll_marginals <- fitted_marginals(roll)
+  ljung_data <- sapply(asset_names, function(asset_name) {
+    model_resid <- roll_residuals(
+      roll_marginals[[asset_name]], roll_num = roll_num
+    )
+    if (squared) model_resid <- model_resid^2
+    sapply(
+      1:10,
+      function(i) Box.test(model_resid, lag = i, type = "Lju")$p.value
+    )
+  }, USE.NAMES = TRUE, simplify = TRUE)
+  ljung_data <- ljung_data %>%
+    as.data.frame() %>%
+    mutate(lag = seq(nrow(ljung_data))) %>%
+    pivot_longer(-lag, names_to = "asset", values_to = "pval")
+  if (all(ljung_data$pval >= 0.05)) {
+    legend_scale <- scale_fill_gradient(
+      low = "#92B8DE", high = "#2a82db"
+    )
+  } else {
+    legend_scale <- scale_fill_gradientn(
+      colours = c("#db4f59","#C37285" ,
+                  "#92B8DE", "#2a82db"),
+      values = scales::rescale(c(0, 0.05 - 0.01, 0.05, 1)),
+      breaks = c(0.05),
+      labels = c(0.05),
+      guide = guide_colourbar(nbin = 1000))
+  }
+  ljung_data %>%
+    ggplot(aes(x = lag, y = asset, fill = pval)) +
+    geom_tile() +
+    scale_x_continuous(breaks = 1:10) +
+    labs(y = "", x = "h", fill = "p-value",
+         title = "Results of the Ljung-Box tests",
+         caption = paste("Rolling window:", roll_num)) +
+    legend_scale +
+    theme(legend.position = "right",
+          panel.grid.minor.x = element_blank())
+}
+```
+
+This time one uses the result of the conditional risk measure estimation for a display of the function for the residual analysis. $h$ again denotes the lag.
+
+```{r}
+ljung_heatmap(uncond_risk_roll)
+```
+
+P-values lower than 0.05 would be highlighted in red on the heatmap for easy spotting.
+
+### A look at the fitted vine copulas
+
+Next up one can have a look at the fitted vine copulas. For this again a utility function is available in the `portvine` package. The function `fitted_vines()` extracts all fitted vines in a list, one vine copula object for each vine window.
+
+```{r}
+uncond_fitted_vines <- fitted_vines(uncond_risk_roll)
+# visualize the first tree of the R-vine fitted in the third vine window
+rvinecopulib:::plot.vinecop(
+  uncond_fitted_vines[[3]], 
+  tree = 1,
+  var_names = "use",
+  edge_labels = "family_tau"
+)
+```
+
+As the list elements are `rvinecopulib::vinecop` objects one can further analyse them with tools from the great [`rvinecopulib`](https://vinecopulib.github.io/rvinecopulib/) package.
+
+### Analyze the risk measure estimates
+
+The last utility function that is presented in this vignette is `risk_estimates()` and as the name suggests it can be used to easily extract the risk measure estimates from the estimation result object. One can not only filter by the risk measure, confidence levels but also choose between an output as `data.frame` or `data.table`. Moreover optionally it calculates a logical column indicating whether the risk measure was exceeded.
+
+```{r}
+## a glimpse at the tidy data.frame with all estimated risk measures
+head(risk_estimates(uncond_risk_roll), 10)
+
+## a glimpse at the estimated VaR at confidence level 1% with exceeded column
+head(
+  risk_estimates(
+    uncond_risk_roll,
+    risk_measures = "VaR",
+    alpha = 0.01,
+    exceeded = TRUE
+  ),
+  6
+)
+
+## of course also applies for the conditional case
+head(
+  risk_estimates(
+    cond_risk_roll,
+    risk_measures = "ES_mean",
+    alpha = 0.01,
+    cond_u = c("prior_resid", 0.1)
+  ),
+  6
+)
+```
+
+This tidy representation can be easily used for visualizations. For example comparisons of risk measures over time.
+
+```{r}
+risk_estimates(uncond_risk_roll, alpha = 0.025) %>%
+  ggplot() +
+  geom_line(aes(x = row_num, y = realized), col = "grey") +
+  geom_line(aes(x = row_num, y = risk_est,
+                col = factor(risk_measure))) +
+  scale_color_manual(values = c("#92B8DE", "#477042")) +
+  labs(x = "trading day",
+       y = "portfolio log returns",
+       col = "Risk measure",
+       title = "Comparison of unconditional risk measure estimates at 
+       confidence level 2.5%",
+       subtitle = paste0("Realized log returns in ",
+                     "<span style='color:",
+                     "grey",
+                     "'>**grey**</span>",
+                     "."))
+```
+
+Or one can explore exceedances.
+
+```{r}
+risk_estimates(
+  uncond_risk_roll,
+  risk_measures = c("VaR"),
+  alpha = 0.01,
+  exceeded = TRUE) %>%
+  ggplot() +
+  geom_line(aes(x = row_num, y = realized), col = "lightgrey") +
+  geom_line(aes(x = row_num, y = risk_est), col = "#92B8DE") +
+  geom_point(aes(x = row_num, y = realized), col = "#db4f59", 
+             inherit.aes = FALSE, data = . %>% filter(exceeded)) +
+  labs(x = "trading days",
+       y = "portfolio log returns",
+       col = "Exceeded",
+       subtitle = paste0("Exceedances are highlighted in ",
+                     "<span style='color:",
+                     "#db4f59",
+                     "'>**red**</span>",
+                     "."),
+       title = "Risk measure: VaR with confidence level 1%"
+       ) +
+  theme(legend.position = "none")
+```
+
+In the conditional case one can first have a look at how the different conditional strategies behave. On the one side a conditioning value based on the quantile level 0.1 was forecasted (below shown in light blue) and on the other side the prior residual strategy tries to emulate the actual behavior of the conditional asset by using the prior day residual (below shown in green). 
+
+```{r}
+risk_estimates(
+  cond_risk_roll,
+  risk_measures = "ES_mean",
+  alpha = 0.01) %>%
+  ggplot() +
+  geom_line(
+    data = sample_returns_small[751:1000, "AMZN"],
+    aes(x = 751:1000,
+        y = AMZN), col = "grey", size = .3) +
+  geom_line(aes(x = row_num, y = AMZN, col = factor(cond_u)),
+            size = 0.5) +
+  scale_color_manual(values = c("#92B8DE", "#477042"),
+                     name = "Conditional strategy") +
+  labs(title = "Conditional variable: AMZN",
+       x = "trading days", y = "log returns of the asset AMZN",
+       subtitle = paste0("Realized log returns in ",
+                     "<span style='color:",
+                     "grey",
+                     "'>**grey**</span>",
+                     "."))
+```
+
+Then one can compare the resulting conditional risk measure estimates.
+
+```{r}
+risk_estimates(cond_risk_roll, alpha = 0.025, risk_measures = "ES_mean") %>%
+  ggplot() +
+  geom_line(aes(x = row_num, y = realized), col = "grey") +
+  geom_line(aes(x = row_num, y = risk_est,
+                col = factor(cond_u))) +
+  scale_color_manual(values = c("#477042", "#92B8DE")) +
+  labs(x = "trading day",
+       y = "portfolio log returns",
+       col = "Conditional strategy",
+       title = "Comparison of conditional risk measure estimates at 
+       confidence level 2.5%",
+       subtitle = paste0("Realized log returns in ",
+                     "<span style='color:",
+                     "grey",
+                     "'>**grey**</span>",
+                     "."))
+```
+
+This is of course just the tip of the iceberg and countless other visualizations are possible at that point. Especially for multiple conditional quantile levels in a stress testing scenario. The interpretation is left out for these exemplary workflows. 
+
+### Backtesting the estimated risk measures
+
+The risk measure estimation performed is in many cases performed with the ultimate goal of backtesting in mind. This can be easily achieved given the objects returned by the `estimate_risk_roll()` function. As there are already excellent resources for performing these here are some suggestions for implementations that can be applied in this portfolio level setting:
+
+- **Value at Risk backtesting**: The package [`rugarch`](https://cran.r-project.org/web/packages/rugarch/index.html) contains the straightforward to use function `rugarch::VaRTest()`. It features classical backtests based on violation sequences.
+- **Expected shortfall backtesting**: The package [`esback`](https://cran.r-project.org/web/packages/esback/index.html) contains a suite of easy to use and theoretically backed backtests for the expected shortfall.
+
+
 

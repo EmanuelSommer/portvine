@@ -31,7 +31,11 @@ Suggests:
     knitr,
     testthat (>= 3.0.0),
     ggplot2,
-    covr
+    covr,
+    patchwork,
+    ggtext,
+    ggraph,
+    scales
 Config/testthat/edition: 3
 Collate: 
     'RcppExports.R'
