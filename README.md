@@ -41,12 +41,12 @@ a perfect fit for you as it showcases a minimal case study with a lot of
 code examples and some handy visualization functions that were not
 incorporated into the package as they are highly opinionated.
 
-In order to really grasp what is going on a look at the **Theoretical
-vignette** is advised before starting to use the package. There the most
-important algorithms used during the risk measure estimation are
-explained. If this doesn’t saturate your hunger for the theory behind
-the package you should take a look at my masters thesis (when it is
-published of course).
+In order to really grasp what is going on under the hood a look at the
+**Theory vignette** is advised before starting to use the package. There
+the most important algorithms used during the risk measure estimation
+are explained. If this doesn’t saturate your hunger for the theory
+behind the package you should take a look at my masters thesis (when it
+is published of course).
 
 Moreover the help pages are quite detailed so feel free to have a look
 at them.
