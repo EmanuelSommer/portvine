@@ -33,7 +33,7 @@ here as soon as it is going to be published. The general idea is
 summarized in the flowchart below for a *d*-dimensional portfolio.
 
 <br>
-<img src='man/figures/overall_estimation_approach_cond.png' align="center" width="100%" />
+<img src='man/figures/overall_estimation_approach_cond2.png' align="center" width="100%" />
 <br> <br>
 
 If you want to get your hands dirty fast the **Get Started vignette** is
