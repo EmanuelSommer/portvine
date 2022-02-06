@@ -20,6 +20,7 @@ In order to get up to speed with the `portvine` package you will find in this vi
 
 - **Exemplary workflows** for the unconditional and conditional risk measure estimation
 - **Opinionated visualization functions** not included in the package
+- Some notes on **backtesting** the estimated risk measures
 
 What you do not find here is a theoretical description of the algorithms. For this purpose there is the **Theoretical vignette** and actually it is probably most often the better idea to start off with the theoretical one.
 
