@@ -60,7 +60,7 @@ head(sample_returns_small)
 dim(sample_returns_small)
 ```
 
-So as one financial year is comprised of 250 days one has the data of 4 years. The aim is now to estimate portfolio level risk measures for the last year i.e. the interval $[751,1000]$. First one specifies the marginal assetwise time series models.
+So as one financial year is comprised of roughly 250 days one has the data of roughly 4 years. The aim is now to estimate portfolio level risk measures for the last year i.e. the interval $[751,1000]$. First one specifies the marginal assetwise time series models.
 
 ### Specify marginal models
 
