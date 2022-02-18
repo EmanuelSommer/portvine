@@ -29,11 +29,20 @@ devtools::install_github("EmanuelSommer/portvine")
 The implemented algorithms for the unconditional as well as conditional
 portfolio level risk measure estimation are based on my masters thesis
 at the chair of Mathematical Statistics at the TUM which I will link to
-here as soon as it is going to be published. The general idea is
-summarized in the flowchart below for a *d*-dimensional portfolio.
+here as soon as it is going to be published. The general idea of the
+unconditional risk measure estimation approach is summarized in the
+flowchart below for a *d*-dimensional portfolio.
 
 <br>
-<img src='man/figures/overall_estimation_approach_cond2.png' align="center" width="100%" />
+<img src='man/figures/overall_estimation_approach.png' align="center" width="100%" />
+<br> <br>
+
+For the single conditional approach the general idea for a
+*d*-dimensional portfolio and a market index *I* is summarized in the
+flowchart below.
+
+<br>
+<img src='man/figures/overall_estimation_approach_cond.png' align="center" width="100%" />
 <br> <br>
 
 If you want to get your hands dirty fast the **Get Started vignette** is
@@ -59,7 +68,10 @@ enabled through the in my humble opinion amazing
 [`future`](https://www.futureverse.org/) framework. For details please
 have a look at the detailed section on parallel processing within the
 help page of the `estimate_risk_roll()` function (or function reference
-on the package website).
+on the package website). Some performance measurements of different
+parallel strategies and further information on the implemented
+parallelisms are presented in the **Parallel processing** article on the
+package website.
 
 ## Acknowledgements
 
