@@ -1,5 +1,5 @@
 url: https://emanuelsommer.github.io/portvine/
 template:
   bootstrap: 5
-  bootswatch: flatly
+  bootswatch: lux
 
