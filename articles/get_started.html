@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">portvine</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -137,13 +137,14 @@
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">sample_returns_small</span><span class="op">)</span>
 <span class="co">#&gt; [1] 1000    3</span></code></pre></div>
 <p>So as one financial year is comprised of roughly 250 days one has the data of roughly 4 years. The aim is now to estimate portfolio level risk measures for the last year i.e. the interval <span class="math inline">\([751,1000]\)</span>. First one specifies the marginal assetwise time series models.</p>
-<div class="section level3">
-<h3 id="specify-marginal-models">Specify marginal models<a class="anchor" aria-label="anchor" href="#specify-marginal-models"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="specify-marginal-models">Specify marginal models<a class="anchor" aria-label="anchor" href="#specify-marginal-models"></a>
+</h2>
 <p>One would like to refit the marginal models every two months which is in trading days 50 days. The training data size is already specified by the interval of interest i.e. here one uses the whole available past of the first marginal window which has the size 750.</p>
-<div class="section level4">
-<h4 id="the-unconditional-case">The unconditional case<a class="anchor" aria-label="anchor" href="#the-unconditional-case"></a>
-</h4>
+<div class="section level3">
+<h3 id="the-unconditional-case">The unconditional case<a class="anchor" aria-label="anchor" href="#the-unconditional-case"></a>
+</h3>
 <p>Here in the unconditional case one will not deviate from the default thus for all marginal models an ARMA(1,1)-GARCH(1,1) model is fitted. The default model can be assessed via the function <code><a href="../reference/default_garch_spec.html">default_garch_spec()</a></code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/default_garch_spec.html">default_garch_spec</a></span><span class="op">(</span><span class="op">)</span>
@@ -176,9 +177,9 @@
   refit_size <span class="op">=</span> <span class="fl">50</span>
 <span class="op">)</span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="the-conditional-case">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case"></a>
-</h4>
+<div class="section level3">
+<h3 id="the-conditional-case">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case"></a>
+</h3>
 <p>For the conditional case one will use a more individual specification. One changes the default to an ARMA(1,2)-GARCH(1,1) model while sticking with the default for the Amazon stock.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cond_marg_settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/marginal_settings-class.html">marginal_settings</a></span><span class="op">(</span>
@@ -190,13 +191,13 @@
 <p>The next step is to specify the settings for the vine fitting.</p>
 </div>
 </div>
-<div class="section level3">
-<h3 id="specify-vine-copula-models">Specify vine copula models<a class="anchor" aria-label="anchor" href="#specify-vine-copula-models"></a>
-</h3>
+<div class="section level2">
+<h2 id="specify-vine-copula-models">Specify vine copula models<a class="anchor" aria-label="anchor" href="#specify-vine-copula-models"></a>
+</h2>
 <p>Here one would like to refit the vine copula models every month so every 25 days which is allowed by the package as 50 is dividable by 25. One would like to capture the dependence on a training set of 100 trading days for each rolling window.</p>
-<div class="section level4">
-<h4 id="the-unconditional-case-1">The unconditional case<a class="anchor" aria-label="anchor" href="#the-unconditional-case-1"></a>
-</h4>
+<div class="section level3">
+<h3 id="the-unconditional-case-1">The unconditional case<a class="anchor" aria-label="anchor" href="#the-unconditional-case-1"></a>
+</h3>
 <p>For the unconditional case one will use the default <code>vine_type</code> which is the R-vine. For the bivariate building blocks of the vine copula one will restrict oneself to the single parametric pair copulas. For other possible choices have a look at the help page of the function <code><a href="https://rdrr.io/pkg/rvinecopulib/man/bicop.html" class="external-link">rvinecopulib::bicop()</a></code>.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">uncond_vine_settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vine_settings-class.html">vine_settings</a></span><span class="op">(</span>
@@ -206,9 +207,9 @@
   vine_type <span class="op">=</span> <span class="st">"rvine"</span>
 <span class="op">)</span></code></pre></div>
 </div>
-<div class="section level4">
-<h4 id="the-conditional-case-1">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case-1"></a>
-</h4>
+<div class="section level3">
+<h3 id="the-conditional-case-1">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case-1"></a>
+</h3>
 <p>In the conditional case up to now only D-vine copulas are allowed. As copula families one will pick some arbitrary ones for this example. Note that “parametric” would be the most nonrestrictive valid option here.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cond_vine_settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vine_settings-class.html">vine_settings</a></span><span class="op">(</span>
@@ -220,13 +221,13 @@
 <p>Now one is ready to perform the actual risk measure estimation.</p>
 </div>
 </div>
-<div class="section level3">
-<h3 id="estimate-the-risk-measures">Estimate the risk measures<a class="anchor" aria-label="anchor" href="#estimate-the-risk-measures"></a>
-</h3>
+<div class="section level2">
+<h2 id="estimate-the-risk-measures">Estimate the risk measures<a class="anchor" aria-label="anchor" href="#estimate-the-risk-measures"></a>
+</h2>
 <p>The risk measures should be estimated at both popular confidence levels 1% and 2.5%. In terms of risk measures one would like to estimate the Value at Risk (VaR) and the expected shortfall (ES) with mean estimation based on here a rather small sample size of 1000.</p>
-<div class="section level4">
-<h4 id="the-unconditional-case-2">The unconditional case<a class="anchor" aria-label="anchor" href="#the-unconditional-case-2"></a>
-</h4>
+<div class="section level3">
+<h3 id="the-unconditional-case-2">The unconditional case<a class="anchor" aria-label="anchor" href="#the-unconditional-case-2"></a>
+</h3>
 <p>Here an equally weighted portfolio of the three stocks is assumed thus one can leave the default <code>NULL</code>value for the <code>weights</code> argument. The trace argument set to <code>TRUE</code> will trigger the printing of some basic information during training. This workhorse function of the package is very well suited for parallel and even nested parallel processing. For details have a look at the help page and consult the README for some performance measurements. Down below one can facilitate basic parallel processing by just using the commented code.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## specify parallel strategy</span>
@@ -259,7 +260,7 @@
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.426 minutes</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.5103 minutes</span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span>
 <span class="co">#&gt; An object of class &lt;portvine_roll&gt;</span>
@@ -282,8 +283,7 @@
 <span class="co">#&gt; Number of estimated risk measures: 1000 </span>
 <span class="co">#&gt; Number of samples for each risk estimation: 1000 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.426 minutes.</span></code></pre></div>
-</div>
+<span class="co">#&gt; Time taken: 0.5103 minutes.</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-conditional-case-2">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case-2"></a>
@@ -311,7 +311,7 @@
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.631 minutes</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.7902 minutes</span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cond_risk_roll</span><span class="op">)</span>
 <span class="co">#&gt; An object of class &lt;cond_portvine_roll&gt;</span>
@@ -339,11 +339,12 @@
 <span class="co">#&gt; Number of estimated risk measures: 1000 </span>
 <span class="co">#&gt; Number of samples for each risk estimation: 1000 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.631 minutes.</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.7902 minutes.</span></code></pre></div>
 </div>
-<div class="section level3">
-<h3 id="assess-marginal-model-quality">Assess marginal model quality<a class="anchor" aria-label="anchor" href="#assess-marginal-model-quality"></a>
-</h3>
+</div>
+<div class="section level2">
+<h2 id="assess-marginal-model-quality">Assess marginal model quality<a class="anchor" aria-label="anchor" href="#assess-marginal-model-quality"></a>
+</h2>
 <p>In order to extract the marginal models one can use the function <code><a href="../reference/fitted_marginals.html">fitted_marginals()</a></code>. The result is a named list with a <code><a href="https://rdrr.io/pkg/rugarch/man/ugarchroll-methods.html" class="external-link">rugarch::ugarchroll</a></code> object for each asset. These objects contain all fitted marginal time series models.</p>
 <div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="fu"><a href="../reference/fitted_marginals.html">fitted_marginals</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span><span class="op">)</span>
@@ -482,9 +483,9 @@
 <p><img src="get_started_files/figure-html/unnamed-chunk-20-1.png" width="672"></p>
 <p>P-values lower than 0.05 would be highlighted in red on the heatmap for easy spotting.</p>
 </div>
-<div class="section level3">
-<h3 id="a-look-at-the-fitted-vine-copulas">A look at the fitted vine copulas<a class="anchor" aria-label="anchor" href="#a-look-at-the-fitted-vine-copulas"></a>
-</h3>
+<div class="section level2">
+<h2 id="a-look-at-the-fitted-vine-copulas">A look at the fitted vine copulas<a class="anchor" aria-label="anchor" href="#a-look-at-the-fitted-vine-copulas"></a>
+</h2>
 <p>Next up one can have a look at the fitted vine copulas. For this again a utility function is available in the <code>portvine</code> package. The function <code><a href="../reference/fitted_vines.html">fitted_vines()</a></code> extracts all fitted vines in a list, one vine copula object for each vine window.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">uncond_fitted_vines</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fitted_vines.html">fitted_vines</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span>
@@ -498,9 +499,9 @@
 <p><img src="get_started_files/figure-html/unnamed-chunk-21-1.png" width="672"></p>
 <p>As the list elements are <code><a href="https://rdrr.io/pkg/rvinecopulib/man/vinecop.html" class="external-link">rvinecopulib::vinecop</a></code> objects one can further analyse them with tools from the great <a href="https://vinecopulib.github.io/rvinecopulib/" class="external-link"><code>rvinecopulib</code></a> package.</p>
 </div>
-<div class="section level3">
-<h3 id="analyze-the-risk-measure-estimates">Analyze the risk measure estimates<a class="anchor" aria-label="anchor" href="#analyze-the-risk-measure-estimates"></a>
-</h3>
+<div class="section level2">
+<h2 id="analyze-the-risk-measure-estimates">Analyze the risk measure estimates<a class="anchor" aria-label="anchor" href="#analyze-the-risk-measure-estimates"></a>
+</h2>
 <p>The last utility function that is presented in this vignette is <code><a href="../reference/risk_estimates.html">risk_estimates()</a></code> and as the name suggests it can be used to easily extract the risk measure estimates from the estimation result object. One can not only filter by the risk measure, confidence levels but also choose between an output as <code>data.frame</code> or <code>data.table</code>. Moreover optionally it calculates a logical column indicating whether the risk measure was exceeded.</p>
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## a glimpse at the tidy data.frame with all estimated risk measures</span>
@@ -646,9 +647,9 @@
 <p><img src="get_started_files/figure-html/unnamed-chunk-26-1.png" width="672"></p>
 <p>This is of course just the tip of the iceberg and countless other visualizations are possible at that point. Especially for multiple conditional quantile levels in a stress testing scenario. The interpretation is left out for these exemplary workflows.</p>
 </div>
-<div class="section level3">
-<h3 id="backtesting-the-estimated-risk-measures">Backtesting the estimated risk measures<a class="anchor" aria-label="anchor" href="#backtesting-the-estimated-risk-measures"></a>
-</h3>
+<div class="section level2">
+<h2 id="backtesting-the-estimated-risk-measures">Backtesting the estimated risk measures<a class="anchor" aria-label="anchor" href="#backtesting-the-estimated-risk-measures"></a>
+</h2>
 <p>The risk measure estimation performed is in many cases performed with the ultimate goal of backtesting in mind. This can be easily achieved given the objects returned by the <code><a href="../reference/estimate_risk_roll.html">estimate_risk_roll()</a></code> function. As there are already excellent resources for performing these here are some suggestions for implementations that can be applied in this portfolio level setting:</p>
 <ul>
 <li>
@@ -656,7 +657,6 @@
 <li>
 <strong>Expected shortfall backtesting</strong>: The package <a href="https://cran.r-project.org/web/packages/esback/index.html" class="external-link"><code>esback</code></a> contains a suite of easy to use and theoretically backed backtests for the expected shortfall.</li>
 </ul>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
     </nav></aside>
