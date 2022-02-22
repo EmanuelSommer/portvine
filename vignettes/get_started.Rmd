@@ -62,11 +62,11 @@ dim(sample_returns_small)
 
 So as one financial year is comprised of roughly 250 days one has the data of roughly 4 years. The aim is now to estimate portfolio level risk measures for the last year i.e. the interval $[751,1000]$. First one specifies the marginal assetwise time series models.
 
-### Specify marginal models
+## Specify marginal models
 
 One would like to refit the marginal models every two months which is in trading days 50 days. The training data size is already specified by the interval of interest i.e. here one uses the whole available past of the first marginal window which has the size 750.
 
-#### The unconditional case
+### The unconditional case
 
 Here in the unconditional case one will not deviate from the default thus for all marginal models an ARMA(1,1)-GARCH(1,1) model is fitted. The default model can be assessed via the function `default_garch_spec()`.
 
@@ -83,7 +83,7 @@ uncond_marg_settings <- marginal_settings(
 )
 ```
 
-#### The conditional case
+### The conditional case
 
 For the conditional case one will use a more individual specification. One changes the default to an ARMA(1,2)-GARCH(1,1) model while sticking with the default for the Amazon stock.
 
@@ -98,11 +98,11 @@ cond_marg_settings <- marginal_settings(
 
 The next step is to specify the settings for the vine fitting.
 
-### Specify vine copula models
+## Specify vine copula models
 
 Here one would like to refit the vine copula models every month so every 25 days which is allowed by the package as 50 is dividable by 25. One would like to capture the dependence on a training set of 100 trading days for each rolling window.
 
-#### The unconditional case
+### The unconditional case
 
 For the unconditional case one will use the default `vine_type` which is the R-vine. For the bivariate building blocks of the vine copula one will restrict oneself to the single parametric pair copulas. For other possible choices have a look at the help page of the function `rvinecopulib::bicop()`.
 
@@ -115,7 +115,7 @@ uncond_vine_settings <- vine_settings(
 )
 ```
 
-#### The conditional case 
+### The conditional case 
 
 In the conditional case up to now only D-vine copulas are allowed. As copula families one will pick some arbitrary ones for this example. Note that "parametric" would be the most nonrestrictive valid option here.
 
@@ -130,11 +130,11 @@ cond_vine_settings <- vine_settings(
 
 Now one is ready to perform the actual risk measure estimation.
 
-### Estimate the risk measures
+## Estimate the risk measures
 
 The risk measures should be estimated at both popular confidence levels 1% and 2.5%. In terms of risk measures one would like to estimate the Value at Risk (VaR) and the expected shortfall (ES) with mean estimation based on here a rather small sample size of 1000.
 
-#### The unconditional case
+### The unconditional case
 
 Here an equally weighted portfolio of the three stocks is assumed thus one can
 leave the default `NULL`value for the `weights` argument. The trace argument set to `TRUE` will trigger the printing of some basic information during training. This workhorse function of the package is very well suited for parallel and even nested parallel processing. For details have a look at the help page and consult the README for some performance measurements. Down below one can facilitate basic parallel processing by just using the commented code.
@@ -197,7 +197,7 @@ cond_risk_roll
 summary(cond_risk_roll)
 ```
 
-### Assess marginal model quality
+## Assess marginal model quality
 
 In order to extract the marginal models one can use the function `fitted_marginals()`. The result is a named list with a `rugarch::ugarchroll` object for each asset. These objects contain all fitted marginal time series models. 
 
@@ -349,7 +349,7 @@ ljung_heatmap(uncond_risk_roll)
 
 P-values lower than 0.05 would be highlighted in red on the heatmap for easy spotting.
 
-### A look at the fitted vine copulas
+## A look at the fitted vine copulas
 
 Next up one can have a look at the fitted vine copulas. For this again a utility function is available in the `portvine` package. The function `fitted_vines()` extracts all fitted vines in a list, one vine copula object for each vine window.
 
@@ -366,7 +366,7 @@ rvinecopulib:::plot.vinecop(
 
 As the list elements are `rvinecopulib::vinecop` objects one can further analyse them with tools from the great [`rvinecopulib`](https://vinecopulib.github.io/rvinecopulib/) package.
 
-### Analyze the risk measure estimates
+## Analyze the risk measure estimates
 
 The last utility function that is presented in this vignette is `risk_estimates()` and as the name suggests it can be used to easily extract the risk measure estimates from the estimation result object. One can not only filter by the risk measure, confidence levels but also choose between an output as `data.frame` or `data.table`. Moreover optionally it calculates a logical column indicating whether the risk measure was exceeded.
 
@@ -492,7 +492,7 @@ risk_estimates(cond_risk_roll, alpha = 0.025, risk_measures = "ES_mean") %>%
 
 This is of course just the tip of the iceberg and countless other visualizations are possible at that point. Especially for multiple conditional quantile levels in a stress testing scenario. The interpretation is left out for these exemplary workflows. 
 
-### Backtesting the estimated risk measures
+## Backtesting the estimated risk measures
 
 The risk measure estimation performed is in many cases performed with the ultimate goal of backtesting in mind. This can be easily achieved given the objects returned by the `estimate_risk_roll()` function. As there are already excellent resources for performing these here are some suggestions for implementations that can be applied in this portfolio level setting:
 
