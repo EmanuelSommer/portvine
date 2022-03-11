@@ -98,8 +98,8 @@
 <li>The first level allows to fit the univariate time series models for each asset in parallel <strong>and</strong> to fit each vine window in parallel.</li>
 <li>The second level allows if specified that within each vine window the time units, often days, are processed using parallel processes.</li>
 </ol>
-<p>From here on one will use the notation <span class="math inline">\(p_1\)</span>/<span class="math inline">\(p_2\)</span> for the possible parallel strategies where <span class="math inline">\(p_1\)</span> specifies the number of parallel processes/cores on the first level and <span class="math inline">\(p_2\)</span> the number of parallel processes/cores every first level process can in turn call. This means 1/1 is the default sequential case, 5/1 does only use the first level parallelization and 8/2 would require 16 cores as every first level parallel process can use 2 parallel processes while iterating over the time units/days. An illustration of the nested parallelization of the vine windows can be found below.</p>
-<p><br><img src="nested_parallel2_3.png" align="center" width="60%"><br><br></p>
+<p>From here on one will use the notation <span class="math inline">\(p_1\)</span>/<span class="math inline">\(p_2\)</span> for the possible parallel strategies where <span class="math inline">\(p_1\)</span> specifies the number of parallel processes/cores on the first level and <span class="math inline">\(p_2\)</span> the number of parallel processes/cores every first level process can in turn call. This means 1/1 is the default sequential case, 5/1 does only use the first level parallelization and 8/2 would require 16 cores as every first level parallel process can use 2 parallel processes while iterating over the time units/days. An illustration of the two first processing rounds of the nested parallelization of the vine windows can be found below.</p>
+<p><br><img src="nested_parallel2_3_process.png" align="center" width="100%"><br><br></p>
 </div>
 <div class="section level2">
 <h2 id="performance-measurements">Performance measurements<a class="anchor" aria-label="anchor" href="#performance-measurements"></a>

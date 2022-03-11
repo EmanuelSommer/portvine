@@ -83,7 +83,8 @@ summarized explanation have a look at the Details section below.</p>
   cond_u <span class="op">=</span> <span class="fl">0.05</span>,
   n_mc_samples <span class="op">=</span> <span class="fl">1000</span>,
   trace <span class="op">=</span> <span class="cn">FALSE</span>,
-  cutoff_depth <span class="op">=</span> <span class="cn">NULL</span>
+  cutoff_depth <span class="op">=</span> <span class="cn">NULL</span>,
+  prior_resid_strategy <span class="op">=</span> <span class="cn">FALSE</span>
 <span class="op">)</span></code></pre></div>
     </div>
 
@@ -130,7 +131,10 @@ measure estimation.</p></dd>
 in (0,1) of the conditional variable(s) conditioned on which the conditional
 risk measures should be calculated. Additionally always the conditioning
 values corresponding to the residual of one time unit prior are used as
-conditional variables (<code>cond_u</code> = 'prior_resid' in the risk measure output).</p></dd>
+conditional variables (<code>cond_u</code> = 'prior_resid' in the risk measure output)
+if the flag<code>prior_resid</code> is set to TRUE, otherwise the conditioning values
+corresponding to the realized residual are used (<code>cond_u</code> = 'resid'
+in the risk measure output). The latter case corresponds to the default.</p></dd>
 <dt>n_mc_samples</dt>
 <dd><p>Positive count of samples for the Monte Carlo integration
 if the risk measure <code>ES_mc</code> is used. (See <code><a href="est_es.html">est_es()</a></code>)</p></dd>
@@ -144,6 +148,13 @@ that determines the ordering for the D-vine fitting using partial
 correlations. The default <code>NULL</code>
 considers all edges and seems in most use cases reasonable. This argument is
 only relevant if D-vines are used.</p></dd>
+<dt>prior_resid_strategy</dt>
+<dd><p>Logical flag that indicates whether as the
+additionally
+used conditioning values the prior day residual (if this flag is TRUE) or the
+realized residuals are used. The default are the realized residuals. Note
+that the resulting conditional risk measures use realized data so they are
+only for comparisons as they suffer from information leakage.</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
@@ -278,7 +289,8 @@ More details can be found in the extensive documentation of the
 <span class="r-in">  n_samples <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span class="r-in">  cond_vars <span class="op">=</span> <span class="st">"GOOG"</span>,</span>
 <span class="r-in">  cond_u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.5</span><span class="op">)</span>,</span>
-<span class="r-in">  trace <span class="op">=</span> <span class="cn">FALSE</span></span>
+<span class="r-in">  trace <span class="op">=</span> <span class="cn">FALSE</span>,</span>
+<span class="r-in">  prior_resid_strategy <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># have a superficial look</span></span>

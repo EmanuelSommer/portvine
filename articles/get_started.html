@@ -260,7 +260,7 @@
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.5318 minutes</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.3985 minutes</span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span>
 <span class="co">#&gt; An object of class &lt;portvine_roll&gt;</span>
@@ -283,7 +283,7 @@
 <span class="co">#&gt; Number of estimated risk measures: 1000 </span>
 <span class="co">#&gt; Number of samples for each risk estimation: 1000 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.5318 minutes.</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.3985 minutes.</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-conditional-case-2">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case-2"></a>
@@ -311,7 +311,7 @@
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.8025 minutes</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.5925 minutes</span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cond_risk_roll</span><span class="op">)</span>
 <span class="co">#&gt; An object of class &lt;cond_portvine_roll&gt;</span>
@@ -339,7 +339,7 @@
 <span class="co">#&gt; Number of estimated risk measures: 1000 </span>
 <span class="co">#&gt; Number of samples for each risk estimation: 1000 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.8025 minutes.</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.5925 minutes.</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -542,17 +542,17 @@
     <span class="va">cond_risk_roll</span>,
     risk_measures <span class="op">=</span> <span class="st">"ES_mean"</span>,
     alpha <span class="op">=</span> <span class="fl">0.01</span>,
-    cond_u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prior_resid"</span>, <span class="fl">0.1</span><span class="op">)</span>
+    cond_u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"resid"</span>, <span class="fl">0.1</span><span class="op">)</span>
   <span class="op">)</span>,
   <span class="fl">6</span>
 <span class="op">)</span>
-<span class="co">#&gt;   risk_measure    risk_est alpha row_num         AMZN      cond_u vine_window</span>
-<span class="co">#&gt; 1      ES_mean -0.08557438  0.01     751 -0.018518268         0.1           1</span>
-<span class="co">#&gt; 2      ES_mean -0.06680720  0.01     751  0.007347559 prior_resid           1</span>
-<span class="co">#&gt; 3      ES_mean -0.10546217  0.01     752 -0.019046492         0.1           1</span>
-<span class="co">#&gt; 4      ES_mean -0.05151684  0.01     752  0.004434144 prior_resid           1</span>
-<span class="co">#&gt; 5      ES_mean -0.09586411  0.01     753 -0.019629721         0.1           1</span>
-<span class="co">#&gt; 6      ES_mean -0.10195091  0.01     753  0.037611821 prior_resid           1</span>
+<span class="co">#&gt;   risk_measure    risk_est alpha row_num         AMZN cond_u vine_window</span>
+<span class="co">#&gt; 1      ES_mean -0.08557438  0.01     751 -0.018518268    0.1           1</span>
+<span class="co">#&gt; 2      ES_mean -0.06716524  0.01     751  0.005385051  resid           1</span>
+<span class="co">#&gt; 3      ES_mean -0.10546217  0.01     752 -0.019046492    0.1           1</span>
+<span class="co">#&gt; 4      ES_mean -0.06821455  0.01     752  0.032755136  resid           1</span>
+<span class="co">#&gt; 5      ES_mean -0.09586411  0.01     753 -0.019629721    0.1           1</span>
+<span class="co">#&gt; 6      ES_mean -0.07961861  0.01     753  0.022764076  resid           1</span>
 <span class="co">#&gt;      realized</span>
 <span class="co">#&gt; 1 0.000812683</span>
 <span class="co">#&gt; 2 0.000812683</span>
@@ -603,7 +603,7 @@
        <span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></code></pre></div>
 <p><img src="get_started_files/figure-html/unnamed-chunk-24-1.png" width="672"></p>
-<p>In the conditional case one can first have a look at how the different conditional strategies behave. On the one side a conditioning value based on the quantile level 0.1 was forecasted (below shown in light blue) and on the other side the prior residual strategy tries to emulate the actual behavior of the conditional asset by using the prior day residual (below shown in green).</p>
+<p>In the conditional case one can first have a look at how the different conditional strategies behave. On the one side a conditioning value based on the quantile level 0.1 was forecasted (below shown in light blue) and on the other side the prior residual strategy is by default set to the one that uses the realized residuals (below shown in green, it should overlay the grey realized line). Those are only for the comparison as they conceptually are an oracle as the actual realized conditional asset returns would not be known at sampling time.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/risk_estimates.html">risk_estimates</a></span><span class="op">(</span>
   <span class="va">cond_risk_roll</span>,
