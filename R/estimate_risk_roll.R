@@ -32,8 +32,10 @@
 #' results in conditional risk measure estimates that can be particularly
 #' interesting in stress testing like situations. One conditions on a
 #' pre-specified quantile level (`cond_u`) of the conditioning assets
-#' (`cond_vars`) and for comparison one also conditions on the behavior
-#'  of the conditioning asset one time unit before.
+#' (`cond_vars`) and for comparison one also conditions either on the behavior
+#'  of the conditioning asset one time unit before
+#'  (`prior_resid_strategy = TRUE`) or the realized behavior of the
+#'  conditioning asset (`prior_resid_strategy = FALSE`).
 #'
 #' @section Matching marginal and vine settings:
 #' First of all there must be at least 2 marginal windows. Thus `train_size` +
@@ -114,7 +116,10 @@
 #'  in (0,1) of the conditional variable(s) conditioned on which the conditional
 #'  risk measures should be calculated. Additionally always the conditioning
 #'  values corresponding to the residual of one time unit prior are used as
-#'  conditional variables (`cond_u` = 'prior_resid' in the risk measure output).
+#'  conditional variables (`cond_u` = 'prior_resid' in the risk measure output)
+#'  if the flag`prior_resid` is set to TRUE, otherwise the conditioning values
+#'  corresponding to the realized residual are used (`cond_u` = 'resid'
+#'   in the risk measure output). The latter case corresponds to the default.
 #' @param n_mc_samples Positive count of samples for the Monte Carlo integration
 #' if the risk measure `ES_mc` is used. (See [`est_es()`])
 #' @param trace If set to TRUE the algorithm will print a little information
@@ -125,6 +130,12 @@
 #'  correlations. The default `NULL`
 #' considers all edges and seems in most use cases reasonable. This argument is
 #' only relevant if D-vines are used.
+#' @param prior_resid_strategy Logical flag that indicates whether as the
+#'  additionally
+#' used conditioning values the prior day residual (if this flag is TRUE) or the
+#' realized residuals are used. The default are the realized residuals. Note
+#' that the resulting conditional risk measures use realized data so they are
+#' only for comparisons as they suffer from information leakage.
 #'
 #' @return In the unconditional case an S4 object of class `portvine_roll` and
 #' in the conditional case its child class `cond_portvine_roll`. For details
@@ -177,7 +188,8 @@
 #'   n_samples = 1000,
 #'   cond_vars = "GOOG",
 #'   cond_u = c(0.05, 0.5),
-#'   trace = FALSE
+#'   trace = FALSE,
+#'   prior_resid_strategy = TRUE
 #' )
 #'
 #' # have a superficial look
@@ -211,7 +223,8 @@ estimate_risk_roll <- function(data,
                                cond_u = 0.05,
                                n_mc_samples = 1000,
                                trace = FALSE,
-                               cutoff_depth = NULL) {
+                               cutoff_depth = NULL,
+                               prior_resid_strategy = FALSE) {
   # Return also the total run time at the end
   start_time <- Sys.time()
   # Input checks ----------------------------------------------------------
@@ -339,6 +352,8 @@ estimate_risk_roll <- function(data,
   # cutoff_depth argument
   checkmate::assert_count(cutoff_depth, positive = TRUE, null.ok = TRUE)
   if (is.null(cutoff_depth)) cutoff_depth <- Inf
+  # prior_resid_strategy argument
+  checkmate::assert_flag(prior_resid_strategy)
 
 
   # Preparations for the overall algorithm -------------------------------
@@ -390,7 +405,8 @@ estimate_risk_roll <- function(data,
     cond_u = cond_u,
     n_mc_samples = n_mc_samples,
     trace = trace,
-    cutoff_depth = cutoff_depth
+    cutoff_depth = cutoff_depth,
+    prior_resid_strategy = prior_resid_strategy
   )
 
   # compute the realized portfolio returns and left join them to the estimated

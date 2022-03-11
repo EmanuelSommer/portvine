@@ -123,6 +123,14 @@ market index log return series and might be a valuable comparison to the
 estimated quantile based conditional risk measures. Opposed to the
 **quantile based conditional risk measures** one will can call these
 **prior residual conditional risk measures**. These `prior_resid` risk
+measure estimates however suffer from exaggerating market fluctuations and
+thus should be handled with care. Another non quantile based conditional risk
+measure estimation approach is the one calculating the 
+**realized residual conditional risk measures** which are based on the actual 
+observed residuals which means one conditions on the actually realized value of
+the conditional asset. This is an oracle estimator as it suffers from
+information leakage but is a valuable comparison to the quantile based 
+conditional risk measures. These `resid` risk
 measure estimates are calculated by default in the conditional case.
 
 Extending the single conditional case to **two conditioning market

@@ -16,7 +16,8 @@ estimate_risk_roll(
   cond_u = 0.05,
   n_mc_samples = 1000,
   trace = FALSE,
-  cutoff_depth = NULL
+  cutoff_depth = NULL,
+  prior_resid_strategy = FALSE
 )
 }
 \arguments{
@@ -60,7 +61,10 @@ measure estimation.}
 in (0,1) of the conditional variable(s) conditioned on which the conditional
 risk measures should be calculated. Additionally always the conditioning
 values corresponding to the residual of one time unit prior are used as
-conditional variables (\code{cond_u} = 'prior_resid' in the risk measure output).}
+conditional variables (\code{cond_u} = 'prior_resid' in the risk measure output)
+if the flag\code{prior_resid} is set to TRUE, otherwise the conditioning values
+corresponding to the realized residual are used (\code{cond_u} = 'resid'
+in the risk measure output). The latter case corresponds to the default.}
 
 \item{n_mc_samples}{Positive count of samples for the Monte Carlo integration
 if the risk measure \code{ES_mc} is used. (See \code{\link[=est_es]{est_es()}})}
@@ -74,6 +78,13 @@ that determines the ordering for the D-vine fitting using partial
 correlations. The default \code{NULL}
 considers all edges and seems in most use cases reasonable. This argument is
 only relevant if D-vines are used.}
+
+\item{prior_resid_strategy}{Logical flag that indicates whether as the
+additionally
+used conditioning values the prior day residual (if this flag is TRUE) or the
+realized residuals are used. The default are the realized residuals. Note
+that the resulting conditional risk measures use realized data so they are
+only for comparisons as they suffer from information leakage.}
 }
 \value{
 In the unconditional case an S4 object of class \code{portvine_roll} and
@@ -208,7 +219,8 @@ risk_roll_cond <- estimate_risk_roll(
   n_samples = 1000,
   cond_vars = "GOOG",
   cond_u = c(0.05, 0.5),
-  trace = FALSE
+  trace = FALSE,
+  prior_resid_strategy = TRUE
 )
 
 # have a superficial look

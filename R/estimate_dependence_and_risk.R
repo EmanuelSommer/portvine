@@ -48,6 +48,12 @@
 #' edges of the to be constructed D-vine copula are considered in the algorithm
 #' that determines the ordering using partial correlations. The default Inf
 #' considers all edges and seems in most use cases reasonable.
+#' @param prior_resid_strategy Logical flag that indicates whether as the
+#'  additionally
+#' used conditioning values the prior day residual (if this flag is TRUE) or the
+#' realized residuals are used. The default are the realized residuals. Note
+#' that the resulting conditional risk measures use realized data so they are
+#' only for comparisons as they suffer from information leakage.
 #'
 #' @return list with 3 entries:
 #'   -  `fitted_vines` a list of all fitted vines one element for each vine
@@ -79,7 +85,8 @@ estimate_dependence_and_risk <- function(combined_residuals_dt,
                                          cond_u,
                                          n_mc_samples,
                                          trace,
-                                         cutoff_depth = Inf) {
+                                         cutoff_depth = Inf,
+                                         prior_resid_strategy = FALSE) {
   # very basic input checks as the function is internal
   checkmate::assert_data_table(combined_residuals_dt,
     all.missing = FALSE,
@@ -172,10 +179,12 @@ estimate_dependence_and_risk <- function(combined_residuals_dt,
           } else {
             # named vector containing the copula scale residuals of the prior
             # time unit for all conditioning variables
+            prior_resid_strategy_diff <- ifelse(prior_resid_strategy, 1, 0)
             cond_pre_resid <- sapply(cond_vars, function(cond_asset) {
               combined_residuals_dt$copula_scale_resid[
                 combined_residuals_dt$asset == cond_asset &
-                  combined_residuals_dt$row_num == row_num_window - 1 &
+                  combined_residuals_dt$row_num ==
+                    row_num_window - prior_resid_strategy_diff &
                   combined_residuals_dt$marg_window_num == ceiling(
                     n_vine_refit * vine_window / n_marg_refit
                   )
@@ -261,6 +270,11 @@ estimate_dependence_and_risk <- function(combined_residuals_dt,
             cond_risk_estimates <- lapply(
               c(cond_u, "prior_resid"),
               function(cond_level) {
+                cond_level_char <- as.character(ifelse(
+                  cond_level == "prior_resid" & (!prior_resid_strategy),
+                  "resid",
+                  cond_level
+                ))
                 cond_val <- sim_dt[[2]][sim_dt[["cond_u_vec"]] ==
                   cond_level][1]
                 est_risk_measures(
@@ -274,7 +288,7 @@ estimate_dependence_and_risk <- function(combined_residuals_dt,
                   dtplyr::lazy_dt() %>%
                   mutate(
                     !!cond_name := cond_val,
-                    "cond_u" = cond_level
+                    "cond_u" = cond_level_char
                   ) %>%
                   data.table::as.data.table()
               }
@@ -286,6 +300,11 @@ estimate_dependence_and_risk <- function(combined_residuals_dt,
             cond_risk_estimates <- lapply(
               c(cond_u, "prior_resid"),
               function(cond_level) {
+                cond_level_char <- as.character(ifelse(
+                  cond_level == "prior_resid" & (!prior_resid_strategy),
+                  "resid",
+                  cond_level
+                ))
                 cond_val1 <- sim_dt[[2]][sim_dt[["cond_u_vec"]] ==
                   cond_level][1]
                 cond_val2 <- sim_dt[[3]][sim_dt[["cond_u_vec"]] ==
@@ -302,7 +321,7 @@ estimate_dependence_and_risk <- function(combined_residuals_dt,
                   mutate(
                     !!cond_names[1] := cond_val1,
                     !!cond_names[2] := cond_val2,
-                    "cond_u" = cond_level
+                    "cond_u" = cond_level_char
                   ) %>%
                   data.table::as.data.table()
               }

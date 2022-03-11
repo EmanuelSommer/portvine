@@ -60,7 +60,8 @@ otherwise returns the overall risk estimates.}
 \item{cond_u}{Numeric or character vector specifying the corresponding
 quantiles
 in (0,1) of the conditional variable(s) conditioned on which the conditional
-risk measures were calculated to filter for and/or the class "prior_resid".
+risk measures were calculated to filter for and/or the class
+"prior_resid"/"resid".
 Note that they must be fitted in the \code{roll} argument.
 The default will return all fitted risk measures.}
 }

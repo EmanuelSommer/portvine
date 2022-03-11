@@ -391,7 +391,7 @@ head(
     cond_risk_roll,
     risk_measures = "ES_mean",
     alpha = 0.01,
-    cond_u = c("prior_resid", 0.1)
+    cond_u = c("resid", 0.1)
   ),
   6
 )
@@ -444,7 +444,7 @@ risk_estimates(
   theme(legend.position = "none")
 ```
 
-In the conditional case one can first have a look at how the different conditional strategies behave. On the one side a conditioning value based on the quantile level 0.1 was forecasted (below shown in light blue) and on the other side the prior residual strategy tries to emulate the actual behavior of the conditional asset by using the prior day residual (below shown in green). 
+In the conditional case one can first have a look at how the different conditional strategies behave. On the one side a conditioning value based on the quantile level 0.1 was forecasted (below shown in light blue) and on the other side the prior residual strategy is by default set to the one that uses the realized residuals (below shown in green, it should overlay the grey realized line). Those are only for the comparison as they conceptually are an oracle as the actual realized conditional asset returns would not be known at sampling time.  
 
 ```{r}
 risk_estimates(

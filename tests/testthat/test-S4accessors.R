@@ -237,7 +237,7 @@ test_that("risk_estimates() basic functionality & input checks", {
       risk_measures = NULL,
       alpha = NULL
     )[["cond_u"]])),
-    sort(c(0.1, 0.5, 0.9, "prior_resid"))
+    sort(c(0.1, 0.5, 0.9, "resid"))
   )
   expect_true(
     checkmate::test_data_frame(
@@ -280,7 +280,7 @@ test_that("risk_estimates() basic functionality & input checks", {
         roll = t2_risk_roll,
         risk_measures = NULL,
         alpha = NULL,
-        cond_u = c("prior_resid", 0.1),
+        cond_u = c("resid", 0.1),
         cond = TRUE,
         df = FALSE
       ),

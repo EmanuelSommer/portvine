@@ -310,7 +310,8 @@ setClass("portvine_roll",
 #'  `risk_estimate` slot has + the additional conditional columns with the
 #'  respective conditioning value and the column character `cond_u` that
 #'  indicates the used conditional quantile level or the conditional value
-#'  corresponding to the residual one time unit prior with "prior_resid".
+#'  corresponding to the residual one time unit prior with "prior_resid" or
+#'  the realized residual with "resid".
 #' @slot cond_vars !C! character vector with the names of the variables that
 #' were used to sample conditionally from.
 #' @slot cond_u !C! a numeric vector specifying the corresponding quantiles
@@ -497,7 +498,8 @@ setMethod("risk_estimates",
 #' @param cond_u Numeric or character vector specifying the corresponding
 #' quantiles
 #'  in (0,1) of the conditional variable(s) conditioned on which the conditional
-#'  risk measures were calculated to filter for and/or the class "prior_resid".
+#'  risk measures were calculated to filter for and/or the class
+#'   "prior_resid"/"resid".
 #'  Note that they must be fitted in the `roll` argument.
 #'  The default will return all fitted risk measures.
 #'

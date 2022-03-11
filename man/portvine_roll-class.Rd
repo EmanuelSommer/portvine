@@ -79,7 +79,8 @@ estimation process took.}
 \code{risk_estimate} slot has + the additional conditional columns with the
 respective conditioning value and the column character \code{cond_u} that
 indicates the used conditional quantile level or the conditional value
-corresponding to the residual one time unit prior with "prior_resid".}
+corresponding to the residual one time unit prior with "prior_resid" or
+the realized residual with "resid".}
 
 \item{\code{cond_vars}}{!C! character vector with the names of the variables that
 were used to sample conditionally from.}

@@ -442,7 +442,8 @@ test_that("basic functionality (conditionally)", {
       n_samples = 50,
       cond_vars = "GOOG",
       cond_u = c(0.05, 0.5),
-      trace = TRUE
+      trace = TRUE,
+      prior_resid_strategy = TRUE
     )
   )
   t1_risk_roll <- estimate_risk_roll(
@@ -455,13 +456,16 @@ test_that("basic functionality (conditionally)", {
     n_samples = 11,
     cond_vars = "GOOG",
     cond_u = c(0.05, 0.5),
-    trace = TRUE
+    trace = TRUE,
+    prior_resid_strategy = TRUE
   )
   expect_output(print(t1_marg_settings))
   expect_s4_class(t1_risk_roll, "cond_portvine_roll")
   expect_true(
     "GOOG" %in% colnames(t1_risk_roll@cond_risk_estimates)
   )
+  expect_true("prior_resid" %in% t1_risk_roll@cond_risk_estimates$cond_u)
+  expect_false("resid" %in% t1_risk_roll@cond_risk_estimates$cond_u)
   expect_true(
     checkmate::test_data_table(t1_risk_roll@risk_estimates,
       any.missing = FALSE,
@@ -535,6 +539,8 @@ test_that("basic functionality (conditionally)", {
       nrows = 3 * 200 * 2
     )
   )
+  expect_false("prior_resid" %in% t2_risk_roll@cond_risk_estimates$cond_u)
+  expect_true("resid" %in% t2_risk_roll@cond_risk_estimates$cond_u)
   expect_true(
     t2_risk_roll@cond_estimation
   )
