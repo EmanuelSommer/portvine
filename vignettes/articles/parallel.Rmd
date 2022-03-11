@@ -20,10 +20,10 @@ The `portvine` package  allows for **nested parallel processing** i.e.two levels
 1. The first level allows to fit the univariate time series models for each asset in parallel **and** to fit each vine window in parallel.
 2.  The second level allows if specified that within each vine window the time units, often days, are processed using parallel processes.
 
-From here on one will use the notation $p_1$/$p_2$ for the possible parallel strategies where $p_1$ specifies the number of parallel processes/cores on the first level and $p_2$ the number of parallel processes/cores every first level process can in turn call. This means 1/1 is the default sequential case, 5/1 does only use the first level parallelization and 8/2 would require 16 cores as every first level parallel process can use 2 parallel processes while iterating over the time units/days. An illustration of the nested parallelization of the vine windows can be found below.
+From here on one will use the notation $p_1$/$p_2$ for the possible parallel strategies where $p_1$ specifies the number of parallel processes/cores on the first level and $p_2$ the number of parallel processes/cores every first level process can in turn call. This means 1/1 is the default sequential case, 5/1 does only use the first level parallelization and 8/2 would require 16 cores as every first level parallel process can use 2 parallel processes while iterating over the time units/days. An illustration of the two first processing rounds of the nested parallelization of the vine windows can be found below.
 
 <br>
-<img src='nested_parallel2_3.png' align="center" width="60%" />
+<img src='nested_parallel2_3_process.png' align="center" width="100%" />
 <br>
 <br>
 
