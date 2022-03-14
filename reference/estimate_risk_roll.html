@@ -188,8 +188,10 @@ returns which then
 results in conditional risk measure estimates that can be particularly
 interesting in stress testing like situations. One conditions on a
 pre-specified quantile level (<code>cond_u</code>) of the conditioning assets
-(<code>cond_vars</code>) and for comparison one also conditions on the behavior
-of the conditioning asset one time unit before.</p>
+(<code>cond_vars</code>) and for comparison one also conditions either on the behavior
+of the conditioning asset one time unit before
+(<code>prior_resid_strategy = TRUE</code>) or the realized behavior of the
+conditioning asset (<code>prior_resid_strategy = FALSE</code>).</p>
     </div>
     <div class="section level2">
     <h2 id="matching-marginal-and-vine-settings">Matching marginal and vine settings<a class="anchor" aria-label="anchor" href="#matching-marginal-and-vine-settings"></a></h2>
