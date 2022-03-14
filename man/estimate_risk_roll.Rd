@@ -127,8 +127,10 @@ returns which then
 results in conditional risk measure estimates that can be particularly
 interesting in stress testing like situations. One conditions on a
 pre-specified quantile level (\code{cond_u}) of the conditioning assets
-(\code{cond_vars}) and for comparison one also conditions on the behavior
-of the conditioning asset one time unit before.
+(\code{cond_vars}) and for comparison one also conditions either on the behavior
+of the conditioning asset one time unit before
+(\code{prior_resid_strategy = TRUE}) or the realized behavior of the
+conditioning asset (\code{prior_resid_strategy = FALSE}).
 }
 \section{Matching marginal and vine settings}{
 
