@@ -490,11 +490,13 @@ risk_estimates(cond_risk_roll, alpha = 0.025, risk_measures = "ES_mean") %>%
                      "."))
 ```
 
-This is of course just the tip of the iceberg and countless other visualizations are possible at that point. Especially for multiple conditional quantile levels in a stress testing scenario. The interpretation is left out for these exemplary workflows. 
+This is of course just the tip of the iceberg and countless other visualizations are possible at that point. Especially for multiple conditional quantile levels in a stress testing scenario. An especially promising comparison is the one comparing multiple levels of quantile based risk measure estimates with the respective unconditional one. This allows to assess how well the unconditional approach accounts for the market risk on the portfolio associated with fluctuations of the conditional asset(s).
+
+The interpretation is left out for these exemplary workflows. Detailed case studies can again be found in my thesis.
 
 ## Backtesting the estimated risk measures
 
-The risk measure estimation performed is in many cases performed with the ultimate goal of backtesting in mind. This can be easily achieved given the objects returned by the `estimate_risk_roll()` function. As there are already excellent resources for performing these here are some suggestions for implementations that can be applied in this portfolio level setting:
+The risk measure estimation performed is in many cases performed with the goal of backtesting in mind. This can be easily achieved given the objects returned by the `estimate_risk_roll()` function. As there are already excellent resources for performing these here are some suggestions for implementations that can be applied in this portfolio level setting:
 
 - **Value at Risk backtesting**: The package [`rugarch`](https://cran.r-project.org/web/packages/rugarch/index.html) contains the straightforward to use function `rugarch::VaRTest()`. It features classical backtests based on violation sequences.
 - **Expected shortfall backtesting**: The package [`esback`](https://cran.r-project.org/web/packages/esback/index.html) contains a suite of easy to use and theoretically backed backtests for the expected shortfall.
