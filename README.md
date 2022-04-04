@@ -12,7 +12,7 @@ coverage](https://codecov.io/gh/EmanuelSommer/portvine/branch/master/graph/badge
 <!-- badges: end -->
 
 Portfolio level unconditional as well as conditional risk measure
-estimation for backtesting using vine copula and ARMA-GARCH models.
+estimation for backtesting using Vine Copula and ARMA-GARCH models.
 
 ## Installation
 

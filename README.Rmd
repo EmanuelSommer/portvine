@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 <!-- badges: end -->
 
-Portfolio level unconditional as well as conditional risk measure estimation for backtesting using vine copula and ARMA-GARCH models.
+Portfolio level unconditional as well as conditional risk measure estimation for backtesting using Vine Copula and ARMA-GARCH models.
 
 
 
