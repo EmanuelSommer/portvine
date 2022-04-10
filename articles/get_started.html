@@ -260,7 +260,7 @@
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.405 minutes</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.4231 minutes</span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span>
 <span class="co">#&gt; An object of class &lt;portvine_roll&gt;</span>
@@ -283,7 +283,7 @@
 <span class="co">#&gt; Number of estimated risk measures: 1000 </span>
 <span class="co">#&gt; Number of samples for each risk estimation: 1000 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.405 minutes.</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.4231 minutes.</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-conditional-case-2">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case-2"></a>
@@ -311,7 +311,7 @@
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.615 minutes</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.6417 minutes</span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cond_risk_roll</span><span class="op">)</span>
 <span class="co">#&gt; An object of class &lt;cond_portvine_roll&gt;</span>
@@ -339,7 +339,7 @@
 <span class="co">#&gt; Number of estimated risk measures: 1000 </span>
 <span class="co">#&gt; Number of samples for each risk estimation: 1000 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.615 minutes.</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.6417 minutes.</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -489,15 +489,10 @@
 <p>Next up one can have a look at the fitted vine copulas. For this again a utility function is available in the <code>portvine</code> package. The function <code><a href="../reference/fitted_vines.html">fitted_vines()</a></code> extracts all fitted vines in a list, one vine copula object for each vine window.</p>
 <div class="sourceCode" id="cb22"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">uncond_fitted_vines</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fitted_vines.html">fitted_vines</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span>
-<span class="co"># visualize the first tree of the R-vine fitted in the third vine window</span>
-<span class="fu">rvinecopulib</span><span class="fu">:::</span><span class="fu"><a href="https://rdrr.io/pkg/rvinecopulib/man/plot.vinecop_dist.html" class="external-link">plot.vinecop</a></span><span class="op">(</span>
-  <span class="va">uncond_fitted_vines</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>, 
-  tree <span class="op">=</span> <span class="fl">1</span>,
-  var_names <span class="op">=</span> <span class="st">"use"</span>,
-  edge_labels <span class="op">=</span> <span class="st">"family_tau"</span>
-<span class="op">)</span></code></pre></div>
-<p><img src="get_started_files/figure-html/unnamed-chunk-21-1.png" width="672"></p>
-<p>As the list elements are <code><a href="https://rdrr.io/pkg/rvinecopulib/man/vinecop.html" class="external-link">rvinecopulib::vinecop</a></code> objects one can further analyse them with tools from the great <a href="https://vinecopulib.github.io/rvinecopulib/" class="external-link"><code>rvinecopulib</code></a> package.</p>
+<span class="va">uncond_fitted_vines</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>
+<span class="co">#&gt; 3-dimensional vine copula fit ('vinecop')</span>
+<span class="co">#&gt; nobs = 100   logLik = 52.15   npars = 3   AIC = -98.29   BIC = -90.48</span></code></pre></div>
+<p>As the list elements are <code><a href="https://rdrr.io/pkg/rvinecopulib/man/vinecop.html" class="external-link">rvinecopulib::vinecop</a></code> objects one can further analyse them with tools from the great <a href="https://vinecopulib.github.io/rvinecopulib/" class="external-link"><code>rvinecopulib</code></a> package e.g. plot the objects to exploit the graphical representation, which aids interpretability.</p>
 </div>
 <div class="section level2">
 <h2 id="analyze-the-risk-measure-estimates">Analyze the risk measure estimates<a class="anchor" aria-label="anchor" href="#analyze-the-risk-measure-estimates"></a>
