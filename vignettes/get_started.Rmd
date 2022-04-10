@@ -355,16 +355,10 @@ Next up one can have a look at the fitted vine copulas. For this again a utility
 
 ```{r}
 uncond_fitted_vines <- fitted_vines(uncond_risk_roll)
-# visualize the first tree of the R-vine fitted in the third vine window
-rvinecopulib:::plot.vinecop(
-  uncond_fitted_vines[[3]], 
-  tree = 1,
-  var_names = "use",
-  edge_labels = "family_tau"
-)
+uncond_fitted_vines[[3]]
 ```
 
-As the list elements are `rvinecopulib::vinecop` objects one can further analyse them with tools from the great [`rvinecopulib`](https://vinecopulib.github.io/rvinecopulib/) package.
+As the list elements are `rvinecopulib::vinecop` objects one can further analyse them with tools from the great [`rvinecopulib`](https://vinecopulib.github.io/rvinecopulib/) package e.g. plot the objects to exploit the graphical representation, which aids interpretability.
 
 ## Analyze the risk measure estimates
 
