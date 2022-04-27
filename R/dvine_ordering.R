@@ -34,8 +34,17 @@ dvine_ordering <- function(
   if (length(cond_vars) > 2) {
     stop("Conditioning on more than 2 variables is not yet implemented.")
   }
-  # transform the copula data to the normalized scale
-  vine_train_data <- vine_train_data  %>%
+
+  # transform the copula data to the normalized scale as suggested in Section
+  # 1.4 of Dependence Modeling with Copulas by Harry Joe
+  vine_train_data <- vine_train_data %>%
+    mutate(
+      across(
+        everything(),
+        function(x) (rank(x, ties.method = "first") - .5) /
+          nrow(vine_train_data)
+      )
+    ) %>%
     mutate(across(everything(), qnorm))
 
   # pairwise pearson correlation coefficient

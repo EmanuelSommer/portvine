@@ -1,6 +1,6 @@
 Package: portvine
 Title: Portfolio level (un)conditional risk measure estimation for backtesting using vine copula and ARMA-GARCH models
-Version: 1.0.0
+Version: 1.0.1
 Authors@R: 
     person('Emanuel', 'Sommer', email = 'emanuel_sommer@gmx.de',
     role = c('cre', 'aut'))
