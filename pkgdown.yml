@@ -1,11 +1,11 @@
 pandoc: 2.7.3
-pkgdown: 2.0.2
+pkgdown: 2.0.3
 pkgdown_sha: ~
 articles:
   parallel: parallel.html
   get_started: get_started.html
   theory: theory.html
-last_built: 2022-04-10T13:43Z
+last_built: 2022-04-27T19:54Z
 urls:
   reference: https://emanuelsommer.github.io/portvine/reference
   article: https://emanuelsommer.github.io/portvine/articles
