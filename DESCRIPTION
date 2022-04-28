@@ -18,7 +18,6 @@ Imports:
     data.table,
     dplyr,
     dtplyr,
-    future,
     future.apply,
     methods,
     Rcpp (>= 0.12.12),
@@ -29,6 +28,7 @@ Imports:
     ppcor
 Suggests: 
     rmarkdown,
+    future,
     knitr,
     testthat (>= 3.0.0),
     ggplot2,

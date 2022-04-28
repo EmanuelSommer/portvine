@@ -156,10 +156,6 @@ uncond_risk_roll <- estimate_risk_roll(
 # future::plan("sequential")
 ```
 
-```{r, echo=FALSE, include=FALSE}
-# just in order to get rid of the CMD-Check note :) does not do anything
-future::plan("sequential")
-```
 
 
 Having estimated the risk measures one can get a short and more detailed summary of the process by printing the object and calling the summary method.
