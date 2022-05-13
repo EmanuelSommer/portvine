@@ -5,8 +5,15 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="Portfolio level risk estimates (like the Value at Risk or the Expected Shortfall) are estimated by modeling each asset univariately by an ARMA-GARCH model and then their dependence via a vine copula model in a rolling window fashion. One can even condition on variables/time series at certain quantile levels to stresstest the risk estimates.">
-<title>Portfolio level (un)conditional risk measure estimation for backtesting using vine copula and ARMA-GARCH models • portvine</title>
+<meta name="description" content="Following Sommer (2022) &lt;https://mediatum.ub.tum.de/1658240&gt;
+    portfolio level risk estimates (e.g. Value at Risk, Expected
+    Shortfall) are estimated by modeling each asset univariately by an
+    ARMA-GARCH model and then their cross dependence via a vine copula
+    model in a rolling window fashion. One can even condition on
+    variables/time series at certain quantile levels to stresstest the
+    risk measure estimates.">
+<title>Portfolio Level Unconditional and Conditional Risk Measure Estimation
+    for Backtesting and Stress Testing using Vine Copula and ARMA-GARCH Models • portvine</title>
 <!-- favicons --><link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="apple-touch-icon" type="image/png" sizes="180x180" href="apple-touch-icon.png">
@@ -17,8 +24,15 @@
 <link href="deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
-<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Portfolio level (un)conditional risk measure estimation for backtesting using vine copula and ARMA-GARCH models">
-<meta property="og:description" content="Portfolio level risk estimates (like the Value at Risk or the Expected Shortfall) are estimated by modeling each asset univariately by an ARMA-GARCH model and then their dependence via a vine copula model in a rolling window fashion. One can even condition on variables/time series at certain quantile levels to stresstest the risk estimates.">
+<!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Portfolio Level Unconditional and Conditional Risk Measure Estimation
+    for Backtesting and Stress Testing using Vine Copula and ARMA-GARCH Models">
+<meta property="og:description" content="Following Sommer (2022) &lt;https://mediatum.ub.tum.de/1658240&gt;
+    portfolio level risk estimates (e.g. Value at Risk, Expected
+    Shortfall) are estimated by modeling each asset univariately by an
+    ARMA-GARCH model and then their cross dependence via a vine copula
+    model in a rolling window fashion. One can even condition on
+    variables/time series at certain quantile levels to stresstest the
+    risk measure estimates.">
 <meta property="og:image" content="https://emanuelsommer.github.io/portvine/logo.png">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -82,11 +96,11 @@
 </h1>
 </div>
 <!-- badges: start -->
-<p>Portfolio level unconditional as well as conditional risk measure estimation for backtesting using Vine Copula and ARMA-GARCH models.</p>
+<p>Portfolio level unconditional as well as conditional risk measure estimation for backtesting and stress testing using Vine Copula and ARMA-GARCH models. The package implements the proposed approaches in <a href="https://mediatum.ub.tum.de/1658240" class="external-link">Sommer (2022)</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install the development version of portvine from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
+<p>You can install the development version of <code>portvine</code> from <a href="https://github.com/" class="external-link">GitHub</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co"># install.packages("devtools")</span>
 <span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"EmanuelSommer/portvine"</span><span class="op">)</span></code></pre></div>
@@ -94,12 +108,12 @@
 <div class="section level2">
 <h2 id="what-it-does-and-why">What it does and why<a class="anchor" aria-label="anchor" href="#what-it-does-and-why"></a>
 </h2>
-<p>The implemented algorithms for the unconditional as well as conditional portfolio level risk measure estimation are based on my masters thesis at the chair of Mathematical Statistics at the TUM which I will link to here as soon as it is going to be published. The general idea of the unconditional risk measure estimation approach is summarized in the flowchart below for a <em>d</em>-dimensional portfolio.</p>
+<p>The implemented algorithms for the unconditional as well as conditional portfolio level risk measure estimation are based on my masters thesis at the chair of Mathematical Statistics at the TUM which you can find <a href="https://mediatum.ub.tum.de/1658240" class="external-link">here</a>. The general idea of the unconditional risk measure estimation approach is summarized in the flowchart below for a <img src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;d" title="d" alt="d">-dimensional portfolio.</p>
 <p><br><img src="reference/figures/overall_estimation_approach.png" align="center" width="100%"><br><br></p>
-<p>For the single conditional approach the general idea for a <em>d</em>-dimensional portfolio and a market index <em>I</em> is summarized in the flowchart below.</p>
+<p>For the single conditional approach the general idea for a <img src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;d" title="d" alt="d">-dimensional portfolio and a market index <img src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;I" title="I" alt="I"> is summarized in the flowchart below.</p>
 <p><br><img src="reference/figures/overall_estimation_approach_cond.png" align="center" width="100%"><br><br></p>
 <p>If you want to get your hands dirty fast the <strong>Get Started vignette</strong> is a perfect fit for you as it showcases a minimal case study with a lot of code examples and some handy visualization functions that were not incorporated into the package as they are highly opinionated.</p>
-<p>In order to really grasp what is going on under the hood a look at the <strong>Theory vignette</strong> is advised before starting to use the package. There the most important algorithms used during the risk measure estimation are explained. If this doesn’t saturate your hunger for the theory behind the package you should take a look at my masters thesis (when it is published of course).</p>
+<p>In order to grasp what is going on under the hood a look at the <strong>Under the hood vignette</strong> is advised before starting to use the package. There the most important algorithms used during the risk measure estimation are explained. If this doesn’t saturate your hunger for the theory behind the package you should take a look at <a href="https://mediatum.ub.tum.de/1658240" class="external-link">Sommer (2022)</a>.</p>
 <p>Moreover the help pages are quite detailed so feel free to have a look at them.</p>
 </div>
 <div class="section level2">
@@ -110,7 +124,7 @@
 <div class="section level2">
 <h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
 </h2>
-<p>This package is built on the shoulder of giants most importantly the R packages <a href="https://cran.r-project.org/web/packages/rvinecopulib/index.html" class="external-link"><code>rvinecopulib</code></a> and <a href="https://cran.r-project.org/web/packages/rugarch/index.html" class="external-link"><code>rugarch</code></a>. Thus a big thanks goes to all the contributors and maintainers! Also I would like to thank my supervisors Prof. Claudia Czado and M.Sc. Karoline Bax for giving me the opportunity to work on this project and their very dedicated supervision!</p>
+<p>This package is built on the shoulder of giants most importantly the R packages <a href="https://CRAN.R-project.org/package=rvinecopulib" class="external-link"><code>rvinecopulib</code></a> and <a href="https://CRAN.R-project.org/package=rugarch" class="external-link"><code>rugarch</code></a>. Thus a big thanks goes to all the contributors and maintainers! Also I would like to thank my supervisors Prof. Claudia Czado and M.Sc. Karoline Bax for giving me the opportunity to work on this project and their very dedicated supervision!</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
@@ -148,8 +162,8 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://github.com/EmanuelSommer/portvine/actions" class="external-link"><img src="https://github.com/EmanuelSommer/portvine/workflows/R-CMD-check/badge.svg" alt="R-CMD-check"></a></li>
-<li><a href="https://codecov.io/gh/EmanuelSommer/portvine" class="external-link"><img src="https://codecov.io/gh/EmanuelSommer/portvine/branch/master/graph/badge.svg?token=DNJHHI4MXP" alt="Codecov test coverage"></a></li>
-<li><a href="https://www.tidyverse.org/lifecycle/#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="lifecycle"></a></li>
+<li><a href="https://app.codecov.io/gh/EmanuelSommer/portvine" class="external-link"><img src="https://codecov.io/gh/EmanuelSommer/portvine/branch/master/graph/badge.svg?token=DNJHHI4MXP" alt="Codecov test coverage"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="lifecycle"></a></li>
 </ul>
 </div>
 

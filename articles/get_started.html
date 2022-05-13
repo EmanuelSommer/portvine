@@ -96,7 +96,7 @@
 <strong>Opinionated visualization functions</strong> not included in the package</li>
 <li>Some notes on <strong>backtesting</strong> the estimated risk measures</li>
 </ul>
-<p>What you do not find here is a theoretical description of the algorithms. For this purpose there is the <strong>Theoretical vignette</strong> and actually it is probably most often the better idea to start off with the theoretical one.</p>
+<p>What you do not find here is a theoretical description of the algorithms. For this purpose there is the <strong>Under the hood vignette</strong> and actually it is probably most often the better idea to start off with the theoretical one.</p>
 <div class="section level2">
 <h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
@@ -228,7 +228,7 @@
 <div class="section level3">
 <h3 id="the-unconditional-case-2">The unconditional case<a class="anchor" aria-label="anchor" href="#the-unconditional-case-2"></a>
 </h3>
-<p>Here an equally weighted portfolio of the three stocks is assumed thus one can leave the default <code>NULL</code>value for the <code>weights</code> argument. The trace argument set to <code>TRUE</code> will trigger the printing of some basic information during training. This workhorse function of the package is very well suited for parallel and even nested parallel processing. For details have a look at the help page and consult the README for some performance measurements. Down below one can facilitate basic parallel processing by just using the commented code.</p>
+<p>Here an equally weighted portfolio of the three stocks is assumed thus one can leave the default <code>NULL</code>value for the <code>weights</code> argument. The trace argument set to <code>TRUE</code> will trigger the printing of some basic information during training. This workhorse function of the package is very well suited for parallel and even nested parallel processing. For details have a look at the help page and consult the article covering the parallel processing on the package website for some performance measurements. Down below one can facilitate basic parallel processing by just using the commented code.</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## specify parallel strategy</span>
 <span class="co"># future::plan("multisession", workers = 4)</span>
@@ -260,7 +260,7 @@
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.5186 minutes</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.5543 minutes</span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span>
 <span class="co">#&gt; An object of class &lt;portvine_roll&gt;</span>
@@ -283,7 +283,7 @@
 <span class="co">#&gt; Number of estimated risk measures: 1000 </span>
 <span class="co">#&gt; Number of samples for each risk estimation: 1000 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.5186 minutes.</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.5543 minutes.</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-conditional-case-2">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case-2"></a>
@@ -311,7 +311,7 @@
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.7878 minutes</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.8379 minutes</span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cond_risk_roll</span><span class="op">)</span>
 <span class="co">#&gt; An object of class &lt;cond_portvine_roll&gt;</span>
@@ -339,7 +339,7 @@
 <span class="co">#&gt; Number of estimated risk measures: 1000 </span>
 <span class="co">#&gt; Number of samples for each risk estimation: 1000 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.7878 minutes.</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.8379 minutes.</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -492,7 +492,7 @@
 <span class="va">uncond_fitted_vines</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>
 <span class="co">#&gt; 3-dimensional vine copula fit ('vinecop')</span>
 <span class="co">#&gt; nobs = 100   logLik = 52.15   npars = 3   AIC = -98.29   BIC = -90.48</span></code></pre></div>
-<p>As the list elements are <code><a href="https://rdrr.io/pkg/rvinecopulib/man/vinecop.html" class="external-link">rvinecopulib::vinecop</a></code> objects one can further analyse them with tools from the great <a href="https://vinecopulib.github.io/rvinecopulib/" class="external-link"><code>rvinecopulib</code></a> package e.g. plot the objects to exploit the graphical representation, which aids interpretability.</p>
+<p>As the list elements are <code><a href="https://rdrr.io/pkg/rvinecopulib/man/vinecop.html" class="external-link">rvinecopulib::vinecop</a></code> objects one can further analyze them with tools from the great <a href="https://vinecopulib.github.io/rvinecopulib/" class="external-link"><code>rvinecopulib</code></a> package e.g. plot the objects to exploit the graphical representation, which aids interpretability.</p>
 </div>
 <div class="section level2">
 <h2 id="analyze-the-risk-measure-estimates">Analyze the risk measure estimates<a class="anchor" aria-label="anchor" href="#analyze-the-risk-measure-estimates"></a>
@@ -641,7 +641,7 @@
                      <span class="st">"."</span><span class="op">)</span><span class="op">)</span></code></pre></div>
 <p><img src="get_started_files/figure-html/unnamed-chunk-26-1.png" width="672"></p>
 <p>This is of course just the tip of the iceberg and countless other visualizations are possible at that point. Especially for multiple conditional quantile levels in a stress testing scenario. An especially promising comparison is the one comparing multiple levels of quantile based risk measure estimates with the respective unconditional one. This allows to assess how well the unconditional approach accounts for the market risk on the portfolio associated with fluctuations of the conditional asset(s).</p>
-<p>The interpretation is left out for these exemplary workflows. Detailed case studies can again be found in my thesis.</p>
+<p>The interpretation is left out for these exemplary workflows. Detailed case studies can again be found in <a href="https://mediatum.ub.tum.de/1658240" class="external-link">Sommer (2022)</a>.</p>
 </div>
 <div class="section level2">
 <h2 id="backtesting-the-estimated-risk-measures">Backtesting the estimated risk measures<a class="anchor" aria-label="anchor" href="#backtesting-the-estimated-risk-measures"></a>
@@ -649,9 +649,9 @@
 <p>The risk measure estimation performed is in many cases performed with the goal of backtesting in mind. This can be easily achieved given the objects returned by the <code><a href="../reference/estimate_risk_roll.html">estimate_risk_roll()</a></code> function. As there are already excellent resources for performing these here are some suggestions for implementations that can be applied in this portfolio level setting:</p>
 <ul>
 <li>
-<strong>Value at Risk backtesting</strong>: The package <a href="https://cran.r-project.org/web/packages/rugarch/index.html" class="external-link"><code>rugarch</code></a> contains the straightforward to use function <code><a href="https://rdrr.io/pkg/rugarch/man/VaRTest.html" class="external-link">rugarch::VaRTest()</a></code>. It features classical backtests based on violation sequences.</li>
+<strong>Value at Risk backtesting</strong>: The package <a href="https://CRAN.R-project.org/package=rugarch" class="external-link"><code>rugarch</code></a> contains the straightforward to use function <code><a href="https://rdrr.io/pkg/rugarch/man/VaRTest.html" class="external-link">rugarch::VaRTest()</a></code>. It features classical backtests based on violation sequences.</li>
 <li>
-<strong>Expected shortfall backtesting</strong>: The package <a href="https://cran.r-project.org/web/packages/esback/index.html" class="external-link"><code>esback</code></a> contains a suite of easy to use and theoretically backed backtests for the expected shortfall.</li>
+<strong>Expected shortfall backtesting</strong>: The package <a href="https://CRAN.R-project.org/package=esback" class="external-link"><code>esback</code></a> contains a suite of easy to use and theoretically backed backtests for the expected shortfall.</li>
 </ul>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
