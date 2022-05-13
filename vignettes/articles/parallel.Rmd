@@ -57,7 +57,7 @@ As the conditional approach performs almost identical for a single or two condit
 <br>
 <br>
 
-As annotated on the plot the observation for the maximal strategy 10/25 and samplesize  of  100000  corresponds  to  the  estimation  of  only  1  conditional  quantile  as  2  conditional  quantiles would come with the extensive memory requirements of >100Gb.  From this fact one directly expects this estimation  to  be  roughly  33%  faster.   But  even  after  adjusting  for  this  expected  33%  faster  result  one observes a drop of another 44% in runtime for this particular parallel strategy. 
+As annotated on the plot the observation for the maximal strategy 10/25 and sample size  of  100000  corresponds  to  the  estimation  of  only  1  conditional  quantile  as  2  conditional  quantiles would come with the extensive memory requirements of >100Gb.  From this fact one directly expects this estimation  to  be  roughly  33%  faster.   But  even  after  adjusting  for  this  expected  33%  faster  result  one observes a drop of another 44% in runtime for this particular parallel strategy. 
 
 <br>
 <img src='cond_perf_influence_vars.png' align="center" width="80%" />

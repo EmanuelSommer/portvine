@@ -7,16 +7,18 @@
 
 [![R-CMD-check](https://github.com/EmanuelSommer/portvine/workflows/R-CMD-check/badge.svg)](https://github.com/EmanuelSommer/portvine/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/EmanuelSommer/portvine/branch/master/graph/badge.svg?token=DNJHHI4MXP)](https://codecov.io/gh/EmanuelSommer/portvine)
-[![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
+coverage](https://codecov.io/gh/EmanuelSommer/portvine/branch/master/graph/badge.svg?token=DNJHHI4MXP)](https://app.codecov.io/gh/EmanuelSommer/portvine)
+[![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 Portfolio level unconditional as well as conditional risk measure
-estimation for backtesting using Vine Copula and ARMA-GARCH models.
+estimation for backtesting and stress testing using Vine Copula and
+ARMA-GARCH models. The package implements the proposed approaches in
+[Sommer (2022)](https://mediatum.ub.tum.de/1658240).
 
 ## Installation
 
-You can install the development version of portvine from
+You can install the development version of `portvine` from
 [GitHub](https://github.com/) with:
 
 ``` r
@@ -28,18 +30,22 @@ devtools::install_github("EmanuelSommer/portvine")
 
 The implemented algorithms for the unconditional as well as conditional
 portfolio level risk measure estimation are based on my masters thesis
-at the chair of Mathematical Statistics at the TUM which I will link to
-here as soon as it is going to be published. The general idea of the
+at the chair of Mathematical Statistics at the TUM which you can find
+[here](https://mediatum.ub.tum.de/1658240). The general idea of the
 unconditional risk measure estimation approach is summarized in the
-flowchart below for a *d*-dimensional portfolio.
+flowchart below for a
+![d](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;d "d")-dimensional
+portfolio.
 
 <br>
 <img src='man/figures/overall_estimation_approach.png' align="center" width="100%" />
 <br> <br>
 
 For the single conditional approach the general idea for a
-*d*-dimensional portfolio and a market index *I* is summarized in the
-flowchart below.
+![d](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;d "d")-dimensional
+portfolio and a market index
+![I](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;I "I")
+is summarized in the flowchart below.
 
 <br>
 <img src='man/figures/overall_estimation_approach_cond.png' align="center" width="100%" />
@@ -50,12 +56,12 @@ a perfect fit for you as it showcases a minimal case study with a lot of
 code examples and some handy visualization functions that were not
 incorporated into the package as they are highly opinionated.
 
-In order to really grasp what is going on under the hood a look at the
-**Theory vignette** is advised before starting to use the package. There
+In order to grasp what is going on under the hood a look at the **Under
+the hood vignette** is advised before starting to use the package. There
 the most important algorithms used during the risk measure estimation
 are explained. If this doesn’t saturate your hunger for the theory
-behind the package you should take a look at my masters thesis (when it
-is published of course).
+behind the package you should take a look at [Sommer
+(2022)](https://mediatum.ub.tum.de/1658240).
 
 Moreover the help pages are quite detailed so feel free to have a look
 at them.
@@ -77,10 +83,9 @@ package website.
 
 This package is built on the shoulder of giants most importantly the R
 packages
-[`rvinecopulib`](https://cran.r-project.org/web/packages/rvinecopulib/index.html)
-and
-[`rugarch`](https://cran.r-project.org/web/packages/rugarch/index.html).
-Thus a big thanks goes to all the contributors and maintainers! Also I
-would like to thank my supervisors Prof. Claudia Czado and M.Sc.
-Karoline Bax for giving me the opportunity to work on this project and
-their very dedicated supervision!
+[`rvinecopulib`](https://CRAN.R-project.org/package=rvinecopulib) and
+[`rugarch`](https://CRAN.R-project.org/package=rugarch). Thus a big
+thanks goes to all the contributors and maintainers! Also I would like
+to thank my supervisors Prof. Claudia Czado and M.Sc. Karoline Bax for
+giving me the opportunity to work on this project and their very
+dedicated supervision!

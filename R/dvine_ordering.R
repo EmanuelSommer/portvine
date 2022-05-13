@@ -21,10 +21,9 @@
 #' @importFrom stats cor
 #' @importFrom stats qnorm
 #' @noRd
-dvine_ordering <- function(
-  vine_train_data,
-  cond_vars,
-  cutoff_depth = Inf) {
+dvine_ordering <- function(vine_train_data,
+                           cond_vars,
+                           cutoff_depth = Inf) {
   checkmate::assert_data_frame(vine_train_data,
     types = "numeric",
     any.missing = FALSE, min.cols = 3,
@@ -41,8 +40,10 @@ dvine_ordering <- function(
     mutate(
       across(
         everything(),
-        function(x) (rank(x, ties.method = "first") - .5) /
-          nrow(vine_train_data)
+        function(x) {
+          (rank(x, ties.method = "first") - .5) /
+            nrow(vine_train_data)
+        }
       )
     ) %>%
     mutate(across(everything(), qnorm))
@@ -66,12 +67,13 @@ dvine_ordering <- function(
   if (length(cond_vars) == 0) {
     # unconditional case
     ordered_vec <- pairwise_pearson[["ind2"]][which.max(
-      pairwise_pearson$pcoef)]
-    free_indices  <- seq(ncol(vine_train_data))[-ordered_vec]
+      pairwise_pearson$pcoef
+    )]
+    free_indices <- seq(ncol(vine_train_data))[-ordered_vec]
   } else if (length(cond_vars) == 1) {
     # one conditional variable
     ordered_vec <- which(colnames(vine_train_data) == cond_vars)
-    free_indices  <- seq(ncol(vine_train_data))[-ordered_vec]
+    free_indices <- seq(ncol(vine_train_data))[-ordered_vec]
   } else if (length(cond_vars) == 2) {
     # two conditional variables
     cond_positions <- c(
@@ -80,9 +82,9 @@ dvine_ordering <- function(
     )
     filtered_df <- pairwise_pearson %>%
       filter((.data$ind1 %in% cond_positions &
-                !.data$ind2 %in% cond_positions) |
-               (.data$ind2 %in% cond_positions &
-                  !.data$ind1 %in% cond_positions))
+        !.data$ind2 %in% cond_positions) |
+        (.data$ind2 %in% cond_positions &
+          !.data$ind1 %in% cond_positions))
     max_ind <- which.max(filtered_df$pcoef)
     ordered_vec <- ifelse(
       filtered_df$ind1[max_ind] %in% cond_positions,
@@ -91,19 +93,23 @@ dvine_ordering <- function(
     )
     ordered_vec <- c(
       ifelse(ordered_vec == cond_positions[1],
-             cond_positions[2],
-             cond_positions[1]),
+        cond_positions[2],
+        cond_positions[1]
+      ),
       ordered_vec
     )
     ordered_vec <- c(
       ordered_vec,
       ifelse(filtered_df$ind1[max_ind] %in% cond_positions,
-             filtered_df$ind2[max_ind],
-             filtered_df$ind1[max_ind])
+        filtered_df$ind2[max_ind],
+        filtered_df$ind1[max_ind]
+      )
     )
-    free_indices  <- seq(ncol(vine_train_data))[-ordered_vec]
+    free_indices <- seq(ncol(vine_train_data))[-ordered_vec]
     # possible early exit
-    if (length(free_indices) == 0) return(ordered_vec)
+    if (length(free_indices) == 0) {
+      return(ordered_vec)
+    }
   }
   while (length(free_indices) > 1) {
     argmax_index <- NULL
@@ -113,9 +119,13 @@ dvine_ordering <- function(
       for (depth in seq(min(cutoff_depth, length(ordered_vec)))) {
         # compute the necessary (partial) pearson correlation
         temp_dependence <- ppcor::pcor(
-          vine_train_data[, c(free_index,
-                              ordered_vec[seq(length(ordered_vec) + 1 - depth,
-                                              length(ordered_vec))])]
+          vine_train_data[, c(
+            free_index,
+            ordered_vec[seq(
+              length(ordered_vec) + 1 - depth,
+              length(ordered_vec)
+            )]
+          )]
         )$estimate[1, 2]
         index_dependence <- index_dependence + abs(temp_dependence)
       }

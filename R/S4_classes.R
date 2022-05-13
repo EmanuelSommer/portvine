@@ -483,8 +483,11 @@ setMethod("risk_estimates",
         .data$alpha %in% (!!alpha)
       ) %>%
       {
-        if (exceeded) {mutate(., exceeded = .data$realized < .data$risk_est)}
-        else {.}
+        if (exceeded) {
+          mutate(., exceeded = .data$realized < .data$risk_est)
+        } else {
+          .
+        }
       } %>%
       {
         if (df) as.data.frame(.) else data.table::as.data.table(.)
@@ -541,8 +544,11 @@ setMethod("risk_estimates",
         if (cond) filter(., .data$cond_u %in% (!!cond_u)) else .
       } %>%
       {
-        if (exceeded) {mutate(., exceeded = .data$realized < .data$risk_est)}
-        else {.}
+        if (exceeded) {
+          mutate(., exceeded = .data$realized < .data$risk_est)
+        } else {
+          .
+        }
       } %>%
       {
         if (df) as.data.frame(.) else data.table::as.data.table(.)

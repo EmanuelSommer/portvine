@@ -51,7 +51,8 @@ estimate_marginal_models <- function(data,
     empty.ok = FALSE
   )
   checkmate::assert_subset(all_asset_names, unique(data$asset),
-                           empty.ok = FALSE)
+    empty.ok = FALSE
+  )
   checkmate::assert_list(marginal_specs_list,
     types = "uGARCHspec",
     len = length(all_asset_names), any.missing = FALSE,

@@ -236,11 +236,13 @@ fitted_marginals(risk_roll_cond)
 
 # and of course most importantly the risk measure estimates
 risk_estimates(
-  risk_roll, risk_measures = "ES_mean",
+  risk_roll,
+  risk_measures = "ES_mean",
   alpha = 0.05, exceeded = TRUE
 )
 risk_estimates(
-  risk_roll_cond, risk_measures = "ES_mean",
+  risk_roll_cond,
+  risk_measures = "ES_mean",
   alpha = 0.05, exceeded = TRUE,
   cond_u = c("prior_resid", 0.5)
 )

@@ -227,7 +227,8 @@ estimate_dependence_and_risk <- function(combined_residuals_dt,
                 trans_vals[["sigma"]][trans_vals[["asset"]] == .data$asset] *
                   rugarch::qdist(
                     distribution = trans_vals[["marg_dist"]][
-                      trans_vals[["asset"]] == .data$asset],
+                      trans_vals[["asset"]] == .data$asset
+                    ],
                     p = sample,
                     skew = trans_vals[["skew"]][trans_vals[["asset"]] ==
                       .data$asset]
