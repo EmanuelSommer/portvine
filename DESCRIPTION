@@ -1,18 +1,22 @@
 Package: portvine
-Title: Portfolio level (un)conditional risk measure estimation for backtesting using vine copula and ARMA-GARCH models
+Title: Portfolio Level Unconditional and Conditional Risk Measure Estimation
+    for Backtesting and Stress Testing using Vine Copula and ARMA-GARCH Models
 Version: 1.0.1
 Authors@R: 
-    person('Emanuel', 'Sommer', email = 'emanuel_sommer@gmx.de',
-    role = c('cre', 'aut'))
-Description: Portfolio level risk estimates (like the Value at Risk or the Expected Shortfall) are estimated by modeling each asset univariately by an ARMA-GARCH model and then their dependence via a vine copula model in a rolling window fashion. One can even condition on variables/time series at certain quantile levels to stresstest the risk estimates.
+    person("Emanuel", "Sommer", , "emanuel_sommer@gmx.de", role = c("cre", "aut"))
+Description: Following Sommer (2022) <https://mediatum.ub.tum.de/1658240>
+    portfolio level risk estimates (e.g. Value at Risk, Expected
+    Shortfall) are estimated by modeling each asset univariately by an
+    ARMA-GARCH model and then their cross dependence via a vine copula
+    model in a rolling window fashion. One can even condition on
+    variables/time series at certain quantile levels to stress test the
+    risk measure estimates.
 License: MIT + file LICENSE
-Encoding: UTF-8
-NeedsCompilation: yes
-Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.1.2
 URL: https://github.com/EmanuelSommer/portvine,
     https://emanuelsommer.github.io/portvine/
 BugReports: https://github.com/EmanuelSommer/portvine/issues
+Depends: 
+    R (>= 2.10)
 Imports: 
     checkmate,
     data.table,
@@ -20,23 +24,39 @@ Imports:
     dtplyr,
     future.apply,
     methods,
+    ppcor,
     Rcpp (>= 0.12.12),
+    rlang,
     rugarch,
     rvinecopulib,
-    tidyr,
-    rlang,
-    ppcor
+    tidyr
 Suggests: 
-    rmarkdown,
-    future,
-    knitr,
-    testthat (>= 3.0.0),
-    ggplot2,
     covr,
-    patchwork,
+    future,
+    ggplot2,
     ggtext,
-    scales
+    knitr,
+    patchwork,
+    rmarkdown,
+    scales,
+    testthat (>= 3.0.0)
+LinkingTo: 
+    BH,
+    kde1d,
+    Rcpp,
+    RcppEigen,
+    RcppThread,
+    rvinecopulib,
+    wdm
+VignetteBuilder: 
+    knitr
 Config/testthat/edition: 3
+Encoding: UTF-8
+LazyData: true
+NeedsCompilation: yes
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.2
+SystemRequirements: C++11
 Collate: 
     'RcppExports.R'
     'default_garch_spec.R'
@@ -49,16 +69,3 @@ Collate:
     'estimate_marginal_models.R'
     'estimate_risk_roll.R'
     'utils.R'
-Depends: 
-    R (>= 2.10)
-LazyData: true
-VignetteBuilder: knitr
-LinkingTo: 
-    BH,
-    rvinecopulib,
-    Rcpp,
-    RcppEigen,
-    RcppThread,
-    kde1d,
-    wdm
-SystemRequirements: C++11

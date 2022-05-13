@@ -22,7 +22,7 @@ In order to get up to speed with the `portvine` package you will find in this vi
 - **Opinionated visualization functions** not included in the package
 - Some notes on **backtesting** the estimated risk measures
 
-What you do not find here is a theoretical description of the algorithms. For this purpose there is the **Theoretical vignette** and actually it is probably most often the better idea to start off with the theoretical one.
+What you do not find here is a theoretical description of the algorithms. For this purpose there is the **Under the hood vignette** and actually it is probably most often the better idea to start off with the theoretical one.
 
 ## Setup
 
@@ -137,7 +137,7 @@ The risk measures should be estimated at both popular confidence levels 1% and 2
 ### The unconditional case
 
 Here an equally weighted portfolio of the three stocks is assumed thus one can
-leave the default `NULL`value for the `weights` argument. The trace argument set to `TRUE` will trigger the printing of some basic information during training. This workhorse function of the package is very well suited for parallel and even nested parallel processing. For details have a look at the help page and consult the README for some performance measurements. Down below one can facilitate basic parallel processing by just using the commented code.
+leave the default `NULL`value for the `weights` argument. The trace argument set to `TRUE` will trigger the printing of some basic information during training. This workhorse function of the package is very well suited for parallel and even nested parallel processing. For details have a look at the help page and consult the article covering the parallel processing on the package website for some performance measurements. Down below one can facilitate basic parallel processing by just using the commented code.
 
 ```{r}
 ## specify parallel strategy
@@ -360,7 +360,7 @@ uncond_fitted_vines <- fitted_vines(uncond_risk_roll)
 uncond_fitted_vines[[3]]
 ```
 
-As the list elements are `rvinecopulib::vinecop` objects one can further analyse them with tools from the great [`rvinecopulib`](https://vinecopulib.github.io/rvinecopulib/) package e.g. plot the objects to exploit the graphical representation, which aids interpretability.
+As the list elements are `rvinecopulib::vinecop` objects one can further analyze them with tools from the great [`rvinecopulib`](https://vinecopulib.github.io/rvinecopulib/) package e.g. plot the objects to exploit the graphical representation, which aids interpretability.
 
 ## Analyze the risk measure estimates
 
@@ -488,14 +488,14 @@ risk_estimates(cond_risk_roll, alpha = 0.025, risk_measures = "ES_mean") %>%
 
 This is of course just the tip of the iceberg and countless other visualizations are possible at that point. Especially for multiple conditional quantile levels in a stress testing scenario. An especially promising comparison is the one comparing multiple levels of quantile based risk measure estimates with the respective unconditional one. This allows to assess how well the unconditional approach accounts for the market risk on the portfolio associated with fluctuations of the conditional asset(s).
 
-The interpretation is left out for these exemplary workflows. Detailed case studies can again be found in my thesis.
+The interpretation is left out for these exemplary workflows. Detailed case studies can again be found in  [Sommer (2022)](https://mediatum.ub.tum.de/1658240).
 
 ## Backtesting the estimated risk measures
 
 The risk measure estimation performed is in many cases performed with the goal of backtesting in mind. This can be easily achieved given the objects returned by the `estimate_risk_roll()` function. As there are already excellent resources for performing these here are some suggestions for implementations that can be applied in this portfolio level setting:
 
-- **Value at Risk backtesting**: The package [`rugarch`](https://cran.r-project.org/web/packages/rugarch/index.html) contains the straightforward to use function `rugarch::VaRTest()`. It features classical backtests based on violation sequences.
-- **Expected shortfall backtesting**: The package [`esback`](https://cran.r-project.org/web/packages/esback/index.html) contains a suite of easy to use and theoretically backed backtests for the expected shortfall.
+- **Value at Risk backtesting**: The package [`rugarch`](https://CRAN.R-project.org/package=rugarch) contains the straightforward to use function `rugarch::VaRTest()`. It features classical backtests based on violation sequences.
+- **Expected shortfall backtesting**: The package [`esback`](https://CRAN.R-project.org/package=esback) contains a suite of easy to use and theoretically backed backtests for the expected shortfall.
 
 
 

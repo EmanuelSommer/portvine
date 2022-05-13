@@ -24,7 +24,7 @@ Started** vignette. At the end of this vignette one can find a mapping
 table from the theoretical notation to the function arguments in the
 `portvine` package. Note that this is just a package vignette so for a 
 more rigorous and way more detailed explanation of the theory
-consult my master thesis that will be linked to here after publishing.
+consult [Sommer (2022)](https://mediatum.ub.tum.de/1658240).
 
 In order to discuss the theory some notation is needed. One has a
 portfolio $\Omega$ of $d$ assets $A_j$ with corresponding log returns

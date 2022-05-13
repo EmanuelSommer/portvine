@@ -25,7 +25,6 @@
 #' @noRd
 r1conddvine <- function(n_samples, cond_u, cond_pre_resid, fitted_vine) {
   asset_names <- fitted_vine$names
-  n_assets <- length(asset_names)
   # for each cond_alpha level get the n_samples samples
   sample_dt <- lapply(c(cond_u, cond_pre_resid), function(cond_alpha_level) {
     # call lower level cpp function for the actual sampling i.e. speed up
@@ -78,7 +77,6 @@ r1conddvine <- function(n_samples, cond_u, cond_pre_resid, fitted_vine) {
 #' @noRd
 r2conddvine <- function(n_samples, cond_u, cond_pre_resid, fitted_vine) {
   asset_names <- fitted_vine$names
-  n_assets <- length(asset_names)
   cond_asset_names <- asset_names[fitted_vine$structure$order][1:2]
 
   # for each cond_alpha level get the n_samples samples
