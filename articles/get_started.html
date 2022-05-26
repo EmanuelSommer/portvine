@@ -49,8 +49,8 @@
   <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" role="button" aria-expanded="false" aria-haspopup="true" id="dropdown-articles">Articles</a>
   <div class="dropdown-menu" aria-labelledby="dropdown-articles">
     <a class="dropdown-item" href="../articles/parallel.html">Parallel processing</a>
-    <a class="dropdown-item" href="../articles/get_started.html">Get started</a>
     <a class="dropdown-item" href="../articles/theory.html">Under the hood</a>
+    <a class="dropdown-item" href="../articles/get_started.html">Get started</a>
   </div>
 </li>
 <li class="nav-item">
@@ -96,7 +96,7 @@
 <strong>Opinionated visualization functions</strong> not included in the package</li>
 <li>Some notes on <strong>backtesting</strong> the estimated risk measures</li>
 </ul>
-<p>What you do not find here is a theoretical description of the algorithms. For this purpose there is the <strong>Under the hood vignette</strong> and actually it is probably most often the better idea to start off with the theoretical one.</p>
+<p>What you do not find here is a theoretical description of the algorithms. For this purpose there is the <strong>Under the hood article</strong> on the package website and actually it is probably most often the better idea to start off with the theoretical view.</p>
 <div class="section level2">
 <h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
@@ -260,7 +260,7 @@
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.5512 minutes</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.569 minutes</span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span>
 <span class="co">#&gt; An object of class &lt;portvine_roll&gt;</span>
@@ -283,7 +283,7 @@
 <span class="co">#&gt; Number of estimated risk measures: 1000 </span>
 <span class="co">#&gt; Number of samples for each risk estimation: 1000 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.5512 minutes.</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.569 minutes.</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-conditional-case-2">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case-2"></a>
@@ -311,7 +311,7 @@
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.8185 minutes</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.8892 minutes</span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cond_risk_roll</span><span class="op">)</span>
 <span class="co">#&gt; An object of class &lt;cond_portvine_roll&gt;</span>
@@ -339,7 +339,7 @@
 <span class="co">#&gt; Number of estimated risk measures: 1000 </span>
 <span class="co">#&gt; Number of samples for each risk estimation: 1000 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.8185 minutes.</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.8892 minutes.</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
