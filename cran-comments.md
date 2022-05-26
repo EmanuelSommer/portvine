@@ -1,8 +1,13 @@
 ## This is a resubmission
 
-It is implementing feedback from Uwe Ligges. The rather
-large tarball size was reduced by moving a figure heavy vignette to an article
-now only displayed on the package website.
+It is implementing feedback from Uwe Ligges (Thanks for that!).
+
+* The rather large tarball size was reduced by moving a figure heavy vignette
+  to an article now only displayed on the package website.
+
+* The overall check time was reduced as suggested mainly by making the examples
+  in the vignette faster and by skipping a test of an internal function on CRAN,
+  which are aimed for the local testing when implementing new features.
 
 ## R CMD check results
 

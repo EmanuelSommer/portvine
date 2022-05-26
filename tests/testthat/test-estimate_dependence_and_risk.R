@@ -25,6 +25,9 @@ test_combined_residuals_dt <- data.table::rbindlist(
 )
 
 test_that("unconditional case", {
+  # as these tests are more important for the development of new features
+  # do not run them on CRAN
+  skip_on_cran()
   # rvine
   edr_rvine <- estimate_dependence_and_risk(
     test_combined_residuals_dt,
@@ -64,6 +67,7 @@ test_that("unconditional case", {
       types = "vinecop"
     )
   )
+
   # dvine
   edr_dvine <- estimate_dependence_and_risk(
     test_combined_residuals_dt,
@@ -104,7 +108,7 @@ test_that("unconditional case", {
       types = "vinecop"
     )
   )
-  skip_on_cran()
+
   # different family_set, alphas and risk measure
   edr_dvine2 <- estimate_dependence_and_risk(
     test_combined_residuals_dt,
@@ -139,6 +143,9 @@ test_that("unconditional case", {
 })
 
 test_that("conditional case", {
+  # as these tests are more important for the development of new features
+  # do not run them on CRAN
+  skip_on_cran()
   # dvine single conditional
   dep_risk_test_result_cond1 <- estimate_dependence_and_risk(
     combined_residuals_dt = test_combined_residuals_dt,

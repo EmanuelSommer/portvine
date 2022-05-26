@@ -22,7 +22,7 @@ In order to get up to speed with the `portvine` package you will find in this vi
 - **Opinionated visualization functions** not included in the package
 - Some notes on **backtesting** the estimated risk measures
 
-What you do not find here is a theoretical description of the algorithms. For this purpose there is the **Under the hood article** on the package website and actually it is probably most often the better idea to start off with the theoretical view.
+What you do not find here is a theoretical description of the algorithms. For this purpose there is the **Under the hood article** on the package website and actually it is probably most often the better idea to start off with the theoretical view. For a very detailed theoretical view with lots of illustrations and two case studies have a look at my thesis - [Sommer (2022)](https://mediatum.ub.tum.de/1658240).
 
 ## Setup
 
@@ -60,11 +60,11 @@ head(sample_returns_small)
 dim(sample_returns_small)
 ```
 
-So as one financial year is comprised of roughly 250 days one has the data of roughly 4 years. The aim is now to estimate portfolio level risk measures for the last year i.e. the interval $[751,1000]$. First one specifies the marginal assetwise time series models.
+So as one financial year is comprised of roughly 250 days one has the data of roughly 4 years. The aim is now to estimate portfolio level risk measures for the last 40 days i.e. the interval $[960,1000]$. For a realistic scenario this would of course be a very short window. First one specifies the marginal assetwise time series models.
 
 ## Specify marginal models
 
-One would like to refit the marginal models every two months which is in trading days 50 days. The training data size is already specified by the interval of interest i.e. here one uses the whole available past of the first marginal window which has the size 750.
+In practice one would for example like to refit the marginal models every two months which is in trading days roughly 50 days, but here we will refit every 20 days. The training data size is already specified by the interval of interest i.e. here one uses the whole available past of the first marginal window which has the size 960.
 
 ### The unconditional case
 
@@ -78,8 +78,8 @@ The marginal model specifications are then collected in a `marginal_settings` ob
 
 ```{r}
 uncond_marg_settings <- marginal_settings(
-  train_size = 750,
-  refit_size = 50
+  train_size = 960,
+  refit_size = 20
 )
 ```
 
@@ -89,8 +89,8 @@ For the conditional case one will use a more individual specification. One chang
 
 ```{r}
 cond_marg_settings <- marginal_settings(
-  train_size = 750,
-  refit_size = 50,
+  train_size = 960,
+  refit_size = 20,
   individual_spec = list("AMZN" = default_garch_spec()),
   default_spec = default_garch_spec(ma = 2)
 )
@@ -100,7 +100,7 @@ The next step is to specify the settings for the vine fitting.
 
 ## Specify vine copula models
 
-Here one would like to refit the vine copula models every month so every 25 days which is allowed by the package as 50 is dividable by 25. One would like to capture the dependence on a training set of 100 trading days for each rolling window.
+Here one would like to refit the vine copula models every 10 or 20 days which is allowed by the package as 20 is dividable by 10. One would like to capture the dependence on a training set of 100 trading days for each rolling window.
 
 ### The unconditional case
 
@@ -109,7 +109,7 @@ For the unconditional case one will use the default `vine_type` which is the R-v
 ```{r}
 uncond_vine_settings <- vine_settings(
   train_size = 100,
-  refit_size = 25,
+  refit_size = 10,
   family_set = "onepar", # valid bivariate building blocks
   vine_type = "rvine"
 )
@@ -122,7 +122,7 @@ In the conditional case up to now only D-vine copulas are allowed. As copula fam
 ```{r}
 cond_vine_settings <- vine_settings(
   train_size = 100,
-  refit_size = 25,
+  refit_size = 20,
   family_set = c("gumbel", "joe", "t"),
   vine_type = "dvine"
 )
@@ -132,7 +132,7 @@ Now one is ready to perform the actual risk measure estimation.
 
 ## Estimate the risk measures
 
-The risk measures should be estimated at both popular confidence levels 1% and 2.5%. In terms of risk measures one would like to estimate the Value at Risk (VaR) and the expected shortfall (ES) with mean estimation based on here a rather small sample size of 1000.
+The risk measures should be estimated at both popular confidence levels 1% and 2.5%. In terms of risk measures one would like to estimate the Value at Risk (VaR) and the expected shortfall (ES) with mean estimation based on here a very small and not realistic sample size of 50. A realistic one would be 100000.
 
 ### The unconditional case
 
@@ -149,7 +149,7 @@ uncond_risk_roll <- estimate_risk_roll(
   vine_settings = uncond_vine_settings,
   alpha = c(0.01, 0.025),
   risk_measures = c("VaR", "ES_mean"),
-  n_samples = 1000,
+  n_samples = 50,
   trace = TRUE
 )
 ## return to default sequential settings (cut off any background processes)
@@ -183,7 +183,7 @@ cond_risk_roll <- estimate_risk_roll(
   vine_settings = cond_vine_settings,
   alpha = c(0.01, 0.025),
   risk_measures = c("VaR", "ES_mean"),
-  n_samples = 1000,
+  n_samples = 50,
   cond_vars = "AMZN",
   cond_u = 0.1
 )
@@ -440,7 +440,7 @@ risk_estimates(
   theme(legend.position = "none")
 ```
 
-In the conditional case one can first have a look at how the different conditional strategies behave. On the one side a conditioning value based on the quantile level 0.1 was forecasted (below shown in light blue) and on the other side the prior residual strategy is by default set to the one that uses the realized residuals (below shown in green, it should overlay the grey realized line). Those are only for the comparison as they conceptually are an oracle as the actual realized conditional asset returns would not be known at sampling time.  
+In the conditional case one can first have a look at how the different conditional strategies behave. On the one side a conditioning value based on the quantile level 0.1 was forecasted (below shown in light blue) and on the other side the residual strategy is by default set to the one that uses the realized residuals (below shown in green, it should almost overlay the grey realized line). Those are only for the comparison as they conceptually are an oracle as the actual realized conditional asset returns would not be known at sampling time.  
 
 ```{r}
 risk_estimates(
@@ -449,8 +449,8 @@ risk_estimates(
   alpha = 0.01) %>%
   ggplot() +
   geom_line(
-    data = sample_returns_small[751:1000, "AMZN"],
-    aes(x = 751:1000,
+    data = sample_returns_small[961:1000, "AMZN"],
+    aes(x = 961:1000,
         y = AMZN), col = "grey", size = .3) +
   geom_line(aes(x = row_num, y = AMZN, col = factor(cond_u)),
             size = 0.5) +
