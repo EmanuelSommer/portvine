@@ -22,7 +22,7 @@ In order to get up to speed with the `portvine` package you will find in this vi
 - **Opinionated visualization functions** not included in the package
 - Some notes on **backtesting** the estimated risk measures
 
-What you do not find here is a theoretical description of the algorithms. For this purpose there is the **Under the hood vignette** and actually it is probably most often the better idea to start off with the theoretical one.
+What you do not find here is a theoretical description of the algorithms. For this purpose there is the **Under the hood article** on the package website and actually it is probably most often the better idea to start off with the theoretical view.
 
 ## Setup
 

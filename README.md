@@ -9,6 +9,7 @@
 [![Codecov test
 coverage](https://codecov.io/gh/EmanuelSommer/portvine/branch/master/graph/badge.svg?token=DNJHHI4MXP)](https://app.codecov.io/gh/EmanuelSommer/portvine)
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/portvine)](https://cran.r-project.org/package=portvine)
 <!-- badges: end -->
 
 Portfolio level unconditional as well as conditional risk measure
@@ -57,11 +58,11 @@ code examples and some handy visualization functions that were not
 incorporated into the package as they are highly opinionated.
 
 In order to grasp what is going on under the hood a look at the **Under
-the hood vignette** is advised before starting to use the package. There
-the most important algorithms used during the risk measure estimation
-are explained. If this doesn’t saturate your hunger for the theory
-behind the package you should take a look at [Sommer
-(2022)](https://mediatum.ub.tum.de/1658240).
+the hood article** on the package website is advised before starting to
+use the package. There the most important algorithms used during the
+risk measure estimation are explained. If this doesn’t saturate your
+hunger for the theory behind the package you should take a look at
+[Sommer (2022)](https://mediatum.ub.tum.de/1658240).
 
 Moreover the help pages are quite detailed so feel free to have a look
 at them.
