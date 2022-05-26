@@ -96,7 +96,7 @@
 <strong>Opinionated visualization functions</strong> not included in the package</li>
 <li>Some notes on <strong>backtesting</strong> the estimated risk measures</li>
 </ul>
-<p>What you do not find here is a theoretical description of the algorithms. For this purpose there is the <strong>Under the hood article</strong> on the package website and actually it is probably most often the better idea to start off with the theoretical view.</p>
+<p>What you do not find here is a theoretical description of the algorithms. For this purpose there is the <strong>Under the hood article</strong> on the package website and actually it is probably most often the better idea to start off with the theoretical view. For a very detailed theoretical view with lots of illustrations and two case studies have a look at my thesis - <a href="https://mediatum.ub.tum.de/1658240" class="external-link">Sommer (2022)</a>.</p>
 <div class="section level2">
 <h2 id="setup">Setup<a class="anchor" aria-label="anchor" href="#setup"></a>
 </h2>
@@ -136,12 +136,12 @@
 <span class="co">#&gt; 6:  0.015416878  0.0113819042  0.018446965</span>
 <span class="fu"><a href="https://rdrr.io/r/base/dim.html" class="external-link">dim</a></span><span class="op">(</span><span class="va">sample_returns_small</span><span class="op">)</span>
 <span class="co">#&gt; [1] 1000    3</span></code></pre></div>
-<p>So as one financial year is comprised of roughly 250 days one has the data of roughly 4 years. The aim is now to estimate portfolio level risk measures for the last year i.e. the interval <span class="math inline">\([751,1000]\)</span>. First one specifies the marginal assetwise time series models.</p>
+<p>So as one financial year is comprised of roughly 250 days one has the data of roughly 4 years. The aim is now to estimate portfolio level risk measures for the last 40 days i.e. the interval <span class="math inline">\([960,1000]\)</span>. For a realistic scenario this would of course be a very short window. First one specifies the marginal assetwise time series models.</p>
 </div>
 <div class="section level2">
 <h2 id="specify-marginal-models">Specify marginal models<a class="anchor" aria-label="anchor" href="#specify-marginal-models"></a>
 </h2>
-<p>One would like to refit the marginal models every two months which is in trading days 50 days. The training data size is already specified by the interval of interest i.e. here one uses the whole available past of the first marginal window which has the size 750.</p>
+<p>In practice one would for example like to refit the marginal models every two months which is in trading days roughly 50 days, but here we will refit every 20 days. The training data size is already specified by the interval of interest i.e. here one uses the whole available past of the first marginal window which has the size 960.</p>
 <div class="section level3">
 <h3 id="the-unconditional-case">The unconditional case<a class="anchor" aria-label="anchor" href="#the-unconditional-case"></a>
 </h3>
@@ -173,8 +173,8 @@
 <p>The marginal model specifications are then collected in a <code>marginal_settings</code> object as shown below.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">uncond_marg_settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/marginal_settings-class.html">marginal_settings</a></span><span class="op">(</span>
-  train_size <span class="op">=</span> <span class="fl">750</span>,
-  refit_size <span class="op">=</span> <span class="fl">50</span>
+  train_size <span class="op">=</span> <span class="fl">960</span>,
+  refit_size <span class="op">=</span> <span class="fl">20</span>
 <span class="op">)</span></code></pre></div>
 </div>
 <div class="section level3">
@@ -183,8 +183,8 @@
 <p>For the conditional case one will use a more individual specification. One changes the default to an ARMA(1,2)-GARCH(1,1) model while sticking with the default for the Amazon stock.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cond_marg_settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/marginal_settings-class.html">marginal_settings</a></span><span class="op">(</span>
-  train_size <span class="op">=</span> <span class="fl">750</span>,
-  refit_size <span class="op">=</span> <span class="fl">50</span>,
+  train_size <span class="op">=</span> <span class="fl">960</span>,
+  refit_size <span class="op">=</span> <span class="fl">20</span>,
   individual_spec <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"AMZN"</span> <span class="op">=</span> <span class="fu"><a href="../reference/default_garch_spec.html">default_garch_spec</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span>,
   default_spec <span class="op">=</span> <span class="fu"><a href="../reference/default_garch_spec.html">default_garch_spec</a></span><span class="op">(</span>ma <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>
 <span class="op">)</span></code></pre></div>
@@ -194,7 +194,7 @@
 <div class="section level2">
 <h2 id="specify-vine-copula-models">Specify vine copula models<a class="anchor" aria-label="anchor" href="#specify-vine-copula-models"></a>
 </h2>
-<p>Here one would like to refit the vine copula models every month so every 25 days which is allowed by the package as 50 is dividable by 25. One would like to capture the dependence on a training set of 100 trading days for each rolling window.</p>
+<p>Here one would like to refit the vine copula models every 10 or 20 days which is allowed by the package as 20 is dividable by 10. One would like to capture the dependence on a training set of 100 trading days for each rolling window.</p>
 <div class="section level3">
 <h3 id="the-unconditional-case-1">The unconditional case<a class="anchor" aria-label="anchor" href="#the-unconditional-case-1"></a>
 </h3>
@@ -202,7 +202,7 @@
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">uncond_vine_settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vine_settings-class.html">vine_settings</a></span><span class="op">(</span>
   train_size <span class="op">=</span> <span class="fl">100</span>,
-  refit_size <span class="op">=</span> <span class="fl">25</span>,
+  refit_size <span class="op">=</span> <span class="fl">10</span>,
   family_set <span class="op">=</span> <span class="st">"onepar"</span>, <span class="co"># valid bivariate building blocks</span>
   vine_type <span class="op">=</span> <span class="st">"rvine"</span>
 <span class="op">)</span></code></pre></div>
@@ -214,7 +214,7 @@
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">cond_vine_settings</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/vine_settings-class.html">vine_settings</a></span><span class="op">(</span>
   train_size <span class="op">=</span> <span class="fl">100</span>,
-  refit_size <span class="op">=</span> <span class="fl">25</span>,
+  refit_size <span class="op">=</span> <span class="fl">20</span>,
   family_set <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"gumbel"</span>, <span class="st">"joe"</span>, <span class="st">"t"</span><span class="op">)</span>,
   vine_type <span class="op">=</span> <span class="st">"dvine"</span>
 <span class="op">)</span></code></pre></div>
@@ -224,7 +224,7 @@
 <div class="section level2">
 <h2 id="estimate-the-risk-measures">Estimate the risk measures<a class="anchor" aria-label="anchor" href="#estimate-the-risk-measures"></a>
 </h2>
-<p>The risk measures should be estimated at both popular confidence levels 1% and 2.5%. In terms of risk measures one would like to estimate the Value at Risk (VaR) and the expected shortfall (ES) with mean estimation based on here a rather small sample size of 1000.</p>
+<p>The risk measures should be estimated at both popular confidence levels 1% and 2.5%. In terms of risk measures one would like to estimate the Value at Risk (VaR) and the expected shortfall (ES) with mean estimation based on here a very small and not realistic sample size of 50. A realistic one would be 100000.</p>
 <div class="section level3">
 <h3 id="the-unconditional-case-2">The unconditional case<a class="anchor" aria-label="anchor" href="#the-unconditional-case-2"></a>
 </h3>
@@ -239,7 +239,7 @@
   vine_settings <span class="op">=</span> <span class="va">uncond_vine_settings</span>,
   alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.025</span><span class="op">)</span>,
   risk_measures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"VaR"</span>, <span class="st">"ES_mean"</span><span class="op">)</span>,
-  n_samples <span class="op">=</span> <span class="fl">1000</span>,
+  n_samples <span class="op">=</span> <span class="fl">50</span>,
   trace <span class="op">=</span> <span class="cn">TRUE</span>
 <span class="op">)</span>
 <span class="co">#&gt; </span>
@@ -248,42 +248,42 @@
 <span class="co">#&gt; </span>
 <span class="co">#&gt; Fit vine copula models and estimate risk.</span>
 <span class="co">#&gt; Vine windows:</span>
-<span class="co">#&gt; (1/10) (2/10) (3/10) (4/10) (5/10) (6/10) (7/10) (8/10) (9/10) (10/10)</span>
+<span class="co">#&gt; (1/4) (2/4) (3/4) (4/4)</span>
 <span class="co">## return to default sequential settings (cut off any background processes)</span>
 <span class="co"># future::plan("sequential")</span></code></pre></div>
 <p>Having estimated the risk measures one can get a short and more detailed summary of the process by printing the object and calling the summary method.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="va">uncond_risk_roll</span>
 <span class="co">#&gt; An object of class &lt;portvine_roll&gt;</span>
-<span class="co">#&gt; Number of ARMA-GARCH/ marginal windows: 5 </span>
-<span class="co">#&gt; Number of vine windows: 10 </span>
+<span class="co">#&gt; Number of ARMA-GARCH/ marginal windows: 2 </span>
+<span class="co">#&gt; Number of vine windows: 4 </span>
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.569 minutes</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.1204 minutes</span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span>
 <span class="co">#&gt; An object of class &lt;portvine_roll&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; --- Marginal models ---</span>
-<span class="co">#&gt; Number of ARMA-GARCH/ marginal windows: 5 </span>
-<span class="co">#&gt; Train size:  750 </span>
-<span class="co">#&gt; Refit size:  50 </span>
+<span class="co">#&gt; Number of ARMA-GARCH/ marginal windows: 2 </span>
+<span class="co">#&gt; Train size:  960 </span>
+<span class="co">#&gt; Refit size:  20 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; --- Vine copula models ---</span>
-<span class="co">#&gt; Number of vine windows: 10 </span>
+<span class="co">#&gt; Number of vine windows: 4 </span>
 <span class="co">#&gt; Train size:  100 </span>
-<span class="co">#&gt; Refit size:  25 </span>
+<span class="co">#&gt; Refit size:  10 </span>
 <span class="co">#&gt; Vine copula type:  rvine </span>
 <span class="co">#&gt; Vine family set:  onepar </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; --- Risk estimation ---</span>
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
-<span class="co">#&gt; Number of estimated risk measures: 1000 </span>
-<span class="co">#&gt; Number of samples for each risk estimation: 1000 </span>
+<span class="co">#&gt; Number of estimated risk measures: 160 </span>
+<span class="co">#&gt; Number of samples for each risk estimation: 50 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.569 minutes.</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.1204 minutes.</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-conditional-case-2">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case-2"></a>
@@ -297,7 +297,7 @@
   vine_settings <span class="op">=</span> <span class="va">cond_vine_settings</span>,
   alpha <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.025</span><span class="op">)</span>,
   risk_measures <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"VaR"</span>, <span class="st">"ES_mean"</span><span class="op">)</span>,
-  n_samples <span class="op">=</span> <span class="fl">1000</span>,
+  n_samples <span class="op">=</span> <span class="fl">50</span>,
   cond_vars <span class="op">=</span> <span class="st">"AMZN"</span>,
   cond_u <span class="op">=</span> <span class="fl">0.1</span>
 <span class="op">)</span></code></pre></div>
@@ -306,40 +306,40 @@
 <code class="sourceCode R"><span class="va">cond_risk_roll</span>
 <span class="co">#&gt; An object of class &lt;cond_portvine_roll&gt;</span>
 <span class="co">#&gt; Conditional variable(s): AMZN </span>
-<span class="co">#&gt; Number of ARMA-GARCH/ marginal windows: 5 </span>
-<span class="co">#&gt; Number of vine windows: 10 </span>
+<span class="co">#&gt; Number of ARMA-GARCH/ marginal windows: 2 </span>
+<span class="co">#&gt; Number of vine windows: 2 </span>
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.8892 minutes</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.1197 minutes</span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cond_risk_roll</span><span class="op">)</span>
 <span class="co">#&gt; An object of class &lt;cond_portvine_roll&gt;</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; --- Conditional settings ---</span>
 <span class="co">#&gt; Conditional variable(s): AMZN </span>
-<span class="co">#&gt; Number of conditional estimated risk measures: 2000 </span>
+<span class="co">#&gt; Number of conditional estimated risk measures: 320 </span>
 <span class="co">#&gt; Conditioning quantiles: 0.1 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; --- Marginal models ---</span>
-<span class="co">#&gt; Number of ARMA-GARCH/ marginal windows: 5 </span>
-<span class="co">#&gt; Train size:  750 </span>
-<span class="co">#&gt; Refit size:  50 </span>
+<span class="co">#&gt; Number of ARMA-GARCH/ marginal windows: 2 </span>
+<span class="co">#&gt; Train size:  960 </span>
+<span class="co">#&gt; Refit size:  20 </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; --- Vine copula models ---</span>
-<span class="co">#&gt; Number of vine windows: 10 </span>
+<span class="co">#&gt; Number of vine windows: 2 </span>
 <span class="co">#&gt; Train size:  100 </span>
-<span class="co">#&gt; Refit size:  25 </span>
+<span class="co">#&gt; Refit size:  20 </span>
 <span class="co">#&gt; Vine copula type:  dvine </span>
 <span class="co">#&gt; Vine family set:  gumbel joe t </span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; --- Risk estimation ---</span>
 <span class="co">#&gt; Risk measures estimated: VaR ES_mean </span>
 <span class="co">#&gt; Alpha levels used: 0.01 0.025 </span>
-<span class="co">#&gt; Number of estimated risk measures: 1000 </span>
-<span class="co">#&gt; Number of samples for each risk estimation: 1000 </span>
+<span class="co">#&gt; Number of estimated risk measures: 160 </span>
+<span class="co">#&gt; Number of samples for each risk estimation: 50 </span>
 <span class="co">#&gt; </span>
-<span class="co">#&gt; Time taken: 0.8892 minutes.</span></code></pre></div>
+<span class="co">#&gt; Time taken: 0.1197 minutes.</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -491,7 +491,7 @@
 <code class="sourceCode R"><span class="va">uncond_fitted_vines</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fitted_vines.html">fitted_vines</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span>
 <span class="va">uncond_fitted_vines</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span>
 <span class="co">#&gt; 3-dimensional vine copula fit ('vinecop')</span>
-<span class="co">#&gt; nobs = 100   logLik = 52.15   npars = 3   AIC = -98.29   BIC = -90.48</span></code></pre></div>
+<span class="co">#&gt; nobs = 100   logLik = 56   npars = 3   AIC = -106.01   BIC = -98.19</span></code></pre></div>
 <p>As the list elements are <code><a href="https://rdrr.io/pkg/rvinecopulib/man/vinecop.html" class="external-link">rvinecopulib::vinecop</a></code> objects one can further analyze them with tools from the great <a href="https://vinecopulib.github.io/rvinecopulib/" class="external-link"><code>rvinecopulib</code></a> package e.g. plot the objects to exploit the graphical representation, which aids interpretability.</p>
 </div>
 <div class="section level2">
@@ -501,17 +501,17 @@
 <div class="sourceCode" id="cb23"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="co">## a glimpse at the tidy data.frame with all estimated risk measures</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/risk_estimates.html">risk_estimates</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span>
-<span class="co">#&gt;    risk_measure    risk_est alpha row_num vine_window    realized</span>
-<span class="co">#&gt; 1           VaR -0.10454393 0.010     751           1 0.004492802</span>
-<span class="co">#&gt; 2           VaR -0.07793607 0.025     751           1 0.004492802</span>
-<span class="co">#&gt; 3       ES_mean -0.14119372 0.010     751           1 0.004492802</span>
-<span class="co">#&gt; 4       ES_mean -0.11060053 0.025     751           1 0.004492802</span>
-<span class="co">#&gt; 5           VaR -0.10024730 0.010     752           1 0.044349642</span>
-<span class="co">#&gt; 6           VaR -0.07268996 0.025     752           1 0.044349642</span>
-<span class="co">#&gt; 7       ES_mean -0.12261382 0.010     752           1 0.044349642</span>
-<span class="co">#&gt; 8       ES_mean -0.09816388 0.025     752           1 0.044349642</span>
-<span class="co">#&gt; 9           VaR -0.07810087 0.010     753           1 0.045963725</span>
-<span class="co">#&gt; 10          VaR -0.06525622 0.025     753           1 0.045963725</span>
+<span class="co">#&gt;    risk_measure    risk_est alpha row_num vine_window     realized</span>
+<span class="co">#&gt; 1           VaR -0.06642110 0.010     961           1 -0.001246766</span>
+<span class="co">#&gt; 2           VaR -0.05021659 0.025     961           1 -0.001246766</span>
+<span class="co">#&gt; 3       ES_mean -0.08115332 0.010     961           1 -0.001246766</span>
+<span class="co">#&gt; 4       ES_mean -0.06612045 0.025     961           1 -0.001246766</span>
+<span class="co">#&gt; 5           VaR -0.08815168 0.010     962           1  0.048242745</span>
+<span class="co">#&gt; 6           VaR -0.05064118 0.025     962           1  0.048242745</span>
+<span class="co">#&gt; 7       ES_mean -0.12112020 0.010     962           1  0.048242745</span>
+<span class="co">#&gt; 8       ES_mean -0.08747886 0.025     962           1  0.048242745</span>
+<span class="co">#&gt; 9           VaR -0.07056187 0.010     963           1  0.011817887</span>
+<span class="co">#&gt; 10          VaR -0.06257534 0.025     963           1  0.011817887</span>
 
 <span class="co">## a glimpse at the estimated VaR at confidence level 1% with exceeded column</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>
@@ -524,12 +524,12 @@
   <span class="fl">6</span>
 <span class="op">)</span>
 <span class="co">#&gt;   risk_measure    risk_est alpha row_num vine_window     realized exceeded</span>
-<span class="co">#&gt; 1          VaR -0.10454393  0.01     751           1  0.004492802    FALSE</span>
-<span class="co">#&gt; 2          VaR -0.10024730  0.01     752           1  0.044349642    FALSE</span>
-<span class="co">#&gt; 3          VaR -0.07810087  0.01     753           1  0.045963725    FALSE</span>
-<span class="co">#&gt; 4          VaR -0.09509246  0.01     754           1  0.010905472    FALSE</span>
-<span class="co">#&gt; 5          VaR -0.10696890  0.01     755           1 -0.002581235    FALSE</span>
-<span class="co">#&gt; 6          VaR -0.08220021  0.01     756           1  0.013140508    FALSE</span>
+<span class="co">#&gt; 1          VaR -0.06642110  0.01     961           1 -0.001246766    FALSE</span>
+<span class="co">#&gt; 2          VaR -0.08815168  0.01     962           1  0.048242745    FALSE</span>
+<span class="co">#&gt; 3          VaR -0.07056187  0.01     963           1  0.011817887    FALSE</span>
+<span class="co">#&gt; 4          VaR -0.07643047  0.01     964           1  0.012662108    FALSE</span>
+<span class="co">#&gt; 5          VaR -0.09512079  0.01     965           1  0.023044956    FALSE</span>
+<span class="co">#&gt; 6          VaR -0.14389637  0.01     966           1 -0.013655480    FALSE</span>
 
 <span class="co">## of course also applies for the conditional case</span>
 <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span>
@@ -542,19 +542,19 @@
   <span class="fl">6</span>
 <span class="op">)</span>
 <span class="co">#&gt;   risk_measure    risk_est alpha row_num         AMZN cond_u vine_window</span>
-<span class="co">#&gt; 1      ES_mean -0.08557438  0.01     751 -0.018518268    0.1           1</span>
-<span class="co">#&gt; 2      ES_mean -0.06716524  0.01     751  0.005385051  resid           1</span>
-<span class="co">#&gt; 3      ES_mean -0.10546217  0.01     752 -0.019046492    0.1           1</span>
-<span class="co">#&gt; 4      ES_mean -0.06821455  0.01     752  0.032755136  resid           1</span>
-<span class="co">#&gt; 5      ES_mean -0.09586411  0.01     753 -0.019629721    0.1           1</span>
-<span class="co">#&gt; 6      ES_mean -0.07961861  0.01     753  0.022764076  resid           1</span>
-<span class="co">#&gt;      realized</span>
-<span class="co">#&gt; 1 0.000812683</span>
-<span class="co">#&gt; 2 0.000812683</span>
-<span class="co">#&gt; 3 0.023087416</span>
-<span class="co">#&gt; 4 0.023087416</span>
-<span class="co">#&gt; 5 0.041408990</span>
-<span class="co">#&gt; 6 0.041408990</span></code></pre></div>
+<span class="co">#&gt; 1      ES_mean -0.09972157  0.01     961 -0.025134330    0.1           1</span>
+<span class="co">#&gt; 2      ES_mean -0.04771672  0.01     961 -0.010373232  resid           1</span>
+<span class="co">#&gt; 3      ES_mean -0.14477330  0.01     962 -0.022958822    0.1           1</span>
+<span class="co">#&gt; 4      ES_mean -0.03292465  0.01     962  0.018511442  resid           1</span>
+<span class="co">#&gt; 5      ES_mean -0.10651503  0.01     963 -0.022824470    0.1           1</span>
+<span class="co">#&gt; 6      ES_mean -0.02974445  0.01     963  0.009607753  resid           1</span>
+<span class="co">#&gt;       realized</span>
+<span class="co">#&gt; 1  0.007439544</span>
+<span class="co">#&gt; 2  0.007439544</span>
+<span class="co">#&gt; 3  0.039189494</span>
+<span class="co">#&gt; 4  0.039189494</span>
+<span class="co">#&gt; 5 -0.002692899</span>
+<span class="co">#&gt; 6 -0.002692899</span></code></pre></div>
 <p>This tidy representation can be easily used for visualizations. For example comparisons of risk measures over time.</p>
 <div class="sourceCode" id="cb24"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/risk_estimates.html">risk_estimates</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span>, alpha <span class="op">=</span> <span class="fl">0.025</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
@@ -598,7 +598,7 @@
        <span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html" class="external-link">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></code></pre></div>
 <p><img src="get_started_files/figure-html/unnamed-chunk-24-1.png" width="672"></p>
-<p>In the conditional case one can first have a look at how the different conditional strategies behave. On the one side a conditioning value based on the quantile level 0.1 was forecasted (below shown in light blue) and on the other side the prior residual strategy is by default set to the one that uses the realized residuals (below shown in green, it should overlay the grey realized line). Those are only for the comparison as they conceptually are an oracle as the actual realized conditional asset returns would not be known at sampling time.</p>
+<p>In the conditional case one can first have a look at how the different conditional strategies behave. On the one side a conditioning value based on the quantile level 0.1 was forecasted (below shown in light blue) and on the other side the residual strategy is by default set to the one that uses the realized residuals (below shown in green, it should almost overlay the grey realized line). Those are only for the comparison as they conceptually are an oracle as the actual realized conditional asset returns would not be known at sampling time.</p>
 <div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span class="fu"><a href="../reference/risk_estimates.html">risk_estimates</a></span><span class="op">(</span>
   <span class="va">cond_risk_roll</span>,
@@ -606,8 +606,8 @@
   alpha <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span>
-    data <span class="op">=</span> <span class="va">sample_returns_small</span><span class="op">[</span><span class="fl">751</span><span class="op">:</span><span class="fl">1000</span>, <span class="st">"AMZN"</span><span class="op">]</span>,
-    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">751</span><span class="op">:</span><span class="fl">1000</span>,
+    data <span class="op">=</span> <span class="va">sample_returns_small</span><span class="op">[</span><span class="fl">961</span><span class="op">:</span><span class="fl">1000</span>, <span class="st">"AMZN"</span><span class="op">]</span>,
+    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fl">961</span><span class="op">:</span><span class="fl">1000</span>,
         y <span class="op">=</span> <span class="va">AMZN</span><span class="op">)</span>, col <span class="op">=</span> <span class="st">"grey"</span>, size <span class="op">=</span> <span class="fl">.3</span><span class="op">)</span> <span class="op">+</span>
   <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html" class="external-link">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">row_num</span>, y <span class="op">=</span> <span class="va">AMZN</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor</a></span><span class="op">(</span><span class="va">cond_u</span><span class="op">)</span><span class="op">)</span>,
             size <span class="op">=</span> <span class="fl">0.5</span><span class="op">)</span> <span class="op">+</span>
