@@ -1,5 +1,5 @@
 Package: portvine
-Title: Vine Based (Un)conditional Portfolio Risk Measure Estimation
+Title: Vine Based (Un)Conditional Portfolio Risk Measure Estimation
 Version: 1.0.1
 Authors@R: 
     person("Emanuel", "Sommer", , "emanuel_sommer@gmx.de", role = c("cre", "aut"))

@@ -1,8 +1,9 @@
 ## This is a resubmission
 
-It is implementing feedback from Victoria Wimmer (Thanks for that!).
+It is implementing feedback from Victoria Wimmer & Uwe Ligges
+(Thanks for that!).
 
-* Title was reduced to less than 65 characters
+* Title was reduced to less than 65 characters and to tilecase
 
 * The example which would run over 5 sec was wrapped in \donttest{} instead of 
   \dontrun{}
