@@ -1,13 +1,12 @@
 Package: portvine
-Title: Portfolio Level Unconditional and Conditional Risk Measure Estimation
-    for Backtesting and Stress Testing using Vine Copula and ARMA-GARCH Models
+Title: Vine Based (Un)conditional Portfolio Risk Measure Estimation
 Version: 1.0.1
 Authors@R: 
     person("Emanuel", "Sommer", , "emanuel_sommer@gmx.de", role = c("cre", "aut"))
 Description: Following Sommer (2022) <https://mediatum.ub.tum.de/1658240>
     portfolio level risk estimates (e.g. Value at Risk, Expected
     Shortfall) are estimated by modeling each asset univariately by an
-    ARMA-GARCH model and then their cross dependence via a vine copula
+    ARMA-GARCH model and then their cross dependence via a Vine Copula
     model in a rolling window fashion. One can even condition on
     variables/time series at certain quantile levels to stress test the
     risk measure estimates.

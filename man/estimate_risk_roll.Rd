@@ -187,11 +187,11 @@ More details can be found in the extensive documentation of the
 \examples{
 # For better illustrated examples have a look at the vignettes
 # and/or the package website.
-\dontrun{
+\donttest{
 data("sample_returns_small")
 ex_marg_settings <- marginal_settings(
-  train_size = 800,
-  refit_size = 100
+  train_size = 900,
+  refit_size = 50
 )
 ex_vine_settings <- vine_settings(
   train_size = 100,
@@ -207,7 +207,7 @@ risk_roll <- estimate_risk_roll(
   vine_settings = ex_vine_settings,
   alpha = c(0.01, 0.05),
   risk_measures = c("VaR", "ES_mean"),
-  n_samples = 1000,
+  n_samples = 10,
   trace = FALSE
 )
 # conditional on one asset
@@ -218,7 +218,7 @@ risk_roll_cond <- estimate_risk_roll(
   vine_settings = ex_vine_settings,
   alpha = c(0.01, 0.05),
   risk_measures = c("VaR", "ES_mean"),
-  n_samples = 1000,
+  n_samples = 10,
   cond_vars = "GOOG",
   cond_u = c(0.05, 0.5),
   trace = FALSE,

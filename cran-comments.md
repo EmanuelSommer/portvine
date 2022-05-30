@@ -1,13 +1,18 @@
 ## This is a resubmission
 
-It is implementing feedback from Uwe Ligges (Thanks for that!).
+It is implementing feedback from Victoria Wimmer (Thanks for that!).
 
-* The rather large tarball size was reduced by moving a figure heavy vignette
-  to an article now only displayed on the package website.
+* Title was reduced to less than 65 characters
 
-* The overall check time was reduced as suggested mainly by making the examples
-  in the vignette faster and by skipping a test of an internal function on CRAN,
-  which are aimed for the local testing when implementing new features.
+* The example which would run over 5 sec was wrapped in \donttest{} instead of 
+  \dontrun{}
+  
+* I had a look at all my functions and as far as I am concerned I only found 
+  calls of cat() in non print or summary functions with the following scheme:
+  if(trace) cat(). So the user can suppress the information messages by setting
+  the argument 'trace' to FALSE. Otherwise I only
+  once print to the console with message() to inform the user of potentially
+  unintended behavior.
 
 ## R CMD check results
 
