@@ -304,7 +304,7 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> Risk measures estimated: VaR ES_mean </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Alpha levels used: 0.01 0.05 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Time taken: 0.2439 minutes </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Time taken: 0.2211 minutes </span>
 <span class="r-in"><span class="co"># a slightly more detailed look</span></span>
 <span class="r-in"><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">risk_roll_cond</span><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> An object of class &lt;cond_portvine_roll&gt;</span>
@@ -332,7 +332,7 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of estimated risk measures: 400 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> Number of samples for each risk estimation: 10 </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Time taken: 0.2439 minutes. </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Time taken: 0.2211 minutes. </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># actually use the results by extracting important fitted quantities</span></span>
 <span class="r-in"><span class="fu"><a href="fitted_vines.html">fitted_vines</a></span><span class="op">(</span><span class="va">risk_roll_cond</span><span class="op">)</span></span>
@@ -374,7 +374,7 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1972-09-26 0.0008 0.0122 1.0413 3.534          0   0.0028</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1972-09-27 0.0009 0.0120 1.0413 3.534          0  -0.0109</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Elapsed: 1.568705 secs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Elapsed: 1.34813 secs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $GOOG</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -405,7 +405,7 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1972-09-26 4e-04 0.0101 0.9821 4.2038          0  -0.0012</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1972-09-27 6e-04 0.0099 0.9821 4.2038          0  -0.0017</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Elapsed: 1.58843 secs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Elapsed: 1.584174 secs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> $AMZN</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
@@ -436,7 +436,7 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1972-09-26 0.0013 0.0146 1.0288 3.461          0   0.0032</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1972-09-27 0.0016 0.0144 1.0288 3.461          0  -0.0141</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> Elapsed: 1.883799 secs</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> Elapsed: 1.368108 secs</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
 <span class="r-in"></span>
 <span class="r-in"><span class="co"># and of course most importantly the risk measure estimates</span></span>
@@ -446,106 +446,106 @@ More details can be found in the extensive documentation of the
 <span class="r-in">  alpha <span class="op">=</span> <span class="fl">0.05</span>, exceeded <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     risk_measure     risk_est alpha row_num vine_window      realized exceeded</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        ES_mean -0.078072015  0.05     901           1 -0.0060446548    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        ES_mean -0.066180913  0.05     902           1 -0.0792850109     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        ES_mean -0.090055257  0.05     903           1  0.0331630350    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        ES_mean -0.053232796  0.05     904           1  0.0396444178    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        ES_mean -0.064001567  0.05     905           1  0.0098307520    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        ES_mean -0.163035746  0.05     906           1 -0.0035546832    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7        ES_mean -0.266230764  0.05     907           1 -0.0549415153    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8        ES_mean -0.087717257  0.05     908           1 -0.0048120862    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        ES_mean -0.073488608  0.05     909           1 -0.0116750983    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10       ES_mean -0.061568445  0.05     910           1  0.0500823533    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11       ES_mean -0.029567662  0.05     911           1 -0.0055013938    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       ES_mean -0.022082947  0.05     912           1 -0.0164475619    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13       ES_mean -0.029315152  0.05     913           1 -0.0097478129    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14       ES_mean -0.045821068  0.05     914           1  0.0085510175    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15       ES_mean -0.048811138  0.05     915           1  0.0254935553    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16       ES_mean -0.034378901  0.05     916           1  0.0257264559    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17       ES_mean -0.100736069  0.05     917           1  0.0277721259    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18       ES_mean -0.056163733  0.05     918           1 -0.0042152555    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19       ES_mean -0.102891574  0.05     919           1 -0.0349681922    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20       ES_mean -0.098910115  0.05     920           1  0.0008786021    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21       ES_mean -0.037461961  0.05     921           1  0.0166985327    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22       ES_mean -0.062890587  0.05     922           1 -0.0405427416    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23       ES_mean -0.032078059  0.05     923           1  0.0331199507    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24       ES_mean -0.095323708  0.05     924           1  0.0039553287    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25       ES_mean -0.064098193  0.05     925           1  0.0128577234    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26       ES_mean -0.044384863  0.05     926           1 -0.0267688040    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27       ES_mean -0.032706096  0.05     927           1 -0.0006434490    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28       ES_mean -0.021291240  0.05     928           1 -0.0262126037     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29       ES_mean -0.032765063  0.05     929           1  0.0033384649    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30       ES_mean -0.070353842  0.05     930           1 -0.0029087903    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31       ES_mean -0.024181769  0.05     931           1 -0.0252220647     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32       ES_mean -0.060478507  0.05     932           1 -0.0239892893    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33       ES_mean -0.042208915  0.05     933           1 -0.0331961832    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34       ES_mean -0.099103764  0.05     934           1  0.0200051369    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35       ES_mean -0.096356586  0.05     935           1  0.0410831353    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36       ES_mean -0.058354783  0.05     936           1  0.0049106979    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37       ES_mean -0.033231558  0.05     937           1  0.0206976658    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38       ES_mean -0.028880131  0.05     938           1 -0.0103703417    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39       ES_mean -0.044916470  0.05     939           1  0.0068955614    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40       ES_mean -0.082408830  0.05     940           1 -0.0042075885    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41       ES_mean -0.001159574  0.05     941           1  0.0472190581    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42       ES_mean -0.042875791  0.05     942           1  0.0174462155    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43       ES_mean -0.190601098  0.05     943           1  0.0029622239    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44       ES_mean -0.034964175  0.05     944           1 -0.0079606363    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45       ES_mean -0.030902425  0.05     945           1  0.0290050274    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46       ES_mean -0.046443447  0.05     946           1  0.0009861917    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47       ES_mean -0.007284965  0.05     947           1  0.0102032712    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48       ES_mean -0.035995382  0.05     948           1  0.0239672051    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49       ES_mean -0.020667827  0.05     949           1  0.0066334433    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50       ES_mean -0.068085831  0.05     950           1 -0.0158926637    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51       ES_mean -0.055445870  0.05     951           2 -0.0428770390    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52       ES_mean -0.074179445  0.05     952           2  0.0017742398    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53       ES_mean -0.045321049  0.05     953           2 -0.0377435814    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54       ES_mean -0.057153861  0.05     954           2  0.0179789801    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55       ES_mean -0.136745636  0.05     955           2 -0.0045997955    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56       ES_mean -0.229996732  0.05     956           2  0.0050882039    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57       ES_mean -0.069314135  0.05     957           2  0.2062438419    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58       ES_mean -0.096383024  0.05     958           2  0.0290894526    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59       ES_mean -0.089738709  0.05     959           2  0.0083306529    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60       ES_mean -0.036915542  0.05     960           2 -0.0055718246    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61       ES_mean -0.032163417  0.05     961           2 -0.0012467665    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62       ES_mean -0.038802855  0.05     962           2  0.0482427451    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63       ES_mean -0.054178384  0.05     963           2  0.0118178873    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64       ES_mean -0.054093471  0.05     964           2  0.0126621081    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65       ES_mean -0.044432540  0.05     965           2  0.0230449564    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66       ES_mean -0.123323797  0.05     966           2 -0.0136554800    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67       ES_mean -0.068996020  0.05     967           2 -0.0133549994    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68       ES_mean -0.121092516  0.05     968           2 -0.0028859506    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69       ES_mean -0.117362933  0.05     969           2 -0.0082197477    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70       ES_mean -0.043471416  0.05     970           2 -0.0272196497    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71       ES_mean -0.074625908  0.05     971           2  0.0325291332    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72       ES_mean -0.033564367  0.05     972           2 -0.0251776577    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73       ES_mean -0.111988563  0.05     973           2 -0.0048611406    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74       ES_mean -0.076462461  0.05     974           2  0.0457490940    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75       ES_mean -0.053808430  0.05     975           2  0.0264002730    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76       ES_mean -0.029120761  0.05     976           2  0.0300177806    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77       ES_mean -0.019173494  0.05     977           2  0.0161965898    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78       ES_mean -0.034227605  0.05     978           2 -0.0142138901    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79       ES_mean -0.077959408  0.05     979           2 -0.0733127141    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80       ES_mean -0.034915823  0.05     980           2  0.0268845682    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81       ES_mean -0.069267899  0.05     981           2 -0.0280441016    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82       ES_mean -0.044724119  0.05     982           2 -0.0435108609    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83       ES_mean -0.110032414  0.05     983           2  0.0122123253    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84       ES_mean -0.112743787  0.05     984           2  0.0187544970    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85       ES_mean -0.058238539  0.05     985           2  0.0205165005    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86       ES_mean -0.041674408  0.05     986           2  0.0081176864    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87       ES_mean -0.036622277  0.05     987           2  0.0291318680    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88       ES_mean -0.045898462  0.05     988           2 -0.0095197782    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89       ES_mean -0.087365869  0.05     989           2  0.0026235462    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90       ES_mean -0.003759760  0.05     990           2  0.0165471020    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91       ES_mean -0.043716974  0.05     991           2  0.0284908983    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92       ES_mean -0.191988852  0.05     992           2  0.0357353231    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93       ES_mean -0.037334257  0.05     993           2 -0.0194203462    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94       ES_mean -0.030276459  0.05     994           2 -0.0147090394    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95       ES_mean -0.045666271  0.05     995           2  0.0001064920    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96       ES_mean -0.005404148  0.05     996           2 -0.0087683229     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97       ES_mean -0.035246495  0.05     997           2 -0.0217268278    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98       ES_mean -0.021479894  0.05     998           2 -0.0021598816    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99       ES_mean -0.074769782  0.05     999           2  0.0048795256    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100      ES_mean -0.037511543  0.05    1000           2 -0.0266539889    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        ES_mean -0.067310946  0.05     901           1 -0.0060446548    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        ES_mean -0.006781720  0.05     902           1 -0.0792850109     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        ES_mean -0.060391062  0.05     903           1  0.0331630350    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        ES_mean -0.077178410  0.05     904           1  0.0396444178    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        ES_mean -0.091220890  0.05     905           1  0.0098307520    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        ES_mean -0.030515962  0.05     906           1 -0.0035546832    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        ES_mean -0.022870342  0.05     907           1 -0.0549415153     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        ES_mean -0.039702483  0.05     908           1 -0.0048120862    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        ES_mean -0.069556269  0.05     909           1 -0.0116750983    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       ES_mean -0.024954204  0.05     910           1  0.0500823533    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11       ES_mean -0.022240893  0.05     911           1 -0.0055013938    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       ES_mean -0.067359765  0.05     912           1 -0.0164475619    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       ES_mean -0.044587928  0.05     913           1 -0.0097478129    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14       ES_mean -0.053799193  0.05     914           1  0.0085510175    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       ES_mean -0.046550270  0.05     915           1  0.0254935553    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       ES_mean -0.055220400  0.05     916           1  0.0257264559    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17       ES_mean -0.029087460  0.05     917           1  0.0277721259    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18       ES_mean -0.028594272  0.05     918           1 -0.0042152555    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19       ES_mean -0.021653089  0.05     919           1 -0.0349681922     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       ES_mean -0.055664485  0.05     920           1  0.0008786021    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       ES_mean -0.089376460  0.05     921           1  0.0166985327    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22       ES_mean -0.072780480  0.05     922           1 -0.0405427416    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23       ES_mean -0.036814703  0.05     923           1  0.0331199507    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24       ES_mean -0.039991992  0.05     924           1  0.0039553287    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25       ES_mean -0.011445799  0.05     925           1  0.0128577234    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26       ES_mean -0.001872130  0.05     926           1 -0.0267688040     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27       ES_mean -0.080866976  0.05     927           1 -0.0006434490    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28       ES_mean -0.040162750  0.05     928           1 -0.0262126037    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29       ES_mean -0.031055693  0.05     929           1  0.0033384649    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30       ES_mean -0.030960245  0.05     930           1 -0.0029087903    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31       ES_mean -0.028135181  0.05     931           1 -0.0252220647    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32       ES_mean -0.014676802  0.05     932           1 -0.0239892893     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33       ES_mean -0.028444695  0.05     933           1 -0.0331961832     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34       ES_mean -0.024203598  0.05     934           1  0.0200051369    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35       ES_mean -0.010233789  0.05     935           1  0.0410831353    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36       ES_mean -0.034836474  0.05     936           1  0.0049106979    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37       ES_mean -0.032751075  0.05     937           1  0.0206976658    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38       ES_mean -0.053352124  0.05     938           1 -0.0103703417    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39       ES_mean -0.032334398  0.05     939           1  0.0068955614    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40       ES_mean -0.059756046  0.05     940           1 -0.0042075885    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41       ES_mean -0.073015120  0.05     941           1  0.0472190581    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42       ES_mean -0.067493258  0.05     942           1  0.0174462155    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43       ES_mean -0.025460642  0.05     943           1  0.0029622239    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44       ES_mean -0.045058294  0.05     944           1 -0.0079606363    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45       ES_mean -0.053057713  0.05     945           1  0.0290050274    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46       ES_mean -0.044695938  0.05     946           1  0.0009861917    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47       ES_mean -0.096375866  0.05     947           1  0.0102032712    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48       ES_mean -0.021802469  0.05     948           1  0.0239672051    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49       ES_mean -0.027389008  0.05     949           1  0.0066334433    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50       ES_mean -0.085446864  0.05     950           1 -0.0158926637    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51       ES_mean -0.006065677  0.05     951           2 -0.0428770390     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52       ES_mean -0.048931439  0.05     952           2  0.0017742398    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53       ES_mean -0.066883831  0.05     953           2 -0.0377435814    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54       ES_mean -0.081255078  0.05     954           2  0.0179789801    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55       ES_mean -0.026641150  0.05     955           2 -0.0045997955    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56       ES_mean -0.022154563  0.05     956           2  0.0050882039    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57       ES_mean -0.030259091  0.05     957           2  0.2062438419    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58       ES_mean -0.077587663  0.05     958           2  0.0290894526    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59       ES_mean -0.034645227  0.05     959           2  0.0083306529    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60       ES_mean -0.020798881  0.05     960           2 -0.0055718246    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61       ES_mean -0.101480863  0.05     961           2 -0.0012467665    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62       ES_mean -0.047764047  0.05     962           2  0.0482427451    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63       ES_mean -0.067685684  0.05     963           2  0.0118178873    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64       ES_mean -0.058063348  0.05     964           2  0.0126621081    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65       ES_mean -0.076225792  0.05     965           2  0.0230449564    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66       ES_mean -0.046407639  0.05     966           2 -0.0136554800    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67       ES_mean -0.023633769  0.05     967           2 -0.0133549994    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68       ES_mean -0.029279785  0.05     968           2 -0.0028859506    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69       ES_mean -0.067466470  0.05     969           2 -0.0082197477    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70       ES_mean -0.099568732  0.05     970           2 -0.0272196497    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71       ES_mean -0.082396489  0.05     971           2  0.0325291332    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72       ES_mean -0.043916686  0.05     972           2 -0.0251776577    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73       ES_mean -0.043539352  0.05     973           2 -0.0048611406    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74       ES_mean -0.017718800  0.05     974           2  0.0457490940    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75       ES_mean  0.001823039  0.05     975           2  0.0264002730    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76       ES_mean -0.079094372  0.05     976           2  0.0300177806    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77       ES_mean -0.045175217  0.05     977           2  0.0161965898    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78       ES_mean -0.035354210  0.05     978           2 -0.0142138901    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79       ES_mean -0.038187367  0.05     979           2 -0.0733127141     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80       ES_mean -0.039059812  0.05     980           2  0.0268845682    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81       ES_mean -0.016530475  0.05     981           2 -0.0280441016     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82       ES_mean -0.025764275  0.05     982           2 -0.0435108609     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83       ES_mean -0.028101526  0.05     983           2  0.0122123253    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84       ES_mean -0.015927043  0.05     984           2  0.0187544970    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85       ES_mean -0.039202264  0.05     985           2  0.0205165005    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86       ES_mean -0.036553653  0.05     986           2  0.0081176864    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87       ES_mean -0.059740141  0.05     987           2  0.0291318680    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88       ES_mean -0.037177095  0.05     988           2 -0.0095197782    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89       ES_mean -0.061327704  0.05     989           2  0.0026235462    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90       ES_mean -0.083504856  0.05     990           2  0.0165471020    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91       ES_mean -0.060910333  0.05     991           2  0.0284908983    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92       ES_mean -0.028857401  0.05     992           2  0.0357353231    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93       ES_mean -0.051061246  0.05     993           2 -0.0194203462    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94       ES_mean -0.056005631  0.05     994           2 -0.0147090394    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95       ES_mean -0.048442331  0.05     995           2  0.0001064920    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96       ES_mean -0.101165572  0.05     996           2 -0.0087683229    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97       ES_mean -0.024451841  0.05     997           2 -0.0217268278    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98       ES_mean -0.030425524  0.05     998           2 -0.0021598816    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99       ES_mean -0.092091494  0.05     999           2  0.0048795256    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100      ES_mean -0.033495727  0.05    1000           2 -0.0266539889    FALSE</span>
 <span class="r-in"><span class="fu"><a href="risk_estimates.html">risk_estimates</a></span><span class="op">(</span></span>
 <span class="r-in">  <span class="va">risk_roll_cond</span>,</span>
 <span class="r-in">  risk_measures <span class="op">=</span> <span class="st">"ES_mean"</span>,</span>
@@ -553,206 +553,206 @@ More details can be found in the extensive documentation of the
 <span class="r-in">  cond_u <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"prior_resid"</span>, <span class="fl">0.5</span><span class="op">)</span></span>
 <span class="r-in"><span class="op">)</span></span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     risk_measure      risk_est alpha row_num          GOOG      cond_u</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1        ES_mean -4.570477e-02  0.05     901  9.663831e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2        ES_mean -2.824803e-02  0.05     901 -2.970286e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3        ES_mean -7.612220e-03  0.05     902  9.108541e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4        ES_mean -2.757786e-02  0.05     902 -4.435714e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5        ES_mean -3.123357e-02  0.05     903  6.739723e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6        ES_mean -7.198651e-02  0.05     903 -2.056050e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7        ES_mean -8.503850e-03  0.05     904  1.179775e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8        ES_mean -1.700865e-02  0.05     904  8.605372e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9        ES_mean -3.421307e-02  0.05     905  1.277594e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10       ES_mean -2.097105e-02  0.05     905  9.442000e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11       ES_mean -2.647077e-02  0.05     906  1.060640e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12       ES_mean -1.028272e-02  0.05     906 -7.170050e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13       ES_mean -2.380705e-02  0.05     907  1.144983e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14       ES_mean -2.104232e-02  0.05     907  5.340565e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15       ES_mean -3.087145e-02  0.05     908  7.138837e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16       ES_mean -6.470620e-02  0.05     908 -2.101339e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17       ES_mean -2.783885e-02  0.05     909  9.985466e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18       ES_mean -8.507182e-03  0.05     909 -4.911247e-05 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19       ES_mean -4.113062e-02  0.05     910  9.386887e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20       ES_mean -3.146316e-02  0.05     910 -4.580896e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21       ES_mean -2.037818e-02  0.05     911  1.533002e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22       ES_mean  2.540863e-03  0.05     911  2.346207e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23       ES_mean -2.754725e-02  0.05     912  1.200403e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24       ES_mean -2.892473e-02  0.05     912  2.178768e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 25       ES_mean -2.343013e-02  0.05     913  9.471075e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 26       ES_mean -3.336986e-02  0.05     913 -6.618179e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 27       ES_mean -1.520195e-02  0.05     914  9.060482e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 28       ES_mean -2.209784e-02  0.05     914 -6.078264e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 29       ES_mean -1.897886e-02  0.05     915  9.646147e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 30       ES_mean -1.996333e-02  0.05     915 -2.256919e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 31       ES_mean -1.664998e-02  0.05     916  1.206757e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 32       ES_mean -9.541985e-04  0.05     916  8.739683e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 33       ES_mean -4.446353e-03  0.05     917  1.260902e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 34       ES_mean -2.166838e-03  0.05     917  9.413008e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 35       ES_mean -4.258549e-02  0.05     918  1.308244e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36       ES_mean  4.314551e-04  0.05     918  1.108632e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37       ES_mean -2.899649e-02  0.05     919  1.018067e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38       ES_mean -2.846453e-02  0.05     919 -2.476306e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 39       ES_mean -3.655728e-03  0.05     920  8.209348e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 40       ES_mean -3.967219e-02  0.05     920 -1.048053e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 41       ES_mean -2.266286e-02  0.05     921  9.721368e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 42       ES_mean -1.350874e-02  0.05     921 -5.575805e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 43       ES_mean -2.225110e-02  0.05     922  1.211114e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 44       ES_mean -1.314984e-03  0.05     922  9.444607e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 45       ES_mean -2.002456e-02  0.05     923  8.380465e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 46       ES_mean -6.367776e-02  0.05     923 -1.144681e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 47       ES_mean -9.255930e-03  0.05     924  1.054627e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 48       ES_mean -3.995270e-02  0.05     924  3.053363e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 49       ES_mean -2.218221e-02  0.05     925  1.086660e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 50       ES_mean -8.490221e-03  0.05     925  3.318149e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 51       ES_mean  6.729349e-04  0.05     926  1.083563e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52       ES_mean -1.485881e-02  0.05     926  3.314499e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 53       ES_mean -2.400193e-02  0.05     927  7.943425e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 54       ES_mean -5.589724e-02  0.05     927 -1.223112e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 55       ES_mean -1.384512e-02  0.05     928  8.648825e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56       ES_mean -2.692841e-02  0.05     928 -5.381869e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 57       ES_mean -2.969370e-02  0.05     929  8.610159e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 58       ES_mean -2.514278e-02  0.05     929 -6.064068e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59       ES_mean -2.345050e-02  0.05     930  1.155969e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60       ES_mean -2.086152e-02  0.05     930  8.071936e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 61       ES_mean -1.533181e-02  0.05     931  1.281473e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62       ES_mean -2.781879e-02  0.05     931  1.140642e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63       ES_mean -2.072315e-02  0.05     932  1.068982e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64       ES_mean -1.689802e-02  0.05     932  7.242441e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65       ES_mean -2.548227e-02  0.05     933  9.182541e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 66       ES_mean -1.954027e-02  0.05     933 -4.572652e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 67       ES_mean -2.887111e-03  0.05     934  8.161258e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 68       ES_mean -6.684263e-02  0.05     934 -8.919573e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 69       ES_mean -2.915115e-02  0.05     935  1.068642e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 70       ES_mean -1.456149e-02  0.05     935  4.602634e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 71       ES_mean -9.524844e-03  0.05     936  1.567878e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 72       ES_mean -1.371391e-02  0.05     936  2.619571e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 73       ES_mean -7.526540e-03  0.05     937  1.257283e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 74       ES_mean -2.674466e-02  0.05     937  5.041568e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 75       ES_mean -5.384974e-02  0.05     938  1.318750e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 76       ES_mean -6.840372e-02  0.05     938  1.055042e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 77       ES_mean -1.111420e-02  0.05     939  9.558230e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 78       ES_mean -2.198213e-02  0.05     939 -6.689512e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 79       ES_mean -2.367564e-02  0.05     940  1.130681e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 80       ES_mean -2.475476e-02  0.05     940  5.002338e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 81       ES_mean -6.145723e-03  0.05     941  9.048172e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 82       ES_mean -2.227933e-02  0.05     941 -6.926521e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 83       ES_mean -1.217975e-02  0.05     942  1.501319e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84       ES_mean  2.113302e-02  0.05     942  2.273054e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 85       ES_mean -1.210508e-02  0.05     943  1.349145e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 86       ES_mean -4.003839e-02  0.05     943  9.247074e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 87       ES_mean -6.798125e-03  0.05     944  1.057433e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 88       ES_mean -1.407994e-02  0.05     944 -2.243539e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 89       ES_mean -1.193478e-02  0.05     945  9.449427e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 90       ES_mean -3.414577e-02  0.05     945 -4.743252e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 91       ES_mean -1.505721e-02  0.05     946  1.453286e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92       ES_mean  5.492249e-03  0.05     946  1.959909e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 93       ES_mean -2.159974e-02  0.05     947  1.087328e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 94       ES_mean -1.608261e-02  0.05     947 -1.811699e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 95       ES_mean -4.439093e-03  0.05     948  1.089597e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 96       ES_mean -2.284238e-03  0.05     948  1.895826e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 97       ES_mean -1.774760e-02  0.05     949  1.086601e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 98       ES_mean -1.477103e-02  0.05     949  2.374506e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99       ES_mean -3.111568e-02  0.05     950  1.025511e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100      ES_mean -1.335224e-02  0.05     950  1.112610e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 101      ES_mean -4.234084e-03  0.05     951  9.859076e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 102      ES_mean -1.312963e-02  0.05     951  6.376196e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 103      ES_mean -2.076158e-02  0.05     952  6.488076e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 104      ES_mean -3.432264e-02  0.05     952 -9.291065e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 105      ES_mean -7.871242e-03  0.05     953  1.087894e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 106      ES_mean -1.124463e-02  0.05     953  4.371550e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 107      ES_mean -2.406668e-02  0.05     954  2.440860e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 108      ES_mean -6.518844e-02  0.05     954 -2.391871e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 109      ES_mean -1.730821e-02  0.05     955  1.034400e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110      ES_mean -1.853701e-03  0.05     955  3.016129e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 111      ES_mean -1.818964e-02  0.05     956  1.088417e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 112      ES_mean -1.644873e-02  0.05     956  2.994188e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 113      ES_mean -1.992961e-02  0.05     957  9.473846e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 114      ES_mean -1.714881e-02  0.05     957 -9.882636e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 115      ES_mean -2.314301e-02  0.05     958  2.872951e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 116      ES_mean  3.623837e-02  0.05     958  6.884077e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 117      ES_mean -4.686081e-02  0.05     959  1.101172e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 118      ES_mean -3.466115e-02  0.05     959 -3.988020e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 119      ES_mean -2.113869e-02  0.05     960  1.072731e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 120      ES_mean -1.540912e-02  0.05     960 -5.116241e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 121      ES_mean -2.519341e-02  0.05     961  1.403999e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 122      ES_mean -2.366414e-02  0.05     961  9.230953e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 123      ES_mean -2.411967e-02  0.05     962  1.083626e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 124      ES_mean -2.618527e-02  0.05     962 -2.612404e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 125      ES_mean -1.487161e-02  0.05     963  1.308073e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 126      ES_mean -7.009785e-04  0.05     963  7.093642e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 127      ES_mean -2.013788e-02  0.05     964  8.200795e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 128      ES_mean -3.098074e-02  0.05     964 -7.099540e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 129      ES_mean -1.882198e-02  0.05     965  1.300182e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 130      ES_mean  6.083341e-04  0.05     965  7.900226e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 131      ES_mean -5.647803e-03  0.05     966  1.277636e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 132      ES_mean -5.462551e-03  0.05     966  6.423161e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 133      ES_mean -4.456207e-02  0.05     967  7.276466e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 134      ES_mean -3.113449e-02  0.05     967 -9.189692e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 135      ES_mean -2.974043e-02  0.05     968  8.892635e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 136      ES_mean -3.109996e-02  0.05     968 -3.035407e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 137      ES_mean -3.363784e-03  0.05     969  9.190311e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 138      ES_mean -2.544634e-02  0.05     969 -2.311256e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 139      ES_mean -2.392663e-02  0.05     970  1.005304e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 140      ES_mean -1.358140e-02  0.05     970  3.191682e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 141      ES_mean -2.420458e-02  0.05     971  8.086086e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 142      ES_mean -2.489913e-02  0.05     971 -5.369740e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 143      ES_mean -1.854304e-02  0.05     972  1.410377e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 144      ES_mean -2.174451e-02  0.05     972  1.242438e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 145      ES_mean -1.134307e-02  0.05     973  5.337170e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 146      ES_mean -8.291297e-02  0.05     973 -1.486465e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 147      ES_mean -2.120602e-02  0.05     974  9.498281e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 148      ES_mean -1.265923e-02  0.05     974 -3.087181e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 149      ES_mean  1.793132e-05  0.05     975  1.591765e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 150      ES_mean -9.652680e-04  0.05     975  1.735337e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 151      ES_mean -2.168354e-02  0.05     976  1.076197e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 152      ES_mean -2.663631e-02  0.05     976  9.081445e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 153      ES_mean -1.315071e-02  0.05     977  1.161698e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 154      ES_mean -1.029599e-02  0.05     977  4.684818e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 155      ES_mean -2.793153e-02  0.05     978  1.488526e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 156      ES_mean  4.659144e-03  0.05     978  1.398685e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 157      ES_mean -2.324469e-02  0.05     979  7.716789e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 158      ES_mean -4.434351e-02  0.05     979 -7.496255e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 159      ES_mean -1.650603e-02  0.05     980  9.538729e-05         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 160      ES_mean -1.122537e-01  0.05     980 -2.930600e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 161      ES_mean -1.859318e-02  0.05     981  9.754314e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 162      ES_mean -1.476670e-02  0.05     981  6.360589e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 163      ES_mean -2.519217e-02  0.05     982  6.095891e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 164      ES_mean -3.366798e-02  0.05     982 -1.196683e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 165      ES_mean -2.145471e-03  0.05     983  5.803193e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 166      ES_mean -7.041339e-02  0.05     983 -1.200366e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 167      ES_mean -2.787765e-02  0.05     984  1.241225e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 168      ES_mean -1.043909e-02  0.05     984  7.317997e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 169      ES_mean -9.387817e-03  0.05     985  1.519391e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 170      ES_mean -1.434713e-02  0.05     985  1.394015e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 171      ES_mean -7.171109e-03  0.05     986  1.500060e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 172      ES_mean -1.623982e-02  0.05     986  1.271671e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 173      ES_mean -4.853577e-02  0.05     987  1.254547e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 174      ES_mean -6.388612e-02  0.05     987  5.819314e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 175      ES_mean -1.028851e-02  0.05     988  1.160214e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 176      ES_mean -5.343978e-03  0.05     988  3.891866e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 177      ES_mean -2.289285e-02  0.05     989  9.799904e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 178      ES_mean -3.057135e-02  0.05     989 -8.198640e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 179      ES_mean -5.559202e-03  0.05     990  9.914899e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 180      ES_mean -1.097751e-02  0.05     990  1.184279e-04 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 181      ES_mean -1.173149e-02  0.05     991  1.290659e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 182      ES_mean  1.478592e-02  0.05     991  8.780238e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 183      ES_mean -1.146658e-02  0.05     992  1.538070e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 184      ES_mean -2.578937e-02  0.05     992  1.531203e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 185      ES_mean -5.995720e-03  0.05     993  1.470549e-03         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 186      ES_mean  6.476150e-03  0.05     993  1.257380e-02 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 187      ES_mean -1.224221e-02  0.05     994  7.866234e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 188      ES_mean -3.780911e-02  0.05     994 -6.981585e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 189      ES_mean -1.481348e-02  0.05     995  7.768285e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 190      ES_mean -1.810488e-02  0.05     995 -5.593870e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 191      ES_mean -1.923524e-02  0.05     996  9.237290e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 192      ES_mean -1.566607e-02  0.05     996 -1.151176e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 193      ES_mean -4.938556e-03  0.05     997  8.475814e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 194      ES_mean -1.057221e-02  0.05     997 -3.525840e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 195      ES_mean -1.480419e-02  0.05     998  8.434896e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 196      ES_mean -2.313591e-02  0.05     998 -3.338523e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 197      ES_mean -2.968351e-02  0.05     999  7.003944e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 198      ES_mean -2.674812e-02  0.05     999 -7.495076e-03 prior_resid</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 199      ES_mean -1.196571e-02  0.05    1000  9.062812e-04         0.5</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 200      ES_mean -1.671162e-02  0.05    1000 -1.026854e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1        ES_mean -2.022410e-02  0.05     901  9.663831e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2        ES_mean -4.692331e-02  0.05     901 -2.970286e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3        ES_mean -1.941638e-02  0.05     902  9.108541e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4        ES_mean -3.362142e-02  0.05     902 -4.435714e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5        ES_mean -2.209313e-02  0.05     903  6.739723e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6        ES_mean -7.838331e-02  0.05     903 -2.056050e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7        ES_mean -1.660348e-02  0.05     904  1.179775e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8        ES_mean -2.459941e-05  0.05     904  8.605372e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9        ES_mean -2.718167e-02  0.05     905  1.277594e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10       ES_mean -9.455214e-03  0.05     905  9.442000e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11       ES_mean -1.662566e-02  0.05     906  1.060640e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12       ES_mean -3.562377e-02  0.05     906 -7.170050e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13       ES_mean -2.043003e-02  0.05     907  1.144983e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14       ES_mean -2.668600e-02  0.05     907  5.340565e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15       ES_mean -3.075332e-02  0.05     908  7.138837e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16       ES_mean -7.652592e-02  0.05     908 -2.101339e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17       ES_mean -1.621505e-02  0.05     909  9.985466e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18       ES_mean -1.064587e-02  0.05     909 -4.911247e-05 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19       ES_mean -2.497318e-02  0.05     910  9.386887e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20       ES_mean -3.248632e-02  0.05     910 -4.580896e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21       ES_mean -6.864538e-02  0.05     911  1.533002e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22       ES_mean -2.693110e-03  0.05     911  2.346207e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23       ES_mean -1.966324e-02  0.05     912  1.200403e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24       ES_mean -2.444802e-02  0.05     912  2.178768e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25       ES_mean -9.454710e-03  0.05     913  9.471075e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26       ES_mean -5.783569e-02  0.05     913 -6.618179e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27       ES_mean -1.233473e-02  0.05     914  9.060482e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28       ES_mean -3.288212e-02  0.05     914 -6.078264e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29       ES_mean -2.239854e-02  0.05     915  9.646147e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30       ES_mean -1.935747e-02  0.05     915 -2.256919e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31       ES_mean -1.458706e-02  0.05     916  1.206757e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32       ES_mean  4.824303e-03  0.05     916  8.739683e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33       ES_mean -9.668089e-03  0.05     917  1.260902e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34       ES_mean -6.363750e-03  0.05     917  9.413008e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35       ES_mean -3.311734e-02  0.05     918  1.308244e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36       ES_mean -5.939326e-03  0.05     918  1.108632e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37       ES_mean -2.098568e-02  0.05     919  1.018067e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38       ES_mean -2.209012e-02  0.05     919 -2.476306e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39       ES_mean -2.307005e-02  0.05     920  8.209348e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40       ES_mean -3.557290e-02  0.05     920 -1.048053e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41       ES_mean -1.821027e-02  0.05     921  9.721368e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42       ES_mean -1.801732e-02  0.05     921 -5.575805e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43       ES_mean -2.203761e-02  0.05     922  1.211114e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44       ES_mean  7.832381e-04  0.05     922  9.444607e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45       ES_mean -1.834246e-02  0.05     923  8.380465e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46       ES_mean -5.827062e-02  0.05     923 -1.144681e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47       ES_mean -2.306046e-02  0.05     924  1.054627e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48       ES_mean -2.526415e-02  0.05     924  3.053363e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 49       ES_mean -1.204218e-02  0.05     925  1.086660e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 50       ES_mean -3.669609e-03  0.05     925  3.318149e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 51       ES_mean -1.231921e-02  0.05     926  1.083563e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52       ES_mean -1.768492e-02  0.05     926  3.314499e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 53       ES_mean -1.393630e-02  0.05     927  7.943425e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 54       ES_mean -4.094159e-02  0.05     927 -1.223112e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 55       ES_mean -6.103009e-03  0.05     928  8.648825e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56       ES_mean -8.237354e-03  0.05     928 -5.381869e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 57       ES_mean -1.653921e-02  0.05     929  8.610159e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 58       ES_mean -3.313960e-02  0.05     929 -6.064068e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59       ES_mean -1.344122e-02  0.05     930  1.155969e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60       ES_mean -1.284733e-02  0.05     930  8.071936e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 61       ES_mean -2.525338e-02  0.05     931  1.281473e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62       ES_mean -2.106137e-03  0.05     931  1.140642e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63       ES_mean -1.613726e-02  0.05     932  1.068982e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64       ES_mean -2.418208e-02  0.05     932  7.242441e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65       ES_mean -1.229124e-02  0.05     933  9.182541e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 66       ES_mean -2.212332e-02  0.05     933 -4.572652e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 67       ES_mean -1.299157e-02  0.05     934  8.161258e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 68       ES_mean -3.427298e-02  0.05     934 -8.919573e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 69       ES_mean -1.899691e-02  0.05     935  1.068642e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 70       ES_mean -1.866907e-02  0.05     935  4.602634e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 71       ES_mean -2.360537e-02  0.05     936  1.567878e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 72       ES_mean -7.965818e-03  0.05     936  2.619571e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 73       ES_mean -1.824851e-02  0.05     937  1.257283e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 74       ES_mean -9.372465e-03  0.05     937  5.041568e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 75       ES_mean -1.695945e-02  0.05     938  1.318750e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 76       ES_mean -5.917189e-03  0.05     938  1.055042e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 77       ES_mean -2.292802e-02  0.05     939  9.558230e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 78       ES_mean -3.024915e-02  0.05     939 -6.689512e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 79       ES_mean -2.183107e-02  0.05     940  1.130681e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 80       ES_mean -2.740744e-02  0.05     940  5.002338e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 81       ES_mean -2.052853e-02  0.05     941  9.048172e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 82       ES_mean -2.145034e-02  0.05     941 -6.926521e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 83       ES_mean -2.191284e-02  0.05     942  1.501319e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84       ES_mean  7.471859e-03  0.05     942  2.273054e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 85       ES_mean -1.688274e-02  0.05     943  1.349145e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 86       ES_mean -3.549425e-02  0.05     943  9.247074e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 87       ES_mean -3.288307e-02  0.05     944  1.057433e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 88       ES_mean -2.691457e-02  0.05     944 -2.243539e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 89       ES_mean -1.952729e-02  0.05     945  9.449427e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 90       ES_mean -2.729539e-02  0.05     945 -4.743252e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 91       ES_mean -4.419212e-02  0.05     946  1.453286e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92       ES_mean -2.633779e-03  0.05     946  1.959909e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 93       ES_mean -1.458331e-02  0.05     947  1.087328e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 94       ES_mean -2.074319e-02  0.05     947 -1.811699e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 95       ES_mean -1.165434e-02  0.05     948  1.089597e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 96       ES_mean -2.516511e-02  0.05     948  1.895826e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 97       ES_mean -2.796141e-02  0.05     949  1.086601e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 98       ES_mean -1.939179e-02  0.05     949  2.374506e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99       ES_mean  2.386153e-03  0.05     950  1.025511e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100      ES_mean -1.798948e-02  0.05     950  1.112610e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 101      ES_mean -1.362393e-02  0.05     951  9.859076e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 102      ES_mean -1.956124e-02  0.05     951  6.376196e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 103      ES_mean -1.231120e-02  0.05     952  6.488076e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 104      ES_mean -4.126157e-02  0.05     952 -9.291065e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 105      ES_mean -1.117192e-02  0.05     953  1.087894e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 106      ES_mean -1.189890e-03  0.05     953  4.371550e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 107      ES_mean -1.723319e-02  0.05     954  2.440860e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 108      ES_mean -5.877895e-02  0.05     954 -2.391871e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 109      ES_mean -1.010428e-02  0.05     955  1.034400e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110      ES_mean -2.092095e-02  0.05     955  3.016129e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 111      ES_mean -1.444540e-02  0.05     956  1.088417e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 112      ES_mean -2.080743e-02  0.05     956  2.994188e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 113      ES_mean -1.925097e-02  0.05     957  9.473846e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 114      ES_mean -2.223681e-02  0.05     957 -9.882636e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 115      ES_mean -1.531762e-02  0.05     958  2.872951e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 116      ES_mean  3.841213e-02  0.05     958  6.884077e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 117      ES_mean -2.942668e-02  0.05     959  1.101172e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 118      ES_mean -3.671542e-02  0.05     959 -3.988020e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 119      ES_mean -7.371927e-02  0.05     960  1.072731e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 120      ES_mean -2.163166e-02  0.05     960 -5.116241e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 121      ES_mean -2.385352e-02  0.05     961  1.403999e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 122      ES_mean -1.797393e-02  0.05     961  9.230953e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 123      ES_mean -1.153422e-02  0.05     962  1.083626e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 124      ES_mean -4.895843e-02  0.05     962 -2.612404e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 125      ES_mean -1.238335e-02  0.05     963  1.308073e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 126      ES_mean -1.390953e-02  0.05     963  7.093642e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 127      ES_mean -2.436341e-02  0.05     964  8.200795e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 128      ES_mean -3.189680e-02  0.05     964 -7.099540e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 129      ES_mean -1.604348e-02  0.05     965  1.300182e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 130      ES_mean  5.131309e-03  0.05     965  7.900226e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 131      ES_mean -9.251295e-03  0.05     966  1.277636e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 132      ES_mean -8.126424e-03  0.05     966  6.423161e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 133      ES_mean -3.484713e-02  0.05     967  7.276466e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 134      ES_mean -3.757749e-02  0.05     967 -9.189692e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 135      ES_mean -2.219486e-02  0.05     968  8.892635e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 136      ES_mean -2.496757e-02  0.05     968 -3.035407e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 137      ES_mean -2.336501e-02  0.05     969  9.190311e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 138      ES_mean -2.101472e-02  0.05     969 -2.311256e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 139      ES_mean -1.891118e-02  0.05     970  1.005304e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 140      ES_mean -1.818477e-02  0.05     970  3.191682e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 141      ES_mean -2.387289e-02  0.05     971  8.086086e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 142      ES_mean -2.194783e-02  0.05     971 -5.369740e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 143      ES_mean -1.707287e-02  0.05     972  1.410377e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 144      ES_mean -1.836092e-02  0.05     972  1.242438e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 145      ES_mean -2.489104e-02  0.05     973  5.337170e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 146      ES_mean -6.584480e-02  0.05     973 -1.486465e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 147      ES_mean -1.101225e-02  0.05     974  9.498281e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 148      ES_mean -8.228812e-03  0.05     974 -3.087181e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 149      ES_mean -1.293045e-02  0.05     975  1.591765e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 150      ES_mean -3.868265e-03  0.05     975  1.735337e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 151      ES_mean -1.191378e-02  0.05     976  1.076197e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 152      ES_mean -1.473851e-02  0.05     976  9.081445e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 153      ES_mean -5.610006e-03  0.05     977  1.161698e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 154      ES_mean  8.623290e-03  0.05     977  4.684818e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 155      ES_mean -1.538510e-02  0.05     978  1.488526e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 156      ES_mean -4.651250e-03  0.05     978  1.398685e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 157      ES_mean -1.345047e-02  0.05     979  7.716789e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 158      ES_mean -3.703981e-02  0.05     979 -7.496255e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 159      ES_mean -2.629595e-02  0.05     980  9.538729e-05         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 160      ES_mean -7.533482e-02  0.05     980 -2.930600e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 161      ES_mean -1.401324e-02  0.05     981  9.754314e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 162      ES_mean -2.156733e-02  0.05     981  6.360589e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 163      ES_mean -1.286104e-02  0.05     982  6.095891e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 164      ES_mean -3.780184e-02  0.05     982 -1.196683e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 165      ES_mean -1.202592e-02  0.05     983  5.803193e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 166      ES_mean -3.914023e-02  0.05     983 -1.200366e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 167      ES_mean -1.832405e-02  0.05     984  1.241225e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 168      ES_mean -1.442963e-02  0.05     984  7.317997e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 169      ES_mean -2.236859e-02  0.05     985  1.519391e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 170      ES_mean -9.006038e-03  0.05     985  1.394015e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 171      ES_mean -1.722784e-02  0.05     986  1.500060e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 172      ES_mean  3.303099e-05  0.05     986  1.271671e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 173      ES_mean -1.633999e-02  0.05     987  1.254547e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 174      ES_mean -8.072115e-03  0.05     987  5.819314e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 175      ES_mean -2.141644e-02  0.05     988  1.160214e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 176      ES_mean -1.268721e-02  0.05     988  3.891866e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 177      ES_mean -2.029516e-02  0.05     989  9.799904e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 178      ES_mean -3.279018e-02  0.05     989 -8.198640e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 179      ES_mean -1.908562e-02  0.05     990  9.914899e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 180      ES_mean -1.074615e-02  0.05     990  1.184279e-04 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 181      ES_mean -2.082293e-02  0.05     991  1.290659e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 182      ES_mean  3.377292e-03  0.05     991  8.780238e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 183      ES_mean -1.608666e-02  0.05     992  1.538070e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 184      ES_mean -2.412709e-02  0.05     992  1.531203e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 185      ES_mean -2.916456e-02  0.05     993  1.470549e-03         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 186      ES_mean -7.272533e-03  0.05     993  1.257380e-02 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 187      ES_mean -1.771331e-02  0.05     994  7.866234e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 188      ES_mean -3.101469e-02  0.05     994 -6.981585e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 189      ES_mean -4.045395e-02  0.05     995  7.768285e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 190      ES_mean -2.653774e-02  0.05     995 -5.593870e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 191      ES_mean -1.286237e-02  0.05     996  9.237290e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 192      ES_mean -1.931298e-02  0.05     996 -1.151176e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 193      ES_mean -1.132718e-02  0.05     997  8.475814e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 194      ES_mean -3.249630e-02  0.05     997 -3.525840e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 195      ES_mean -2.669833e-02  0.05     998  8.434896e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 196      ES_mean -2.820809e-02  0.05     998 -3.338523e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 197      ES_mean  1.260109e-03  0.05     999  7.003944e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 198      ES_mean -3.180446e-02  0.05     999 -7.495076e-03 prior_resid</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 199      ES_mean -1.107276e-02  0.05    1000  9.062812e-04         0.5</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 200      ES_mean -5.760787e-03  0.05    1000 -1.026854e-03 prior_resid</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     vine_window      realized exceeded</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 1             1 -0.0018385881    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2             1 -0.0018385881    FALSE</span>
@@ -789,9 +789,9 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 33            1  0.0173273738    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 34            1  0.0173273738    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 35            1 -0.0020944877    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 36            1 -0.0020944877     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 37            1 -0.0254386287    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 38            1 -0.0254386287    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36            1 -0.0020944877    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37            1 -0.0254386287     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38            1 -0.0254386287     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 39            1  0.0015681758    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 40            1  0.0015681758    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 41            1  0.0079634319    FALSE</span>
@@ -805,20 +805,20 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 49            1  0.0096228399    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 50            1  0.0096228399    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 51            1 -0.0160386269     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 52            1 -0.0160386269     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 52            1 -0.0160386269    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 53            1  0.0045803703    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 54            1  0.0045803703    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 55            1 -0.0204478551     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 56            1 -0.0204478551    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 56            1 -0.0204478551     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 57            1 -0.0040765962    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 58            1 -0.0040765962    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 59            1 -0.0134517514    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 60            1 -0.0134517514    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 59            1 -0.0134517514     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 60            1 -0.0134517514     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 61            1 -0.0261555208     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 62            1 -0.0261555208    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 63            1 -0.0197764673    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 64            1 -0.0197764673     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 65            1 -0.0250208924    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 62            1 -0.0261555208     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 63            1 -0.0197764673     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 64            1 -0.0197764673    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 65            1 -0.0250208924     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 66            1 -0.0250208924     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 67            1  0.0157902093    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 68            1  0.0157902093    FALSE</span>
@@ -837,7 +837,7 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 81            1  0.0281930384    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 82            1  0.0281930384    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 83            1  0.0082817798    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 84            1  0.0082817798     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 84            1  0.0082817798    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 85            1  0.0048948638    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 86            1  0.0048948638    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 87            1 -0.0034468575    FALSE</span>
@@ -845,15 +845,15 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 89            1  0.0120308204    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 90            1  0.0120308204    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 91            1  0.0024226366    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 92            1  0.0024226366     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 92            1  0.0024226366    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 93            1  0.0083322551    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 94            1  0.0083322551    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 95            1  0.0216257493    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 96            1  0.0216257493    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 97            1  0.0064520152    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 98            1  0.0064520152    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 99            1 -0.0165274326    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 100           1 -0.0165274326     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 99            1 -0.0165274326     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 100           1 -0.0165274326    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 101           2 -0.0344208564     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 102           2 -0.0344208564     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 103           2 -0.0020277570    FALSE</span>
@@ -863,7 +863,7 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 107           2  0.0158232528    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 108           2  0.0158232528    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 109           2 -0.0074703999    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 110           2 -0.0074703999     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 110           2 -0.0074703999    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 111           2  0.0058796351    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 112           2  0.0058796351    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 113           2  0.1593336266    FALSE</span>
@@ -890,9 +890,9 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 134           2 -0.0102568397    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 135           2 -0.0006267974    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 136           2 -0.0006267974    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 137           2 -0.0084634421     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 137           2 -0.0084634421    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 138           2 -0.0084634421    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 139           2 -0.0222462629    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 139           2 -0.0222462629     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 140           2 -0.0222462629     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 141           2  0.0212404474    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 142           2  0.0212404474    FALSE</span>
@@ -907,15 +907,15 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 151           2  0.0255392108    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 152           2  0.0255392108    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 153           2  0.0032120208    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 154           2  0.0032120208    FALSE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 154           2  0.0032120208     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 155           2 -0.0077427385    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 156           2 -0.0077427385     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 157           2 -0.0484209603     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 158           2 -0.0484209603     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 159           2  0.0271292980    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 160           2  0.0271292980    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 161           2 -0.0169787191    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 162           2 -0.0169787191     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 161           2 -0.0169787191     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 162           2 -0.0169787191    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 163           2 -0.0320713652     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 164           2 -0.0320713652    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 165           2  0.0057546384    FALSE</span>
@@ -929,16 +929,16 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 173           2  0.0252342359    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 174           2  0.0252342359    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 175           2 -0.0089240806    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 176           2 -0.0089240806     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 176           2 -0.0089240806    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 177           2  0.0024986069    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 178           2  0.0024986069    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 179           2  0.0083738319    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 180           2  0.0083738319    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 181           2  0.0142573427    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 182           2  0.0142573427     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 182           2  0.0142573427    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 183           2  0.0236398197    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 184           2  0.0236398197    FALSE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 185           2 -0.0134049629     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 185           2 -0.0134049629    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 186           2 -0.0134049629     TRUE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 187           2 -0.0093428320    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 188           2 -0.0093428320    FALSE</span>
@@ -947,7 +947,7 @@ More details can be found in the extensive documentation of the
 <span class="r-out co"><span class="r-pr">#&gt;</span> 191           2 -0.0054628367    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 192           2 -0.0054628367    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 193           2 -0.0185334113     TRUE</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 194           2 -0.0185334113     TRUE</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 194           2 -0.0185334113    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 195           2  0.0048388271    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 196           2  0.0048388271    FALSE</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 197           2  0.0060523258    FALSE</span>
