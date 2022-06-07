@@ -5,11 +5,12 @@
 
 <!-- badges: start -->
 
-[![R-CMD-check](https://github.com/EmanuelSommer/portvine/workflows/R-CMD-check/badge.svg)](https://github.com/EmanuelSommer/portvine/actions)
+[![](https://www.r-pkg.org/badges/version/portvine?color=green)](https://cran.r-project.org/package=portvine)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/portvine)](https://cran.r-project.org/package=portvine)
 [![Codecov test
 coverage](https://codecov.io/gh/EmanuelSommer/portvine/branch/master/graph/badge.svg?token=DNJHHI4MXP)](https://app.codecov.io/gh/EmanuelSommer/portvine)
+[![R-CMD-check](https://github.com/EmanuelSommer/portvine/workflows/R-CMD-check/badge.svg)](https://github.com/EmanuelSommer/portvine/actions)
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
-[![](http://cranlogs.r-pkg.org/badges/grand-total/portvine)](https://cran.r-project.org/package=portvine)
 <!-- badges: end -->
 
 Portfolio level unconditional as well as conditional risk measure
@@ -18,6 +19,13 @@ ARMA-GARCH models. The package implements the proposed approaches in
 [Sommer (2022)](https://mediatum.ub.tum.de/1658240).
 
 ## Installation
+
+You can install the released version of `portvine` from
+[CRAN](https://cran.r-project.org/package=portvine) with:
+
+``` r
+install.packages("portvine")
+```
 
 You can install the development version of `portvine` from
 [GitHub](https://github.com/) with:
