@@ -231,6 +231,8 @@ estimate_dependence_and_risk <- function(combined_residuals_dt,
                     ],
                     p = sample,
                     skew = trans_vals[["skew"]][trans_vals[["asset"]] ==
+                      .data$asset],
+                    shape = trans_vals[["shape"]][trans_vals[["asset"]] ==
                       .data$asset]
                   )
             ) %>%
