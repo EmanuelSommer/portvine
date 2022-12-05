@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.1.0/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.1.0/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.1.3/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.1.3/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.rawgit.com/afeld/bootstrap-toc/v1.0.1/dist/bootstrap-toc.min.js"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Parallel processing">
 <meta property="og:description" content="portvine">
@@ -77,8 +77,9 @@
 
 
 
-<script src="parallel_files/accessible-code-block-0.0.1/empty-anchor.js"></script><div class="row">
-  <main id="main"><div class="page-header">
+
+<div class="row">
+  <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Parallel processing</h1>
             
       
@@ -88,40 +89,90 @@
 
     
     
-<p>This article will first provide a short overview what actually is running in parallel. Then some performance measures of different parallel strategies are presented.</p>
-<p>It is recommended to first have a look at the <strong>theoretical vignette</strong> to understand what is actually going on under the hood. A good understanding of the algorithm then allows to choose the right parallel strategy for the specific setting.</p>
+<p>This article will first provide a short overview what actually is
+running in parallel. Then some performance measures of different
+parallel strategies are presented.</p>
+<p>It is recommended to first have a look at the <strong>theoretical
+vignette</strong> to understand what is actually going on under the
+hood. A good understanding of the algorithm then allows to choose the
+right parallel strategy for the specific setting.</p>
 <div class="section level2">
 <h2 id="nested-parallel-processing">Nested parallel processing<a class="anchor" aria-label="anchor" href="#nested-parallel-processing"></a>
 </h2>
-<p>The <code>portvine</code> package allows for <strong>nested parallel processing</strong> i.e.two levels of parallel processes. These levels are the following.</p>
+<p>The <code>portvine</code> package allows for <strong>nested parallel
+processing</strong> i.e.two levels of parallel processes. These levels
+are the following.</p>
 <ol style="list-style-type: decimal">
-<li>The first level allows to fit the univariate time series models for each asset in parallel <strong>and</strong> to fit each vine window in parallel.</li>
-<li>The second level allows if specified that within each vine window the time units, often days, are processed using parallel processes.</li>
+<li>The first level allows to fit the univariate time series models for
+each asset in parallel <strong>and</strong> to fit each vine window in
+parallel.</li>
+<li>The second level allows if specified that within each vine window
+the time units, often days, are processed using parallel processes.</li>
 </ol>
-<p>From here on one will use the notation <span class="math inline">\(p_1\)</span>/<span class="math inline">\(p_2\)</span> for the possible parallel strategies where <span class="math inline">\(p_1\)</span> specifies the number of parallel processes/cores on the first level and <span class="math inline">\(p_2\)</span> the number of parallel processes/cores every first level process can in turn call. This means 1/1 is the default sequential case, 5/1 does only use the first level parallelization and 8/2 would require 16 cores as every first level parallel process can use 2 parallel processes while iterating over the time units/days. An illustration of the two first processing rounds of the nested parallelization of the vine windows can be found below.</p>
+<p>From here on one will use the notation <span class="math inline">\(p_1\)</span>/<span class="math inline">\(p_2\)</span> for the possible parallel strategies
+where <span class="math inline">\(p_1\)</span> specifies the number of
+parallel processes/cores on the first level and <span class="math inline">\(p_2\)</span> the number of parallel
+processes/cores every first level process can in turn call. This means
+1/1 is the default sequential case, 5/1 does only use the first level
+parallelization and 8/2 would require 16 cores as every first level
+parallel process can use 2 parallel processes while iterating over the
+time units/days. An illustration of the two first processing rounds of
+the nested parallelization of the vine windows can be found below.</p>
 <p><br><img src="nested_parallel2_3_process.png" align="center" width="100%"><br><br></p>
 </div>
 <div class="section level2">
 <h2 id="performance-measurements">Performance measurements<a class="anchor" aria-label="anchor" href="#performance-measurements"></a>
 </h2>
-<p>The measurements were performed on a Linux Cluster of the Leibniz Supercomputing Centre. The provided computational resources are gratefully acknowledged. The used R version is 3.6.0.</p>
-<p>Throughout the measurements one will always estimate the VaR and the ES at two <span class="math inline">\(\alpha\)</span> levels each.</p>
+<p>The measurements were performed on a Linux Cluster of the Leibniz
+Supercomputing Centre. The provided computational resources are
+gratefully acknowledged. The used R version is 3.6.0.</p>
+<p>Throughout the measurements one will always estimate the VaR and the
+ES at two <span class="math inline">\(\alpha\)</span> levels each.</p>
 <div class="section level3">
 <h3 id="the-unconditional-case">The unconditional case<a class="anchor" aria-label="anchor" href="#the-unconditional-case"></a>
 </h3>
 <p><br><img src="uncond_perf_influence_n_samples.png" align="center" width="80%"><br><br></p>
-<p>Especially for 100000 samples the use of 40 cores with 10/4 instead of 20 cores with 10/2 pays off almost linearly. The maximum strategy of 10/25 achieves a great runtime of under 7 minutes. For the reasonable sample size of 10000 one can see that with already 20 cores one can achieve a quite quick runtime of roughly 5 minutes. Also it seems reasonable to assign as many parallel processes as possible up to the number of vine windows to the first level of parallelization and then to assign as many additional processes to the second level of parallelization. This however changes for really large sample sizes where it can be seen that assigning lots of processes to the second level might pay off. This is evident when looking at the strategy 1/25.</p>
+<p>Especially for 100000 samples the use of 40 cores with 10/4 instead
+of 20 cores with 10/2 pays off almost linearly. The maximum strategy of
+10/25 achieves a great runtime of under 7 minutes. For the reasonable
+sample size of 10000 one can see that with already 20 cores one can
+achieve a quite quick runtime of roughly 5 minutes. Also it seems
+reasonable to assign as many parallel processes as possible up to the
+number of vine windows to the first level of parallelization and then to
+assign as many additional processes to the second level of
+parallelization. This however changes for really large sample sizes
+where it can be seen that assigning lots of processes to the second
+level might pay off. This is evident when looking at the strategy
+1/25.</p>
 <p><br><img src="uncond_perf_influence_vars.png" align="center" width="80%"><br><br></p>
 </div>
 <div class="section level3">
 <h3 id="the-conditional-case">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case"></a>
 </h3>
-<p>As the conditional approach performs almost identical for a single or two conditional variables one displays just the performance measures of the single conditional case. Furthermore one will estimate at the two quantile levels <span class="math inline">\(\alpha^I\)</span>/<code>cond_u</code> 5% and 50%. The conditional risk measure estimation approach is expected to have longer runtimes mostly due to the fact that for each specified quantile level <code>cond_u</code> and the additional prior residual risk estimates one has to sample <span class="math inline">\(S\)</span>/<code>n_samples</code> conditional samples. For the here specified two quantile levels this means that one samples 3 times as many conditional samples as unconditional samples in the unconditional risk estimation approach. Moreover the overhead of the conditional estimation is slightly higher.</p>
+<p>As the conditional approach performs almost identical for a single or
+two conditional variables one displays just the performance measures of
+the single conditional case. Furthermore one will estimate at the two
+quantile levels <span class="math inline">\(\alpha^I\)</span>/<code>cond_u</code> 5% and 50%.
+The conditional risk measure estimation approach is expected to have
+longer runtimes mostly due to the fact that for each specified quantile
+level <code>cond_u</code> and the additional prior residual risk
+estimates one has to sample <span class="math inline">\(S\)</span>/<code>n_samples</code> conditional
+samples. For the here specified two quantile levels this means that one
+samples 3 times as many conditional samples as unconditional samples in
+the unconditional risk estimation approach. Moreover the overhead of the
+conditional estimation is slightly higher.</p>
 <p><br><img src="cond_perf_influence_n_samples.png" align="center" width="80%"><br><br></p>
-<p>As annotated on the plot the observation for the maximal strategy 10/25 and sample size of 100000 corresponds to the estimation of only 1 conditional quantile as 2 conditional quantiles would come with the extensive memory requirements of &gt;100Gb. From this fact one directly expects this estimation to be roughly 33% faster. But even after adjusting for this expected 33% faster result one observes a drop of another 44% in runtime for this particular parallel strategy.</p>
+<p>As annotated on the plot the observation for the maximal strategy
+10/25 and sample size of 100000 corresponds to the estimation of only 1
+conditional quantile as 2 conditional quantiles would come with the
+extensive memory requirements of &gt;100Gb. From this fact one directly
+expects this estimation to be roughly 33% faster. But even after
+adjusting for this expected 33% faster result one observes a drop of
+another 44% in runtime for this particular parallel strategy.</p>
 <p><br><img src="cond_perf_influence_vars.png" align="center" width="80%"><br><br></p>
 <p><br><img src="cond_perf_influence_quantiles.png" align="center" width="80%"><br><br></p>
-<p>I hope these measurements help a little when choosing an appropriate parallel strategy for your needs.</p>
+<p>I hope these measurements help a little when choosing an appropriate
+parallel strategy for your needs.</p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc"><h2>On this page</h2>
@@ -137,7 +188,7 @@
 
 <div class="pkgdown-footer-right">
   <p></p>
-<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.3.</p>
+<p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.6.</p>
 </div>
 
     </footer>
