@@ -1,4 +1,4 @@
-#' Extract fitted residuals from a uGARCHroll object
+#' Extract fitted standardized residuals from a uGARCHroll object
 #'
 #' The [`rugarch::ugarchroll`] class object encompasses fitting information
 #' about a number of
@@ -11,7 +11,7 @@
 #' @param roll_num Count that specifies the fitted model to extract the
 #' residuals from.
 #'
-#' @return Numeric vector of the fitted residuals.
+#' @return Numeric vector of the fitted standardized residuals.
 #' @export
 roll_residuals <- function(ugarchroll, roll_num = 1) {
   checkmate::assert_class(ugarchroll, classes = "uGARCHroll")

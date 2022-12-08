@@ -9,10 +9,10 @@
 #'  given by `dist` that specifies the conditional density used for the
 #'  innovations.
 #'
-#' @param ar positive integer for the autoregressive order
-#' @param ma positive integer for the moving average order
-#' @param arch positive integer for the ARCH order
-#' @param garch positive integer for the GARCH order
+#' @param ar integer for the autoregressive order
+#' @param ma integer for the moving average order
+#' @param arch integer for the ARCH order
+#' @param garch integer for the GARCH order
 #' @param dist a single character value of the possible distributions allowed in
 #' [`rugarch::ugarchspec`]
 #'
@@ -31,10 +31,10 @@ default_garch_spec <- function(ar = 1,
                                garch = 1,
                                dist = "sstd") {
   # basic input checks
-  checkmate::assert_count(ar, positive = TRUE)
-  checkmate::assert_count(ma, positive = TRUE)
-  checkmate::assert_count(arch, positive = TRUE)
-  checkmate::assert_count(garch, positive = TRUE)
+  checkmate::assert_count(ar)
+  checkmate::assert_count(ma)
+  checkmate::assert_count(arch)
+  checkmate::assert_count(garch)
   checkmate::assert_choice(dist, choices = c(
     "norm", "snorm", "std", "sstd", "ged", "sged", "nig", "jsu"
   ))
