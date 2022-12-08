@@ -1,6 +1,6 @@
 test_that("input checks", {
   expect_error(default_garch_spec(ar = 2, ma = NA))
-  expect_error(default_garch_spec(garch = 0))
+  expect_error(default_garch_spec(garch = -1))
   expect_error(default_garch_spec(arch = 2.3))
   expect_error(default_garch_spec(dist = "binom"))
   expect_error(default_garch_spec(dist = 1))
