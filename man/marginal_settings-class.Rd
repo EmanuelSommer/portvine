@@ -44,10 +44,10 @@ come in handy.
 }
 \section{Functions}{
 \itemize{
-\item \code{marginal_settings}: Class constructor taking the arguments
+\item \code{marginal_settings()}: Class constructor taking the arguments
 specified in the slots below
-}}
 
+}}
 \section{Slots}{
 
 \describe{

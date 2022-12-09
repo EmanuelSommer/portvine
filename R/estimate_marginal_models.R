@@ -125,10 +125,10 @@ estimate_marginal_models <- function(data,
               .data$row_num >= (start_window + n_vine_train)) %>%
             arrange(.data$row_num) %>%
             mutate(resid = (.data$Realized - .data$Mu) / .data$Sigma) %>%
-            select(.data$resid,
-              shape = .data$Shape, skew = .data$Skew,
-              mu = .data$Mu, sigma = .data$Sigma,
-              .data$row_num
+            select("resid",
+              shape = "Shape", skew = "Skew",
+              mu = "Mu", sigma = "Sigma",
+              "row_num"
             ) %>%
             data.table::as.data.table() %>%
             rbind(window_residuals_fitted) %>%

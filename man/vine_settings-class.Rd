@@ -34,10 +34,10 @@ the arguments of the also to be specified \code{\link{marginal_settings}}.
 }
 \section{Functions}{
 \itemize{
-\item \code{vine_settings}: Class constructor taking the arguments
+\item \code{vine_settings()}: Class constructor taking the arguments
 specified in the slots below
-}}
 
+}}
 \section{Slots}{
 
 \describe{

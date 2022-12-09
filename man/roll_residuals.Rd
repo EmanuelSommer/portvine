@@ -2,7 +2,7 @@
 % Please edit documentation in R/utils.R
 \name{roll_residuals}
 \alias{roll_residuals}
-\title{Extract fitted residuals from a uGARCHroll object}
+\title{Extract fitted standardized residuals from a uGARCHroll object}
 \usage{
 roll_residuals(ugarchroll, roll_num = 1)
 }
@@ -13,7 +13,7 @@ roll_residuals(ugarchroll, roll_num = 1)
 residuals from.}
 }
 \value{
-Numeric vector of the fitted residuals.
+Numeric vector of the fitted standardized residuals.
 }
 \description{
 The \code{\link[rugarch:ugarchroll-methods]{rugarch::ugarchroll}} class object encompasses fitting information

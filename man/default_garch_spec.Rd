@@ -7,13 +7,13 @@
 default_garch_spec(ar = 1, ma = 1, arch = 1, garch = 1, dist = "sstd")
 }
 \arguments{
-\item{ar}{positive integer for the autoregressive order}
+\item{ar}{integer for the autoregressive order}
 
-\item{ma}{positive integer for the moving average order}
+\item{ma}{integer for the moving average order}
 
-\item{arch}{positive integer for the ARCH order}
+\item{arch}{integer for the ARCH order}
 
-\item{garch}{positive integer for the GARCH order}
+\item{garch}{integer for the GARCH order}
 
 \item{dist}{a single character value of the possible distributions allowed in
 \code{\link[rugarch:ugarchspec-methods]{rugarch::ugarchspec}}}
