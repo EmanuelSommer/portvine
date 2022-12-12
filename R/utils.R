@@ -28,7 +28,7 @@ roll_residuals <- function(ugarchroll, roll_num = 1) {
   arma_order <- ugarchroll@model$spec@model$modelinc[1:3]
   garch_order <- ugarchroll@model$spec@model$modelinc[8:9]
   spec <- rugarch::ugarchspec(
-    mean.model = list(armaOrder = arma_order[2:3], include.mean = arma_order[1]),
+    mean.model = list(armaOrder = arma_order[2:3], include.mean = (arma_order[1]>0)),
     variance.model =  list(garchOrder = garch_order),
     distribution.model = distribution,
     fixed.pars = coefs
