@@ -93,7 +93,7 @@ estimate_marginal_models <- function(data,
           # extract the coefficients for the window
           coefs <- roll@model$coef[[window]]$coef[, 1]
           spec <- rugarch::ugarchspec(
-            mean.model = list(armaOrder = arma_order[2:3], include.mean = arma_order[1]),
+            mean.model = list(armaOrder = arma_order[2:3], include.mean = (arma_order[1]>0)),
             variance.model =  list(garchOrder = garch_order), 
             distribution.model = roll_distribution,
             fixed.pars = coefs
