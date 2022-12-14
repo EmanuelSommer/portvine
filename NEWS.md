@@ -4,7 +4,7 @@ Development version
 
 - Bugfix: Set the `shape` parameter for the inverse PIT transformation of the copula scale residuals and do not use the default.
 - Bugfix: Allow for 0 orders in the utility function `default_garch_spec()`
-- Bugfix: The residual calculation should allow for orders for the mean and variance models that are different than the standard (1,1) order (TBD)
+- Bugfix: The residual calculation should allow for orders for the mean and variance models that are different than the standard (1,1) order
 
 # portvine 1.0.1
 
