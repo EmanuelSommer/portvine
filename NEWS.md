@@ -1,6 +1,4 @@
-# portvine 1.0.1.9000
-
-Development version
+# portvine 1.0.2
 
 - Bugfix: Set the `shape` parameter for the inverse PIT transformation of the copula scale residuals and do not use the default.
 - Bugfix: Allow for 0 orders in the utility function `default_garch_spec()`
