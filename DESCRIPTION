@@ -1,6 +1,6 @@
 Package: portvine
 Title: Vine Based (Un)Conditional Portfolio Risk Measure Estimation
-Version: 1.0.2
+Version: 1.0.3
 Authors@R: 
     person("Emanuel", "Sommer", , "emanuel_sommer@gmx.de", role = c("cre", "aut"))
 Description: Following Sommer (2022) <https://mediatum.ub.tum.de/1658240>

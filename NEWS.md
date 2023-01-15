@@ -1,3 +1,7 @@
+# portvine 1.0.3 
+
+Current Development Version
+
 # portvine 1.0.2
 
 - Bugfix: Set the `shape` parameter for the inverse PIT transformation of the copula scale residuals and do not use the default.
