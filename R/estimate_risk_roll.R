@@ -340,7 +340,7 @@ estimate_risk_roll <- function(data,
   if (is.null(weights)) {
     # if not specified all assets get equal weight
     weights <- matrix(
-      rep(1/length(all_asset_names[-cond_vars]), n_all_assets * ceiling((n_all_obs - n_marg_train) / n_vine_refit)),
+      rep(1/length(all_asset_names[!all_asset_names %in% cond_vars]), n_all_assets * ceiling((n_all_obs - n_marg_train) / n_vine_refit)),
       ncol = n_all_assets
     )
     colnames(weights) <- all_asset_names
