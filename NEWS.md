@@ -1,6 +1,8 @@
-# portvine 1.0.3 
+# portvine 1.0.2.9000 
 
 Current Development Version
+
+- Clarify what is meant as equally weighted portfolio in the documenation of the function `estimate_risk_roll`
 
 # portvine 1.0.2
 

@@ -89,7 +89,7 @@
 #'  Moreover missing values must be imputed beforehand.
 #' @param weights Corresponding named non-negative weights of the assets
 #'  (conditioning variables must have weight 0). Default `NULL` gives equal
-#'  weight to each non conditional asset. Alternatively one can use a matrix
+#'  weight of 1 to each non conditional asset. Alternatively one can use a matrix
 #'  with as many rows as vine windows for changing weights. The matrix must have
 #'  column names corresponding to the assets and conditional assets have to have
 #'  weight 0.
