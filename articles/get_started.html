@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">portvine</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.9000</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -312,7 +312,7 @@ summary method.</p>
 <span><span class="co">#&gt; Risk measures estimated: VaR ES_mean </span></span>
 <span><span class="co">#&gt; Alpha levels used: 0.01 0.025 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Time taken: 0.1096 minutes</span></span></code></pre></div>
+<span><span class="co">#&gt; Time taken: 0.1557 minutes</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span></span>
 <span><span class="co">#&gt; An object of class &lt;portvine_roll&gt;</span></span>
@@ -335,7 +335,7 @@ summary method.</p>
 <span><span class="co">#&gt; Number of estimated risk measures: 160 </span></span>
 <span><span class="co">#&gt; Number of samples for each risk estimation: 50 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Time taken: 0.1096 minutes.</span></span></code></pre></div>
+<span><span class="co">#&gt; Time taken: 0.1557 minutes.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-conditional-case-2">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case-2"></a>
@@ -376,7 +376,7 @@ and calling the summary method.</p>
 <span><span class="co">#&gt; Risk measures estimated: VaR ES_mean </span></span>
 <span><span class="co">#&gt; Alpha levels used: 0.01 0.025 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Time taken: 0.1161 minutes</span></span></code></pre></div>
+<span><span class="co">#&gt; Time taken: 0.1596 minutes</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cond_risk_roll</span><span class="op">)</span></span>
 <span><span class="co">#&gt; An object of class &lt;cond_portvine_roll&gt;</span></span>
@@ -404,7 +404,7 @@ and calling the summary method.</p>
 <span><span class="co">#&gt; Number of estimated risk measures: 160 </span></span>
 <span><span class="co">#&gt; Number of samples for each risk estimation: 50 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Time taken: 0.1161 minutes.</span></span></code></pre></div>
+<span><span class="co">#&gt; Time taken: 0.1596 minutes.</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -581,7 +581,7 @@ vines in a list, one vine copula object for each vine window.</p>
 <code class="sourceCode R"><span><span class="va">uncond_fitted_vines</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/fitted_vines.html">fitted_vines</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span></span>
 <span><span class="va">uncond_fitted_vines</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span></span>
 <span><span class="co">#&gt; 3-dimensional vine copula fit ('vinecop')</span></span>
-<span><span class="co">#&gt; nobs = 100   logLik = 56   npars = 3   AIC = -106.01   BIC = -98.19</span></span></code></pre></div>
+<span><span class="co">#&gt; nobs = 100   logLik = 56   npars = 3   AIC = -106   BIC = -98.19</span></span></code></pre></div>
 <p>As the list elements are <code><a href="https://rdrr.io/pkg/rvinecopulib/man/vinecop.html" class="external-link">rvinecopulib::vinecop</a></code> objects
 one can further analyze them with tools from the great <a href="https://vinecopulib.github.io/rvinecopulib/" class="external-link"><code>rvinecopulib</code></a>
 package e.g. plot the objects to exploit the graphical representation,
@@ -601,16 +601,16 @@ column indicating whether the risk measure was exceeded.</p>
 <code class="sourceCode R"><span><span class="co">## a glimpse at the tidy data.frame with all estimated risk measures</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/risk_estimates.html">risk_estimates</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    risk_measure    risk_est alpha row_num vine_window     realized</span></span>
-<span><span class="co">#&gt; 1           VaR -0.06190088 0.010     961           1 -0.001246766</span></span>
-<span><span class="co">#&gt; 2           VaR -0.04603176 0.025     961           1 -0.001246766</span></span>
-<span><span class="co">#&gt; 3       ES_mean -0.07605478 0.010     961           1 -0.001246766</span></span>
-<span><span class="co">#&gt; 4       ES_mean -0.06161203 0.025     961           1 -0.001246766</span></span>
-<span><span class="co">#&gt; 5           VaR -0.08685468 0.010     962           1  0.048242745</span></span>
-<span><span class="co">#&gt; 6           VaR -0.04670397 0.025     962           1  0.048242745</span></span>
-<span><span class="co">#&gt; 7       ES_mean -0.12243439 0.010     962           1  0.048242745</span></span>
-<span><span class="co">#&gt; 8       ES_mean -0.08612856 0.025     962           1  0.048242745</span></span>
-<span><span class="co">#&gt; 9           VaR -0.06526209 0.010     963           1  0.011817887</span></span>
-<span><span class="co">#&gt; 10          VaR -0.05742935 0.025     963           1  0.011817887</span></span>
+<span><span class="co">#&gt; 1           VaR -0.06188025 0.010     961           1 -0.001246766</span></span>
+<span><span class="co">#&gt; 2           VaR -0.04601638 0.025     961           1 -0.001246766</span></span>
+<span><span class="co">#&gt; 3       ES_mean -0.07602761 0.010     961           1 -0.001246766</span></span>
+<span><span class="co">#&gt; 4       ES_mean -0.06159152 0.025     961           1 -0.001246766</span></span>
+<span><span class="co">#&gt; 5           VaR -0.08681665 0.010     962           1  0.048242745</span></span>
+<span><span class="co">#&gt; 6           VaR -0.04667800 0.025     962           1  0.048242745</span></span>
+<span><span class="co">#&gt; 7       ES_mean -0.12238695 0.010     962           1  0.048242745</span></span>
+<span><span class="co">#&gt; 8       ES_mean -0.08609073 0.025     962           1  0.048242745</span></span>
+<span><span class="co">#&gt; 9           VaR -0.06523401 0.010     963           1  0.011817887</span></span>
+<span><span class="co">#&gt; 10          VaR -0.05740317 0.025     963           1  0.011817887</span></span>
 <span></span>
 <span><span class="co">## a glimpse at the estimated VaR at confidence level 1% with exceeded column</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span></span>
@@ -623,12 +623,12 @@ column indicating whether the risk measure was exceeded.</p>
 <span>  <span class="fl">6</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;   risk_measure    risk_est alpha row_num vine_window     realized exceeded</span></span>
-<span><span class="co">#&gt; 1          VaR -0.06190088  0.01     961           1 -0.001246766    FALSE</span></span>
-<span><span class="co">#&gt; 2          VaR -0.08685468  0.01     962           1  0.048242745    FALSE</span></span>
-<span><span class="co">#&gt; 3          VaR -0.06526209  0.01     963           1  0.011817887    FALSE</span></span>
-<span><span class="co">#&gt; 4          VaR -0.07161073  0.01     964           1  0.012662108    FALSE</span></span>
-<span><span class="co">#&gt; 5          VaR -0.09358950  0.01     965           1  0.023044956    FALSE</span></span>
-<span><span class="co">#&gt; 6          VaR -0.16250089  0.01     966           1 -0.013655480    FALSE</span></span>
+<span><span class="co">#&gt; 1          VaR -0.06188025  0.01     961           1 -0.001246766    FALSE</span></span>
+<span><span class="co">#&gt; 2          VaR -0.08681665  0.01     962           1  0.048242745    FALSE</span></span>
+<span><span class="co">#&gt; 3          VaR -0.06523401  0.01     963           1  0.011817887    FALSE</span></span>
+<span><span class="co">#&gt; 4          VaR -0.07158635  0.01     964           1  0.012662108    FALSE</span></span>
+<span><span class="co">#&gt; 5          VaR -0.09355120  0.01     965           1  0.023044956    FALSE</span></span>
+<span><span class="co">#&gt; 6          VaR -0.16243081  0.01     966           1 -0.013655480    FALSE</span></span>
 <span></span>
 <span><span class="co">## of course also applies for the conditional case</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span></span>
@@ -641,12 +641,12 @@ column indicating whether the risk measure was exceeded.</p>
 <span>  <span class="fl">6</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;   risk_measure    risk_est alpha row_num         AMZN cond_u vine_window</span></span>
-<span><span class="co">#&gt; 1      ES_mean -0.10062513  0.01     961 -0.021737383    0.1           1</span></span>
-<span><span class="co">#&gt; 2      ES_mean -0.04506954  0.01     961 -0.008608346  resid           1</span></span>
-<span><span class="co">#&gt; 3      ES_mean -0.15589632  0.01     962 -0.019597872    0.1           1</span></span>
-<span><span class="co">#&gt; 4      ES_mean -0.03063155  0.01     962  0.015758643  resid           1</span></span>
-<span><span class="co">#&gt; 5      ES_mean -0.11193179  0.01     963 -0.019496859    0.1           1</span></span>
-<span><span class="co">#&gt; 6      ES_mean -0.02745878  0.01     963  0.008117431  resid           1</span></span>
+<span><span class="co">#&gt; 1      ES_mean -0.10061696  0.01     961 -0.021713172    0.1           1</span></span>
+<span><span class="co">#&gt; 2      ES_mean -0.04510164  0.01     961 -0.008608346  resid           1</span></span>
+<span><span class="co">#&gt; 3      ES_mean -0.15587622  0.01     962 -0.019582204    0.1           1</span></span>
+<span><span class="co">#&gt; 4      ES_mean -0.03063455  0.01     962  0.015758643  resid           1</span></span>
+<span><span class="co">#&gt; 5      ES_mean -0.11188717  0.01     963 -0.019476899    0.1           1</span></span>
+<span><span class="co">#&gt; 6      ES_mean -0.02746862  0.01     963  0.008117431  resid           1</span></span>
 <span><span class="co">#&gt;       realized</span></span>
 <span><span class="co">#&gt; 1  0.007439544</span></span>
 <span><span class="co">#&gt; 2  0.007439544</span></span>
