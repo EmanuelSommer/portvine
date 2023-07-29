@@ -40,7 +40,7 @@ default_garch_spec <- function(ar = 1,
   ))
   # specify the result
   rugarch::ugarchspec(
-    variance.model = list(garchOrder = c(arch, garch)),
+    variance.model = list(model = "gjrGARCH", garchOrder = c(arch, garch)),
     mean.model = list(armaOrder = c(ar, ma)),
     distribution.model = dist
   )
