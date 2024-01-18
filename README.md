@@ -16,7 +16,8 @@ coverage](https://codecov.io/gh/EmanuelSommer/portvine/branch/master/graph/badge
 Portfolio level unconditional as well as conditional risk measure
 estimation for backtesting and stress testing using Vine Copula and
 ARMA-GARCH models. The package implements the proposed approaches in
-[Sommer (2022)](https://mediatum.ub.tum.de/1658240).
+[Sommer (2022)](https://mediatum.ub.tum.de/1658240) and [Sommer et
+al. (2023)](https://doi.org/10.1016/j.ecosta.2023.08.002).
 
 ## Installation
 
@@ -42,19 +43,15 @@ portfolio level risk measure estimation are based on my masters thesis
 at the chair of Mathematical Statistics at the TUM which you can find
 [here](https://mediatum.ub.tum.de/1658240). The general idea of the
 unconditional risk measure estimation approach is summarized in the
-flowchart below for a
-![d](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;d "d")-dimensional
-portfolio.
+flowchart below for a $d$-dimensional portfolio.
 
 <br>
 <img src='man/figures/overall_estimation_approach.png' align="center" width="100%" />
 <br> <br>
 
 For the single conditional approach the general idea for a
-![d](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;d "d")-dimensional
-portfolio and a market index
-![I](https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&space;%5Cbg_white&space;I "I")
-is summarized in the flowchart below.
+$d$-dimensional portfolio and a market index $I$ is summarized in the
+flowchart below.
 
 <br>
 <img src='man/figures/overall_estimation_approach_cond.png' align="center" width="100%" />
@@ -95,6 +92,6 @@ packages
 [`rvinecopulib`](https://CRAN.R-project.org/package=rvinecopulib) and
 [`rugarch`](https://CRAN.R-project.org/package=rugarch). Thus a big
 thanks goes to all the contributors and maintainers! Also I would like
-to thank my supervisors Prof. Claudia Czado and M.Sc. Karoline Bax for
-giving me the opportunity to work on this project and their very
-dedicated supervision!
+to thank Claudia Czado and Karoline Bax for giving me the opportunity to
+work on this project in the first place and their dedicated
+collaboration along the way!

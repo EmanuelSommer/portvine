@@ -23,7 +23,7 @@ knitr::opts_chunk$set(
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
-Portfolio level unconditional as well as conditional risk measure estimation for backtesting and stress testing using Vine Copula and ARMA-GARCH models. The package implements the proposed approaches in [Sommer (2022)](https://mediatum.ub.tum.de/1658240).
+Portfolio level unconditional as well as conditional risk measure estimation for backtesting and stress testing using Vine Copula and ARMA-GARCH models. The package implements the proposed approaches in [Sommer (2022)](https://mediatum.ub.tum.de/1658240) and [Sommer et al. (2023)](https://doi.org/10.1016/j.ecosta.2023.08.002).
 
 
 
@@ -70,4 +70,4 @@ The risk estimation algorithms implemented in this package lend themselves perfe
 
 ## Acknowledgements
 
-This package is built on the shoulder of giants most importantly the R packages [`rvinecopulib`](https://CRAN.R-project.org/package=rvinecopulib) and [`rugarch`](https://CRAN.R-project.org/package=rugarch). Thus a big thanks goes to all the contributors and maintainers! Also I would like to thank my supervisors Prof. Claudia Czado and M.Sc. Karoline Bax for giving me the opportunity to work on this project and their very dedicated supervision!
+This package is built on the shoulder of giants most importantly the R packages [`rvinecopulib`](https://CRAN.R-project.org/package=rvinecopulib) and [`rugarch`](https://CRAN.R-project.org/package=rugarch). Thus a big thanks goes to all the contributors and maintainers! Also I would like to thank Claudia Czado and Karoline Bax for giving me the opportunity to work on this project in the first place and their dedicated collaboration along the way!

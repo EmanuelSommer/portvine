@@ -1,3 +1,7 @@
+## Version 1.0.3 of the portvine package (dependency management)
+
+Due to the changes in the `BH` packages I dropped the system requirement `C++11` as suggested by the CRAN maintainers.
+
 ## Version 1.0.2 of the portvine package (just Bugfixes)
 
 Besides the bugfixes mentioned below no changes to the package were made.

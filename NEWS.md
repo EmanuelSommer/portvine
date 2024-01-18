@@ -1,8 +1,12 @@
-# portvine 1.0.2.9000 
+# portvine 1.0.3.9000
 
 Current Development Version
 
+
+# portvine 1.0.3 
+
 - Clarify what is meant as equally weighted portfolio in the documenation of the function `estimate_risk_roll`
+- **Dependency management:** Due to the changes in the `BH` packages I dropped the system requirement `C++11` as suggested by the CRAN maintainers.
 
 # portvine 1.0.2
 
