@@ -20,8 +20,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="apple-touch-icon-60x60.png">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Vine Based (Un)Conditional Portfolio Risk Measure Estimation">
 <meta property="og:description" content="Following Sommer (2022) &lt;https://mediatum.ub.tum.de/1658240&gt;
@@ -45,7 +45,7 @@
     
     <a class="navbar-brand me-2" href="index.html">portvine</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -95,7 +95,7 @@
 </div>
 <!-- badges: start -->
 
-<p>Portfolio level unconditional as well as conditional risk measure estimation for backtesting and stress testing using Vine Copula and ARMA-GARCH models. The package implements the proposed approaches in <a href="https://mediatum.ub.tum.de/1658240" class="external-link">Sommer (2022)</a>.</p>
+<p>Portfolio level unconditional as well as conditional risk measure estimation for backtesting and stress testing using Vine Copula and ARMA-GARCH models. The package implements the proposed approaches in <a href="https://mediatum.ub.tum.de/1658240" class="external-link">Sommer (2022)</a> and <a href="https://doi.org/10.1016/j.ecosta.2023.08.002" class="external-link">Sommer et al. (2023)</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -110,9 +110,9 @@
 <div class="section level2">
 <h2 id="what-it-does-and-why">What it does and why<a class="anchor" aria-label="anchor" href="#what-it-does-and-why"></a>
 </h2>
-<p>The implemented algorithms for the unconditional as well as conditional portfolio level risk measure estimation are based on my masters thesis at the chair of Mathematical Statistics at the TUM which you can find <a href="https://mediatum.ub.tum.de/1658240" class="external-link">here</a>. The general idea of the unconditional risk measure estimation approach is summarized in the flowchart below for a <img src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;d" title="d" alt="d">-dimensional portfolio.</p>
+<p>The implemented algorithms for the unconditional as well as conditional portfolio level risk measure estimation are based on my masters thesis at the chair of Mathematical Statistics at the TUM which you can find <a href="https://mediatum.ub.tum.de/1658240" class="external-link">here</a>. The general idea of the unconditional risk measure estimation approach is summarized in the flowchart below for a <span class="math inline"><em>d</em></span>-dimensional portfolio.</p>
 <p><br><img src="reference/figures/overall_estimation_approach.png" align="center" width="100%"><br><br></p>
-<p>For the single conditional approach the general idea for a <img src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;d" title="d" alt="d">-dimensional portfolio and a market index <img src="https://latex.codecogs.com/png.image?%5Cdpi%7B110%7D&amp;space;%5Cbg_white&amp;space;I" title="I" alt="I"> is summarized in the flowchart below.</p>
+<p>For the single conditional approach the general idea for a <span class="math inline"><em>d</em></span>-dimensional portfolio and a market index <span class="math inline"><em>I</em></span> is summarized in the flowchart below.</p>
 <p><br><img src="reference/figures/overall_estimation_approach_cond.png" align="center" width="100%"><br><br></p>
 <p>If you want to get your hands dirty fast the <strong>Get Started vignette</strong> is a perfect fit for you as it showcases a minimal case study with a lot of code examples and some handy visualization functions that were not incorporated into the package as they are highly opinionated.</p>
 <p>In order to grasp what is going on under the hood a look at the <strong>Under the hood article</strong> on the package website is advised before starting to use the package. There the most important algorithms used during the risk measure estimation are explained. If this doesn’t saturate your hunger for the theory behind the package you should take a look at <a href="https://mediatum.ub.tum.de/1658240" class="external-link">Sommer (2022)</a>.</p>
@@ -126,7 +126,7 @@
 <div class="section level2">
 <h2 id="acknowledgements">Acknowledgements<a class="anchor" aria-label="anchor" href="#acknowledgements"></a>
 </h2>
-<p>This package is built on the shoulder of giants most importantly the R packages <a href="https://CRAN.R-project.org/package=rvinecopulib" class="external-link"><code>rvinecopulib</code></a> and <a href="https://CRAN.R-project.org/package=rugarch" class="external-link"><code>rugarch</code></a>. Thus a big thanks goes to all the contributors and maintainers! Also I would like to thank my supervisors Prof. Claudia Czado and M.Sc. Karoline Bax for giving me the opportunity to work on this project and their very dedicated supervision!</p>
+<p>This package is built on the shoulder of giants most importantly the R packages <a href="https://CRAN.R-project.org/package=rvinecopulib" class="external-link"><code>rvinecopulib</code></a> and <a href="https://CRAN.R-project.org/package=rugarch" class="external-link"><code>rugarch</code></a>. Thus a big thanks goes to all the contributors and maintainers! Also I would like to thank Claudia Czado and Karoline Bax for giving me the opportunity to work on this project in the first place and their dedicated collaboration along the way!</p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

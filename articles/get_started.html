@@ -14,8 +14,8 @@
 <link rel="apple-touch-icon" type="image/png" sizes="76x76" href="../apple-touch-icon-76x76.png">
 <link rel="apple-touch-icon" type="image/png" sizes="60x60" href="../apple-touch-icon-60x60.png">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.2.2/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.2.2/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
 <!-- bootstrap-toc --><script src="https://cdn.jsdelivr.net/gh/afeld/bootstrap-toc@v1.0.1/dist/bootstrap-toc.min.js" integrity="sha256-4veVQbu7//Lk5TSmc7YV48MxtMy98e26cf5MrgZYnwo=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- search --><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="Get started">
 <meta property="og:description" content="portvine">
@@ -33,7 +33,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">portvine</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.2.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.3</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -312,7 +312,7 @@ summary method.</p>
 <span><span class="co">#&gt; Risk measures estimated: VaR ES_mean </span></span>
 <span><span class="co">#&gt; Alpha levels used: 0.01 0.025 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Time taken: 0.1557 minutes</span></span></code></pre></div>
+<span><span class="co">#&gt; Time taken: 0.1045 minutes</span></span></code></pre></div>
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span></span>
 <span><span class="co">#&gt; An object of class &lt;portvine_roll&gt;</span></span>
@@ -335,7 +335,7 @@ summary method.</p>
 <span><span class="co">#&gt; Number of estimated risk measures: 160 </span></span>
 <span><span class="co">#&gt; Number of samples for each risk estimation: 50 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Time taken: 0.1557 minutes.</span></span></code></pre></div>
+<span><span class="co">#&gt; Time taken: 0.1045 minutes.</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="the-conditional-case-2">The conditional case<a class="anchor" aria-label="anchor" href="#the-conditional-case-2"></a>
@@ -376,7 +376,7 @@ and calling the summary method.</p>
 <span><span class="co">#&gt; Risk measures estimated: VaR ES_mean </span></span>
 <span><span class="co">#&gt; Alpha levels used: 0.01 0.025 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Time taken: 0.1596 minutes</span></span></code></pre></div>
+<span><span class="co">#&gt; Time taken: 0.1058 minutes</span></span></code></pre></div>
 <div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html" class="external-link">summary</a></span><span class="op">(</span><span class="va">cond_risk_roll</span><span class="op">)</span></span>
 <span><span class="co">#&gt; An object of class &lt;cond_portvine_roll&gt;</span></span>
@@ -404,7 +404,7 @@ and calling the summary method.</p>
 <span><span class="co">#&gt; Number of estimated risk measures: 160 </span></span>
 <span><span class="co">#&gt; Number of samples for each risk estimation: 50 </span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; Time taken: 0.1596 minutes.</span></span></code></pre></div>
+<span><span class="co">#&gt; Time taken: 0.1058 minutes.</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -503,6 +503,9 @@ display the residual plots for Apple and Alphabet.</p>
 <code class="sourceCode R"><span><span class="va">uncond_residual_viz</span> <span class="op">&lt;-</span> <span class="fu">marg_resid_viz_list</span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Please use `linewidth` instead.</span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">This warning is displayed once every 8 hours.</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">Call `lifecycle::last_lifecycle_warnings()` to see where this warning was</span></span></span>
+<span><span class="co">#&gt; <span style="color: #555555;">generated.</span></span></span>
 <span><span class="va">uncond_residual_viz_squared</span> <span class="op">&lt;-</span> <span class="fu">marg_resid_viz_list</span><span class="op">(</span></span>
 <span>  <span class="va">uncond_risk_roll</span>, squared <span class="op">=</span> <span class="cn">TRUE</span></span>
 <span><span class="op">)</span></span></code></pre></div>
@@ -601,16 +604,16 @@ column indicating whether the risk measure was exceeded.</p>
 <code class="sourceCode R"><span><span class="co">## a glimpse at the tidy data.frame with all estimated risk measures</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/risk_estimates.html">risk_estimates</a></span><span class="op">(</span><span class="va">uncond_risk_roll</span><span class="op">)</span>, <span class="fl">10</span><span class="op">)</span></span>
 <span><span class="co">#&gt;    risk_measure    risk_est alpha row_num vine_window     realized</span></span>
-<span><span class="co">#&gt; 1           VaR -0.06188025 0.010     961           1 -0.001246766</span></span>
-<span><span class="co">#&gt; 2           VaR -0.04601638 0.025     961           1 -0.001246766</span></span>
-<span><span class="co">#&gt; 3       ES_mean -0.07602761 0.010     961           1 -0.001246766</span></span>
-<span><span class="co">#&gt; 4       ES_mean -0.06159152 0.025     961           1 -0.001246766</span></span>
-<span><span class="co">#&gt; 5           VaR -0.08681665 0.010     962           1  0.048242745</span></span>
-<span><span class="co">#&gt; 6           VaR -0.04667800 0.025     962           1  0.048242745</span></span>
-<span><span class="co">#&gt; 7       ES_mean -0.12238695 0.010     962           1  0.048242745</span></span>
-<span><span class="co">#&gt; 8       ES_mean -0.08609073 0.025     962           1  0.048242745</span></span>
-<span><span class="co">#&gt; 9           VaR -0.06523401 0.010     963           1  0.011817887</span></span>
-<span><span class="co">#&gt; 10          VaR -0.05740317 0.025     963           1  0.011817887</span></span>
+<span><span class="co">#&gt; 1           VaR -0.06515100 0.010     961           1 -0.001246766</span></span>
+<span><span class="co">#&gt; 2           VaR -0.04451771 0.025     961           1 -0.001246766</span></span>
+<span><span class="co">#&gt; 3       ES_mean -0.08348521 0.010     961           1 -0.001246766</span></span>
+<span><span class="co">#&gt; 4       ES_mean -0.06477683 0.025     961           1 -0.001246766</span></span>
+<span><span class="co">#&gt; 5           VaR -0.08514402 0.010     962           1  0.048242745</span></span>
+<span><span class="co">#&gt; 6           VaR -0.04493114 0.025     962           1  0.048242745</span></span>
+<span><span class="co">#&gt; 7       ES_mean -0.12128383 0.010     962           1  0.048242745</span></span>
+<span><span class="co">#&gt; 8       ES_mean -0.08440647 0.025     962           1  0.048242745</span></span>
+<span><span class="co">#&gt; 9           VaR -0.06361484 0.010     963           1  0.011817887</span></span>
+<span><span class="co">#&gt; 10          VaR -0.05622925 0.025     963           1  0.011817887</span></span>
 <span></span>
 <span><span class="co">## a glimpse at the estimated VaR at confidence level 1% with exceeded column</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span></span>
@@ -623,12 +626,12 @@ column indicating whether the risk measure was exceeded.</p>
 <span>  <span class="fl">6</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt;   risk_measure    risk_est alpha row_num vine_window     realized exceeded</span></span>
-<span><span class="co">#&gt; 1          VaR -0.06188025  0.01     961           1 -0.001246766    FALSE</span></span>
-<span><span class="co">#&gt; 2          VaR -0.08681665  0.01     962           1  0.048242745    FALSE</span></span>
-<span><span class="co">#&gt; 3          VaR -0.06523401  0.01     963           1  0.011817887    FALSE</span></span>
-<span><span class="co">#&gt; 4          VaR -0.07158635  0.01     964           1  0.012662108    FALSE</span></span>
-<span><span class="co">#&gt; 5          VaR -0.09355120  0.01     965           1  0.023044956    FALSE</span></span>
-<span><span class="co">#&gt; 6          VaR -0.16243081  0.01     966           1 -0.013655480    FALSE</span></span>
+<span><span class="co">#&gt; 1          VaR -0.06515100  0.01     961           1 -0.001246766    FALSE</span></span>
+<span><span class="co">#&gt; 2          VaR -0.08514402  0.01     962           1  0.048242745    FALSE</span></span>
+<span><span class="co">#&gt; 3          VaR -0.06361484  0.01     963           1  0.011817887    FALSE</span></span>
+<span><span class="co">#&gt; 4          VaR -0.06958493  0.01     964           1  0.012662108    FALSE</span></span>
+<span><span class="co">#&gt; 5          VaR -0.09128018  0.01     965           1  0.023044956    FALSE</span></span>
+<span><span class="co">#&gt; 6          VaR -0.15228081  0.01     966           1 -0.013655480    FALSE</span></span>
 <span></span>
 <span><span class="co">## of course also applies for the conditional case</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span></span>
